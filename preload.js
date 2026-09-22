@@ -1,7 +1,11 @@
 const {contextBridge,ipcRenderer}=require("electron");
 contextBridge.exposeInMainWorld("ATemir",{
- load:()=>ipcRenderer.invoke("db:load"),
- save:d=>ipcRenderer.invoke("db:save",d),
+ reports:()=>ipcRenderer.invoke("db:reports"),
+ createReport:n=>ipcRenderer.invoke("db:createReport",n),
+ duplicateReport:id=>ipcRenderer.invoke("db:duplicateReport",id),
+ deleteReport:id=>ipcRenderer.invoke("db:deleteReport",id),
+ load:id=>ipcRenderer.invoke("db:load",id),
+ save:(id,d)=>ipcRenderer.invoke("db:save",id,d),
  importJSON:()=>ipcRenderer.invoke("file:import"),
  backup:d=>ipcRenderer.invoke("file:backup",d),
  exportHTML:h=>ipcRenderer.invoke("file:html",h),
