@@ -156,3 +156,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--sm-blue)!important;bo
 .objectFinance{gap:10px!important}.objectFinance>div{background:#f8fbff!important;border:1px solid #e5edf6!important;border-radius:10px!important;padding:13px!important}.objectFinance small{color:#71849a!important}.objectFinance b{color:var(--sm-navy)!important}
 .participantCard{border-color:#e4ecf4!important;border-radius:10px!important;background:#fbfdff!important}.dailyTiles{gap:8px!important}.dailyTile{padding:12px!important;text-align:left!important}.dailyTile b{color:var(--sm-navy)!important}.dailyTile small{color:#7a8da0!important}
 @media(max-width:720px){.objectHero{grid-template-columns:1fr!important}.objectHero img,.objectHeroEmpty{width:100%!important;height:150px!important}}
+
+/* Smetriqo daily report workspace */
+.dayNavLabel{margin:3px 7px 10px;padding:10px 9px;border:1px solid #ffffff12;border-radius:9px;color:#8faccc;font-size:8px;line-height:1.5;letter-spacing:.7px}.dayNavLabel b{display:block;color:#fff;font-size:12px;letter-spacing:0;margin-top:2px}
+.dailyHeader{padding:17px 19px!important;display:flex!important;align-items:center!important;justify-content:space-between!important}.dailyHeader>div{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}.dailyHeader small{letter-spacing:1px!important;font-weight:800!important;opacity:.65}.dailyHeader h2{margin:0!important;font-size:21px!important}.dailyHeader span{opacity:.72!important}.dailyHeader .btn{background:#ffffff12!important;color:#fff!important;border-color:#ffffff25!important}
+.manageNav{border-top:1px solid #ffffff12!important;margin-top:8px!important;padding-top:13px!important}
+#content>.card+.card{margin-top:13px}.body .grid,.body .formGrid{gap:10px!important}
+.empty{background:#f8fbff!important;border:1px dashed #d7e4f0!important;border-radius:9px!important;color:#8495a7!important;padding:18px!important}
