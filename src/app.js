@@ -13,11 +13,15 @@ async function flushSave(){
   if(saveAgain){saveAgain=false;await flushSave()}
  }
 }
+function flattenDatedRows(rows){
+ if(!Array.isArray(rows))return [];
+ const out=[];for(const r of rows){if(r&&Array.isArray(r.items)){for(const x of r.items)out.push({...x,date:x.date||r.date||""})}else if(r)out.push(r)}return out
+}
 function normalizeState(d){
  d=d&&typeof d==="object"?d:{};
  const base={companyName:"",object:"",address:"",client:"",reportDate:"",weather:{temp:"",wind:"",precip:""},workTypes:[],tasks:[],workDays:[],invoices:[],workers:[],responsibles:[],equipment:[],deadlines:[],actedDays:[],penalties:[],reportPhotos:[],companyLogo:""};
  const x={...base,...d};x.weather={...base.weather,...(d.weather||{})};
- ["workTypes","tasks","workDays","invoices","workers","responsibles","equipment","deadlines","actedDays","penalties","reportPhotos"].forEach(k=>{if(!Array.isArray(x[k]))x[k]=[]});
+ ["workTypes","tasks","workDays","invoices","workers","responsibles","equipment","deadlines","actedDays","penalties","reportPhotos"].forEach(k=>{if(!Array.isArray(x[k]))x[k]=[]});x.workDays=flattenDatedRows(x.workDays);x.invoices=flattenDatedRows(x.invoices);
  if(!x.object&&d.objectName)x.object=d.objectName;if(!x.client&&d.customer)x.client=d.customer;
  return x
 }
