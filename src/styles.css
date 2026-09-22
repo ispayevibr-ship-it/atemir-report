@@ -163,3 +163,15 @@ input:focus,select:focus,textarea:focus{border-color:var(--sm-blue)!important;bo
 .manageNav{border-top:1px solid #ffffff12!important;margin-top:8px!important;padding-top:13px!important}
 #content>.card+.card{margin-top:13px}.body .grid,.body .formGrid{gap:10px!important}
 .empty{background:#f8fbff!important;border:1px dashed #d7e4f0!important;border-radius:9px!important;color:#8495a7!important;padding:18px!important}
+
+/* Stable Smetriqo object list — long names must not deform layout */
+.objectPortfolio{display:flex!important;flex-direction:column!important;gap:8px!important}
+.portfolioObject{display:grid!important;grid-template-columns:92px minmax(0,1fr) auto!important;align-items:center!important;gap:14px!important;min-height:112px!important;width:100%!important;box-sizing:border-box!important}
+.portfolioObject>img,.portfolioPhoto{width:92px!important;height:78px!important;min-width:92px!important;border-radius:9px!important;object-fit:cover!important}
+.portfolioObjectBody{min-width:0!important;display:flex!important;flex-direction:column!important;gap:4px!important}
+.portfolioObjectBody>b{display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;overflow:hidden!important;line-height:1.25!important;font-size:15px!important;max-width:100%!important}
+.portfolioObjectBody>span{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:100%!important}
+.portfolioObjectBody>div{display:flex!important;gap:6px!important;flex-wrap:wrap!important;margin-top:4px!important}
+.portfolioObjectBody em{display:inline-flex!important;padding:4px 7px!important;border-radius:6px!important;background:#f0f4f8!important;font-style:normal!important;white-space:nowrap!important}
+.portfolioObject>.btn{min-width:88px!important;justify-self:end!important}
+@media(max-width:700px){.portfolioObject{grid-template-columns:68px minmax(0,1fr)!important}.portfolioObject>img,.portfolioPhoto{width:68px!important;height:64px!important;min-width:68px!important}.portfolioObject>.btn{grid-column:1/-1!important;width:100%!important}}
