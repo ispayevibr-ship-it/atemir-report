@@ -77,7 +77,7 @@ function bomView(){
 }
 function dynamicsView(){
  const groups={};arr("workDays").filter(x=>x.date).forEach(x=>{const k=(x.type||"—")+"|||"+(x.code||"—")+"|||"+(x.unit||"");groups[k]??={type:x.type||"—",code:x.code||"—",unit:x.unit||"",daily:{}};groups[k].daily[x.date]=(groups[k].daily[x.date]||0)+qtyOf(x)*rowPer(x)});
- const end=state.reportDate?new Date(state.reportDate+"T12:00:00"):new Date(),days=[];for(let i=20;i>=0;i--){const d=new Date(end);d.setDate(end.getDate()-i);days.push(d.toISOString().slice(0,10))}
+ const endRaw=state.reportDate?new Date(state.reportDate+"T12:00:00"):new Date(),end=Number.isFinite(endRaw.getTime())?endRaw:new Date(),days=[];for(let i=20;i>=0;i--){const d=new Date(end);d.setDate(end.getDate()-i);days.push(d.toISOString().slice(0,10))}
  const cards=Object.values(groups).map(g=>{const max=Math.max(1,...days.map(d=>g.daily[d]||0));return `<div class="chartBox"><h3>${esc(g.type)} · ${esc(g.code)} · ${esc(g.unit)}</h3><div class="bars">${days.map(d=>{const v=g.daily[d]||0;return `<div class="barCol" title="${esc(d)}: ${fmt(v)}"><span>${v?fmt(v):""}</span><i style="height:${v?Math.max(3,v/max*100):1}%"></i><small>${d.slice(8,10)}.${d.slice(5,7)}</small></div>`}).join("")}</div></div>`}).join("");
  return card("Динамика выполненных работ",cards||'<div class="empty">Добавьте выполненные работы с датами.</div>')
 }
@@ -120,7 +120,7 @@ function monthCalendar(ym,work,acted){
 function multiCalendarView(){
  const work=new Set(arr("workDays").filter(x=>x.date&&qtyOf(x)>0).map(x=>x.date)),acted=new Set(arr("actedDays").map(x=>typeof x==="string"?x:x.date).filter(Boolean)),all=[...work,...acted].sort();
  if(!all.length)return card("Календарь работ",'<div class="empty">Нет дат.</div>');
- const base=new Date((state.reportDate||all.at(-1))+"T12:00:00"),months=[];
+ const rawBase=new Date((state.reportDate||all.at(-1))+"T12:00:00"),base=Number.isFinite(rawBase.getTime())?rawBase:new Date(all.at(-1)+"T12:00:00"),months=[];
  for(let i=2;i>=0;i--){const d=new Date(base.getFullYear(),base.getMonth()-i,1);months.push(d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"))}
  return card("Календарь работ / актированных дней",`<div class="multiCalendar">${months.map(x=>monthCalendar(x,work,acted)).join("")}</div><div class="legend">Работы — зелёный · Актированный день — красный</div>`)
 }
