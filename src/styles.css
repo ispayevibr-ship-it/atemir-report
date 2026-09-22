@@ -84,3 +84,6 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
 .editorRows>.editRow:nth-child(even){background:#f2f6f9}
 .financeActions,.photoTools{flex-wrap:wrap}
 @media(max-width:600px){.headerActions button{flex:1 1 auto}.financeStats{grid-template-columns:1fr}.sectionToggles{grid-template-columns:1fr}.editRow{grid-template-columns:1fr}.rowSave,.danger{width:100%}}
+
+/* Portfolio analytics */
+.portfolioAnalytics table{margin-top:12px}.portfolioStats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.portfolioStats b{padding:12px;border:1px solid #dce4ea;background:#f7f9fb}.portfolioProgress{width:150px;max-width:100%;height:9px;background:#e3e9ee;border-radius:10px;overflow:hidden;margin-bottom:4px}.portfolioProgress i{display:block;height:100%;background:#f2b318;border-radius:10px}@media(max-width:760px){.portfolioStats{grid-template-columns:1fr}.portfolioAnalytics{overflow-x:auto}}
