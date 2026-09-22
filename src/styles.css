@@ -30,3 +30,11 @@
 .sectionToggles input{width:16px;height:16px}
 .rowSave{align-self:end;white-space:nowrap}
 @media(max-width:900px){.sectionToggles{grid-template-columns:1fr 1fr}}
+
+.financeLock{max-width:420px;padding:20px;background:#f4f7fa;border-left:4px solid #f2b318}
+.financeStats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.financeStats>div{padding:14px;background:#eef3f7;border-top:3px solid #f2b318}
+.financeStats small{display:block;margin-bottom:7px;color:#607487;font-weight:700}
+.financeStats b{font-size:18px;color:#183247}
+.financeActions{display:flex;gap:10px;margin:14px 0}
+@media(max-width:900px){.financeStats{grid-template-columns:1fr 1fr}}
