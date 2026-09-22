@@ -52,3 +52,5 @@
 .reportTiles{display:grid;gap:10px}.reportTile{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:14px;border:1px solid #d6e0e7;background:#f8fafb}
 .reportTile>div:first-child{display:flex;flex-direction:column;gap:5px}.reportTile b{font-size:14px}.reportTile small{color:#687d8d}.reportTile>div:last-child{display:flex;gap:7px;flex-wrap:wrap}
 @media(max-width:760px){.reportTile{align-items:flex-start;flex-direction:column}.reportCreate{flex-direction:column}}
+
+.reportCurrent{display:inline-block;width:max-content;padding:3px 7px;background:#e8f2fa;color:#1769aa;font-size:10px;font-style:normal;font-weight:700}
