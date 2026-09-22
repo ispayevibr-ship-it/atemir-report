@@ -1,5 +1,5 @@
 const views=[["home","⌂ Дневной отчёт"],["manage","⚙ Ввод данных"],["progress","▥ Сводка объёмов"],["works","✓ Выполненные работы"],["bom","☷ Ведомость марок"],["invoices","▤ Поставка"],["people","♟ Люди"],["machines","⚙ Техника"],["dynamics","↗ Динамика"],["deadlines","⌛ Сроки"],["acted","▦ Актированные дни"],["penalties","! Штрафы"],["finance","₸ Финансы"]];
-const manageViews=[["object","▣","Объект"],["types","◆","Виды работ"],["tasks","☷","Задачи / ведомость"],["reportInfo","◷","Дата и погода"],["photos","▧","Фото"],["deadlines","⌛","Сроки выполнения"],["works","✓","Выполненные работы"],["invoices","▤","Поставка"],["workers","♟","Работники"],["responsibles","★","Ответственные"],["equipment","⚙","Машины и механизмы"],["acted","◫","Актированные дни"],["penalties","!","Штрафы"]];
+const manageViews=[["reportInfo","◷","Дата и погода"],["works","✓","Смонтированные марки"],["workers","♟","Работники"],["responsibles","★","Ответственные"],["equipment","▣","Техника"],["photos","▧","Фото"]];
 const unitOptions=["тн","кг","м²","м³","м.п.","шт.","компл.","смена","маш.-час","чел.-час","рейс","сутки"];
 const positionOptions=["Директор","Заместитель директора","Руководитель проекта","Начальник участка","Производитель работ","Мастер участка","Инженер ПТО","Инженер ОТ и ТБ","Геодезист","Монтажник","Электрогазосварщик","Сварщик","Стропальщик","Машинист крана","Водитель","Электрик","Разнорабочий"];
 let editingRows={};
@@ -14,10 +14,10 @@ async function flushSave(){
  try{
   if(currentObjectId&&currentDailyReportId){
    const project=await ATemir.loadObject(currentObjectId)||{};
-   ["companyName","object","address","client","companyLogo","objectPhoto","participants","workTypes","tasks","deadlines","financeContracts","financeActs","financePasswordHash"].forEach(k=>project[k]=state[k]);
+   ["object","address","client","contractNumber","contractDate","objectPhoto","participants","workTypes","tasks","deadlines","invoices","actedDays","penalties","financeContracts","financeActs","financePasswordHash"].forEach(k=>project[k]=state[k]);
    await ATemir.saveObject(currentObjectId,project);
    const daily={};
-   ["reportDate","weather","workDays","invoices","workers","responsibles","equipment","actedDays","penalties","reportPhotos","reportSections"].forEach(k=>daily[k]=state[k]);
+   ["reportDate","weather","workDays","workers","responsibles","equipment","reportPhotos"].forEach(k=>daily[k]=state[k]);
    await ATemir.saveDailyReport(currentDailyReportId,daily);
   }else if(currentReportId)await ATemir.save(currentReportId,state)
  }finally{
@@ -32,7 +32,7 @@ function flattenDatedRows(rows){
 }
 function normalizeState(d){
  d=d&&typeof d==="object"?d:{};
- const base={companyName:"",object:"",address:"",client:"",participants:[],objectPhoto:"",reportDate:"",weather:{temp:"",wind:"",precip:""},workTypes:[],tasks:[],workDays:[],invoices:[],workers:[],responsibles:[],equipment:[],deadlines:[],actedDays:[],penalties:[],reportPhotos:[],companyLogo:"",reportSections:{},financeContracts:[],financeActs:[],financePasswordHash:""};
+ const base={companyName:"",object:"",address:"",client:"",contractNumber:"",contractDate:"",participants:[],objectPhoto:"",reportDate:"",weather:{temp:"",wind:"",precip:""},workTypes:[],tasks:[],workDays:[],invoices:[],workers:[],responsibles:[],equipment:[],deadlines:[],actedDays:[],penalties:[],reportPhotos:[],companyLogo:"",reportSections:{},financeContracts:[],financeActs:[],financePasswordHash:""};
  const x={...base,...d};x.reportSections={...(d.reportSections||{})};x.weather={...base.weather,...(d.weather||{})};
  ["workTypes","tasks","workDays","invoices","workers","responsibles","equipment","deadlines","actedDays","penalties","reportPhotos","financeContracts","financeActs","participants"].forEach(k=>{if(!Array.isArray(x[k]))x[k]=[]});x.workDays=flattenDatedRows(x.workDays);x.invoices=flattenDatedRows(x.invoices);
  if(!x.object&&d.objectName)x.object=d.objectName;if(!x.client&&d.customer)x.client=d.customer;
