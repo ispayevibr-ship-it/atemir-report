@@ -24,3 +24,9 @@
 
 .bomFilters{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}.bomFilters button{border:1px solid #cbd6df;background:#fff;color:#183247;padding:7px 10px;font-size:10px;font-weight:700;cursor:pointer}.bomFilters button.active{background:#123e63;color:#fff;border-color:#123e63}
 .bomStatus.done td{background:#e2f4e6}.bomStatus.partial td{background:#fff4cf}.bomStatus.untouched td{background:#f7f9fb}
+
+.sectionToggles{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:8px 14px}
+.sectionToggles label{display:flex;align-items:center;gap:7px;padding:8px 10px;background:#f4f7fa;border:1px solid #d9e1e8;font-size:12px;font-weight:700}
+.sectionToggles input{width:16px;height:16px}
+.rowSave{align-self:end;white-space:nowrap}
+@media(max-width:900px){.sectionToggles{grid-template-columns:1fr 1fr}}
