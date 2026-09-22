@@ -130,7 +130,7 @@ function fmt(v){const x=n(v);return x.toLocaleString("ru-RU",{maximumFractionDig
 function groupedWorksView(){
  const by={};arr("workDays").forEach(x=>{const d=x.date||"Без даты";(by[d]??=[]).push(x)});
  const dates=Object.keys(by).sort().reverse();
- return card("Выполненные работы",dates.map((d,idx)=>`<details class="reportGroup" ${idx<3?"open":""}><summary><b>${esc(d)}</b><span>${by[d].length} поз.</span></summary>${table(by[d],[["Вид работ","type"],["Шифр","code"],["Марка","mark"],["Наименование","name"],["Кол-во",x=>x.qty||x.quantity],["Ед.","unit"],["Итого вес",x=>x.totalWeight||""]])}</details>`).join("")||'<div class="empty">Нет данных</div>')
+ return card("Выполненные работы",dates.map((d,idx)=>`<details class="reportGroup" ${idx<3?"open":""}><summary><b>${esc(d)}</b><span>${by[d].length} поз.</span></summary>${table(by[d],[["Вид работ","type"],["Шифр","code"],["Марка","mark"],["Наименование","name"],["Кол-во",x=>x.qty||x.quantity],["Ед.","unit"],["Итого вес, тн",x=>n(x.totalWeight)?fmt(n(x.totalWeight)/1000):""]])}</details>`).join("")||'<div class="empty">Нет данных</div>')
 }
 function groupedInvoicesView(){
  const by={};arr("invoices").forEach(x=>{const d=x.date||"Без даты";(by[d]??=[]).push(x)});
