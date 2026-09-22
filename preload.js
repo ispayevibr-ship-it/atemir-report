@@ -1,6 +1,7 @@
 const {contextBridge,ipcRenderer}=require("electron");
 contextBridge.exposeInMainWorld("ATemir",{
  reports:()=>ipcRenderer.invoke("db:reports"),
+ reportAnalytics:()=>ipcRenderer.invoke("db:reportAnalytics"),
  createReport:n=>ipcRenderer.invoke("db:createReport",n),
  duplicateReport:id=>ipcRenderer.invoke("db:duplicateReport",id),
  deleteReport:id=>ipcRenderer.invoke("db:deleteReport",id),
