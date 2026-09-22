@@ -1,8 +1,12 @@
 const {contextBridge,ipcRenderer}=require("electron");
 contextBridge.exposeInMainWorld("Smetriqo",{
- objects:()=>ipcRenderer.invoke("db:objects"),
- objectAnalytics:()=>ipcRenderer.invoke("db:objectAnalytics"),
- createObject:n=>ipcRenderer.invoke("db:createObject",n),
+ companies:()=>ipcRenderer.invoke("db:companies"),
+ createCompany:n=>ipcRenderer.invoke("db:createCompany",n),
+ saveCompany:(id,d)=>ipcRenderer.invoke("db:saveCompany",id,d),
+ deleteCompany:id=>ipcRenderer.invoke("db:deleteCompany",id),
+ objects:companyId=>ipcRenderer.invoke("db:objects",companyId),
+ objectAnalytics:companyId=>ipcRenderer.invoke("db:objectAnalytics",companyId),
+ createObject:(n,companyId)=>ipcRenderer.invoke("db:createObject",n,companyId),
  loadObject:id=>ipcRenderer.invoke("db:loadObject",id),
  saveObject:(id,d)=>ipcRenderer.invoke("db:saveObject",id,d),
  deleteObject:id=>ipcRenderer.invoke("db:deleteObject",id),
