@@ -1,5 +1,16 @@
 const {contextBridge,ipcRenderer}=require("electron");
 contextBridge.exposeInMainWorld("ATemir",{
+ objects:()=>ipcRenderer.invoke("db:objects"),
+ objectAnalytics:()=>ipcRenderer.invoke("db:objectAnalytics"),
+ createObject:n=>ipcRenderer.invoke("db:createObject",n),
+ loadObject:id=>ipcRenderer.invoke("db:loadObject",id),
+ saveObject:(id,d)=>ipcRenderer.invoke("db:saveObject",id,d),
+ deleteObject:id=>ipcRenderer.invoke("db:deleteObject",id),
+ dailyReports:objectId=>ipcRenderer.invoke("db:dailyReports",objectId),
+ createDailyReport:(objectId,date)=>ipcRenderer.invoke("db:createDailyReport",objectId,date),
+ loadDailyReport:id=>ipcRenderer.invoke("db:loadDailyReport",id),
+ saveDailyReport:(id,d)=>ipcRenderer.invoke("db:saveDailyReport",id,d),
+ deleteDailyReport:id=>ipcRenderer.invoke("db:deleteDailyReport",id),
  reports:()=>ipcRenderer.invoke("db:reports"),
  reportAnalytics:()=>ipcRenderer.invoke("db:reportAnalytics"),
  createReport:n=>ipcRenderer.invoke("db:createReport",n),
