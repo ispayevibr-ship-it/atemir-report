@@ -23,6 +23,7 @@ contextBridge.exposeInMainWorld("ATemir",{
  exportHTML:h=>ipcRenderer.invoke("file:html",h),
  pdf:h=>ipcRenderer.invoke("file:pdf",h),
  chooseLogo:()=>ipcRenderer.invoke("file:logo"),
+ chooseObjectPhoto:()=>ipcRenderer.invoke("file:objectPhoto"),
  choosePhotos:()=>ipcRenderer.invoke("file:photos"),
  importBOM:()=>ipcRenderer.invoke("file:bom")
 });
