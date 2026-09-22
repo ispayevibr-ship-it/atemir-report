@@ -239,3 +239,5 @@ html,body,button,input,select,textarea{font-family:"Segoe UI",Inter,Arial,sans-s
 .activityList{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px}.activityObject{display:grid;grid-template-columns:1fr auto;gap:3px 10px;text-align:left;padding:10px 12px;border:1px solid #dbe4eb;border-radius:9px;background:#fff}.activityObject>b{color:#123e63}.activityObject>span{grid-column:1/2;color:#71828e;font-size:10px}.activityObject>strong{grid-column:2;grid-row:1/3;align-self:center;color:#47725a}.activityObject.stale{border-color:#ead9b0;background:#fffaf0}.activityObject.stale>strong{color:#a55b22}
 
 .portfolioKpis .kpiDate{font-size:20px;letter-spacing:.2px}
+
+.objectGroupTitle{display:flex;align-items:center;justify-content:space-between;margin:14px 0 8px;padding:0 2px;color:#123e63}.objectGroupTitle:first-of-type{margin-top:10px}.objectGroupTitle span{min-width:25px;text-align:center;padding:3px 8px;border-radius:12px;background:#eaf2f8;color:#1769aa;font-size:10px}.objectGroupTitle.closed{margin-top:20px;color:#657985}.objectGroupTitle.closed span{background:#eef1f3;color:#657985}.closedPortfolio{margin-bottom:2px}
