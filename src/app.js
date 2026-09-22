@@ -59,14 +59,14 @@ function fieldEditor(key,r,i,f){
  return `<div class="field"><label>${label}</label><input data-list="${key}" data-i="${i}" data-k="${k}" type="${type==="number"?"text":(type||"text")}" ${type==="number"?'inputmode="decimal"':""} value="${esc(val)}"></div>`;
 }
 function rowSummary(r,fields){const vals=fields.map(f=>{const v=r[f[1]];return v!==undefined&&v!==""?`<span><small>${esc(f[0])}</small><b>${esc(v)}</b></span>`:""}).filter(Boolean).slice(0,5).join("");return vals||"<span><b>Новая запись</b></span>"}
-function rowEditor(key,fields){const rows=arr(key);return `<div class="editorRows">${rows.map((r,i)=>{const open=editingRows[key]===i;return open?`<div class="editRow open">${fields.map(f=>fieldEditor(key,r,i,f)).join("")}<button class="btn rowSave" data-row-save="${key}" data-i="${i}">Сохранить</button><button class="danger" data-del="${key}" data-i="${i}">Удалить</button></div>`:`<div class="compactRow"><div class="compactInfo">${rowSummary(r,fields)}</div><div class="compactActions"><button class="btn" data-edit-row="${key}" data-i="${i}">Редактировать</button>${key==="workDays"?`<button data-copy-row="${key}" data-i="${i}">Копировать</button>`:""}<button class="danger" data-del="${key}" data-i="${i}">Удалить</button></div></div>`}).join("")}</div><button class="btn add" data-add="${key}">+ Добавить</button>`}
+function rowEditor(key,fields){const rows=arr(key);return `<div class="editorRows">${rows.map((r,i)=>{const open=editingRows[key]===i;return open?`<div class="editRow open">${fields.map(f=>fieldEditor(key,r,i,f)).join("")}<button class="btn rowSave" data-row-save="${key}" data-i="${i}">Сохранить</button><button class="danger" data-del="${key}" data-i="${i}">Удалить</button></div>`:`<div class="compactRow"><div class="compactInfo">${rowSummary(r,fields)}</div><div class="compactActions"><button class="btn" data-edit-row="${key}" data-i="${i}">Редактировать</button>${["workDays","invoices","actedDays","equipment"].includes(key)?`<button data-copy-row="${key}" data-i="${i}">Копировать</button>`:""}<button class="danger" data-del="${key}" data-i="${i}">Удалить</button></div></div>`}).join("")}</div><button class="btn add" data-add="${key}">+ Добавить</button>`}
 
 function n(v){const x=Number(String(v??"").replace(",","."));return Number.isFinite(x)?x:0}
 function qtyOf(x){return n(x.qty??x.quantity)}
 function taskVol(t){return n(t.volume??t.qty??t.quantity)}
 function perFor(task,b){const w=n(b?.weight1??b?.weight);if(!w)return 1;const u=String(task?.unit||"").toLowerCase();return u==="тн"||u==="т"||u==="ton"||u==="tons"?w/1000:u==="кг"||u==="kg"?w:1}
 function hydrateRowUnits(){
- for(const key of ["workDays","invoices"])for(const r of arr(key)){if(n(r.per)>0)continue;const t=arr("tasks").find(x=>(x.type||"")===(r.type||"")&&(x.code||"")===(r.code||""));if(!t)continue;const b=(t.bom||[]).find(x=>normMark(x.mark)===normMark(r.mark));if(b){r.per=perFor(t,b);r.weight1=n(r.weight1||b.weight1||b.weight);r.unit=r.unit||t.unit||"шт";r.totalWeight=qtyOf(r)*n(r.weight1)}}}
+ for(const key of ["workDays","invoices"])for(const r of arr(key)){const t=arr("tasks").find(x=>(x.type||"")===(r.type||"")&&(x.code||"")===(r.code||""));if(!t)continue;const b=(t.bom||[]).find(x=>normMark(x.mark)===normMark(r.mark));r.unit=r.unit||t.unit||"шт";if(b){if(!n(r.per))r.per=perFor(t,b);r.weight1=n(r.weight1||b.weight1||b.weight);r.totalWeight=qtyOf(r)*n(r.weight1)}}}
 
 function rowPer(x){if(n(x.per)>0)return n(x.per);const t=arr("tasks").find(t=>(t.type||"")===(x.type||"")&&(t.code||"")===(x.code||""));const b=(t?.bom||[]).find(b=>normMark(b.mark)===normMark(x.mark));return b?perFor(t,b):1}
 function doneFor(type,code){return arr("workDays").filter(x=>(x.type||"")===type&&(x.code||"")===code).reduce((z,x)=>z+qtyOf(x)*rowPer(x),0)}
@@ -111,7 +111,7 @@ function groupedWorksView(){
 }
 function groupedInvoicesView(){
  const by={};arr("invoices").forEach(x=>{const d=x.date||"Без даты";(by[d]??=[]).push(x)});
- return card("Поставка",Object.keys(by).sort().reverse().map((d,idx)=>`<details class="reportGroup" ${idx<3?"open":""}><summary><b>${esc(d)}</b><span>${by[d].length} поз.</span></summary>${table(by[d],[["Вид работ","type"],["Шифр","code"],["Марка","mark"],["Количество",x=>x.qty||x.quantity]])}</details>`).join("")||'<div class="empty">Нет данных</div>')
+ return card("Поставка",Object.keys(by).sort().reverse().map((d,idx)=>`<details class="reportGroup" ${idx<3?"open":""}><summary><b>${esc(d)}</b><span>${by[d].length} поз.</span></summary>${table(by[d],[["№ накладной","number"],["Вид работ","type"],["Шифр","code"],["Марка","mark"],["Количество",x=>x.qty||x.quantity],["Ед.","unit"]])}</details>`).join("")||'<div class="empty">Нет данных</div>')
 }
 function penaltiesView(){
  const rows=arr("penalties"),total=rows.reduce((s,x)=>s+n(x.amount),0);
