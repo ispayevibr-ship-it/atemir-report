@@ -5,5 +5,6 @@ contextBridge.exposeInMainWorld("ATemir",{
  importJSON:()=>ipcRenderer.invoke("file:import"),
  backup:d=>ipcRenderer.invoke("file:backup",d),
  exportHTML:h=>ipcRenderer.invoke("file:html",h),
- pdf:()=>ipcRenderer.invoke("file:pdf")
+ pdf:()=>ipcRenderer.invoke("file:pdf"),
+ chooseLogo:()=>ipcRenderer.invoke("file:logo")
 });
