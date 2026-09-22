@@ -60,8 +60,9 @@ function perFor(task,b){const w=n(b?.weight1??b?.weight);if(!w)return 1;const u=
 function hydrateRowUnits(){
  for(const key of ["workDays","invoices"])for(const r of arr(key)){if(n(r.per)>0)continue;const t=arr("tasks").find(x=>(x.type||"")===(r.type||"")&&(x.code||"")===(r.code||""));if(!t)continue;const b=(t.bom||[]).find(x=>normMark(x.mark)===normMark(r.mark));if(b){r.per=perFor(t,b);r.weight1=n(r.weight1||b.weight1||b.weight);r.unit=r.unit||t.unit||"шт";r.totalWeight=qtyOf(r)*n(r.weight1)}}}
 
-function doneFor(type,code){return arr("workDays").filter(x=>(x.type||"")===type&&(x.code||"")===code).reduce((s,x)=>s+qtyOf(x)*n(x.per||1),0)}
-function deliveredFor(type,code){return arr("invoices").filter(x=>(!x.type||x.type===type)&&(x.code||"")===code).reduce((z,x)=>z+qtyOf(x)*n(x.per||1),0)}
+function rowPer(x){if(n(x.per)>0)return n(x.per);const t=arr("tasks").find(t=>(t.type||"")===(x.type||"")&&(t.code||"")===(x.code||""));const b=(t?.bom||[]).find(b=>normMark(b.mark)===normMark(x.mark));return b?perFor(t,b):1}
+function doneFor(type,code){return arr("workDays").filter(x=>(x.type||"")===type&&(x.code||"")===code).reduce((z,x)=>z+qtyOf(x)*rowPer(x),0)}
+function deliveredFor(type,code){return arr("invoices").filter(x=>(!x.type||x.type===type)&&(x.code||"")===code).reduce((z,x)=>z+qtyOf(x)*rowPer(x),0)}
 function normMark(v){return String(v||"").trim().toUpperCase().replace(/[–—−]/g,"-").replace(/\s+/g,"").replace(/^K(?=\d)/,"К")}
 function bomRows(){return arr("tasks").flatMap(t=>(t.bom||[]).map(b=>({...b,type:t.type,code:t.code,unit:t.unit})))}
 function usedMark(type,code,mark){return arr("workDays").filter(x=>(x.type||"")===type&&(x.code||"")===code&&normMark(x.mark)===normMark(mark)).reduce((s,x)=>s+qtyOf(x),0)}
@@ -73,7 +74,7 @@ function bomView(){
  return card("Ведомость марок",`<div class="stats"><b>Всего: ${fmt(total)}</b><b>Смонтировано: ${fmt(done)}</b><b>Остаток: ${fmt(Math.max(0,total-done))}</b></div>${filters}${body}`)
 }
 function dynamicsView(){
- const groups={};arr("workDays").filter(x=>x.date).forEach(x=>{const k=(x.type||"—")+"|||"+(x.code||"—")+"|||"+(x.unit||"");groups[k]??={type:x.type||"—",code:x.code||"—",unit:x.unit||"",daily:{}};groups[k].daily[x.date]=(groups[k].daily[x.date]||0)+qtyOf(x)*n(x.per||1)});
+ const groups={};arr("workDays").filter(x=>x.date).forEach(x=>{const k=(x.type||"—")+"|||"+(x.code||"—")+"|||"+(x.unit||"");groups[k]??={type:x.type||"—",code:x.code||"—",unit:x.unit||"",daily:{}};groups[k].daily[x.date]=(groups[k].daily[x.date]||0)+qtyOf(x)*rowPer(x)});
  const end=state.reportDate?new Date(state.reportDate+"T12:00:00"):new Date(),days=[];for(let i=20;i>=0;i--){const d=new Date(end);d.setDate(end.getDate()-i);days.push(d.toISOString().slice(0,10))}
  const cards=Object.values(groups).map(g=>{const max=Math.max(1,...days.map(d=>g.daily[d]||0));return `<div class="chartBox"><h3>${esc(g.type)} · ${esc(g.code)} · ${esc(g.unit)}</h3><div class="bars">${days.map(d=>{const v=g.daily[d]||0;return `<div class="barCol" title="${esc(d)}: ${fmt(v)}"><span>${v?fmt(v):""}</span><i style="height:${v?Math.max(3,v/max*100):1}%"></i><small>${d.slice(8,10)}.${d.slice(5,7)}</small></div>`}).join("")}</div></div>`}).join("");
  return card("Динамика выполненных работ",cards||'<div class="empty">Добавьте выполненные работы с датами.</div>')
