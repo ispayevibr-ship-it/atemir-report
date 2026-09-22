@@ -1,0 +1,9 @@
+{
+  "name":"atemir-report","version":"2.0.0","description":"A-Temir Stroy construction report","main":"main.js",
+  "scripts":{"start":"electron .","dist:win":"electron-builder --win portable --x64"},
+  "dependencies":{"better-sqlite3":"11.10.0"},
+  "devDependencies":{"electron":"36.9.5","electron-builder":"26.0.12"},
+  "build":{"appId":"kz.atemir.report","productName":"A-Temir Report","asar":true,
+    "files":["main.js","preload.js","src/**/*","package.json"],
+    "win":{"target":"portable","artifactName":"A-Temir-Report-2.0.0-Windows.exe"}}
+}
