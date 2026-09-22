@@ -10,3 +10,10 @@ ipcMain.handle("file:import",async()=>{const r=await dialog.showOpenDialog(win,{
 ipcMain.handle("file:backup",async(_,d)=>{const r=await dialog.showSaveDialog(win,{defaultPath:"ATemir_Backup.json",filters:[{name:"JSON",extensions:["json"]}]});if(r.canceled)return false;fs.writeFileSync(r.filePath,JSON.stringify(d,null,2));return true});
 ipcMain.handle("file:html",async(_,h)=>{const r=await dialog.showSaveDialog(win,{defaultPath:"A-Temir_Report.html",filters:[{name:"HTML",extensions:["html"]}]});if(r.canceled)return false;fs.writeFileSync(r.filePath,h);return true});
 ipcMain.handle("file:pdf",async()=>{const r=await dialog.showSaveDialog(win,{defaultPath:"A-Temir_Report.pdf",filters:[{name:"PDF",extensions:["pdf"]}]});if(r.canceled)return false;const b=await win.webContents.printToPDF({printBackground:true,pageSize:"A4"});fs.writeFileSync(r.filePath,b);return true});
+ipcMain.handle("file:logo",async()=>{
+ const r=await dialog.showOpenDialog(win,{properties:["openFile"],filters:[{name:"Images",extensions:["png","jpg","jpeg","webp"]}]});
+ if(r.canceled)return null;
+ const p=r.filePaths[0], ext=path.extname(p).toLowerCase().replace(".","")||"png";
+ const mime=ext==="jpg"||ext==="jpeg"?"image/jpeg":ext==="webp"?"image/webp":"image/png";
+ return "data:"+mime+";base64,"+fs.readFileSync(p).toString("base64");
+});
