@@ -76,3 +76,11 @@ table{font-size:11px;background:#fff}th{background:#e9eff4;color:#29465e;font-si
 @media(max-width:1100px){header{align-items:flex-start;flex-direction:column}.headerActions{justify-content:flex-start}}
 @media(max-width:900px){body{grid-template-columns:1fr}aside{min-height:0;position:static}.brand{padding:14px 16px}.brand:after{left:16px}nav{padding:6px;display:flex;overflow:auto}nav button{min-width:max-content}header{position:static}.headerActions{width:100%}#content{padding:12px}}
 @media print{.eyebrow{display:none}}
+
+/* final interaction polish */
+header button:focus-visible,nav button:focus-visible,.btn:focus-visible,.manageTabs button:focus-visible,.danger:focus-visible{outline:3px solid #f2b31866;outline-offset:2px}
+button:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
+.tableWrap{overflow:auto;border-radius:5px}.tableWrap table{min-width:720px}
+.editorRows>.editRow:nth-child(even){background:#f2f6f9}
+.financeActions,.photoTools{flex-wrap:wrap}
+@media(max-width:600px){.headerActions button{flex:1 1 auto}.financeStats{grid-template-columns:1fr}.sectionToggles{grid-template-columns:1fr}.editRow{grid-template-columns:1fr}.rowSave,.danger{width:100%}}
