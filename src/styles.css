@@ -116,3 +116,5 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
 .editRow.open{grid-template-columns:repeat(auto-fit,minmax(155px,1fr))}.editRow.open .rowSave,.editRow.open>.danger{align-self:end;height:36px}.compactInfo span:has(small:first-child){max-width:250px}.compactInfo span small{letter-spacing:.1px;text-transform:none}.compactInfo span b{line-height:1.25}
 
 .linkedField select{font-weight:600;color:#173b57}.linkedField select option{font-weight:400}.card table td:nth-child(n+4){font-variant-numeric:tabular-nums}.reportGroup summary{display:flex;justify-content:space-between;align-items:center;gap:10px}.reportGroup summary span{font-size:9px;color:#71808c;font-weight:600}
+
+.bomAttachList{display:grid;gap:8px;margin-top:14px}.bomAttach{display:grid;grid-template-columns:minmax(220px,1.2fr) minmax(220px,1fr) auto;align-items:center;gap:12px}.bomAttach>div{display:flex;flex-direction:column;gap:3px}.bomAttach>div small{color:#6d7d88}.bomAttach>span.ready{color:#176b45;font-weight:700}@media(max-width:800px){.bomAttach{grid-template-columns:1fr}.bomAttach .btn{width:100%}}
