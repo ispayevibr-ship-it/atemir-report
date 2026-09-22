@@ -1,5 +1,5 @@
 const {contextBridge,ipcRenderer}=require("electron");
-contextBridge.exposeInMainWorld("ATemir",{
+contextBridge.exposeInMainWorld("Smetriqo",{
  objects:()=>ipcRenderer.invoke("db:objects"),
  objectAnalytics:()=>ipcRenderer.invoke("db:objectAnalytics"),
  createObject:n=>ipcRenderer.invoke("db:createObject",n),
