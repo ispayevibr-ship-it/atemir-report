@@ -94,7 +94,7 @@ function doneFor(type,code){return arr("workDays").filter(x=>(x.type||"")===type
 function deliveredFor(type,code){return arr("invoices").filter(x=>(!x.type||x.type===type)&&(x.code||"")===code).reduce((z,x)=>z+qtyOf(x)*rowPer(x),0)}
 function normMark(v){return String(v||"").trim().toUpperCase().replace(/[–—−]/g,"-").replace(/\s+/g,"").replace(/^K(?=\d)/,"К")}
 function bomRows(){return arr("tasks").flatMap(t=>(t.bom||[]).map(b=>({...b,type:t.type,code:t.code,unit:t.unit})))}
-function usedMark(type,code,mark){return arr("workDays").filter(x=>(x.type||"")===type&&(x.code||"")===code&&normMark(x.mark)===normMark(mark)).reduce((s,x)=>s+qtyOf(x),0)}
+function usedMark(type,code,mark){if(currentObjectId){return (objectAnalyticsData||[]).filter(x=>+x.id===+currentObjectId&&x.reportData).flatMap(x=>x.reportData.workDays||[]).filter(x=>(x.type||"")===type&&(x.code||"")===code&&normMark(x.mark)===normMark(mark)).reduce((s,x)=>s+qtyOf(x),0)}return arr("workDays").filter(x=>(x.type||"")===type&&(x.code||"")===code&&normMark(x.mark)===normMark(mark)).reduce((s,x)=>s+qtyOf(x),0)}
 function deliveredMark(type,code,mark){return arr("invoices").filter(x=>(!x.type||x.type===type)&&(x.code||"")===code&&normMark(x.mark)===normMark(mark)).reduce((s,x)=>s+qtyOf(x),0)}
 function taskStatus(t){const p=taskVol(t),d=doneFor(t.type||"",t.code||""),del=deliveredFor(t.type||"",t.code||"");return{p,d,del,left:Math.max(0,p-d),pct:p?Math.min(100,d/p*100):0}}
 function bomView(){
