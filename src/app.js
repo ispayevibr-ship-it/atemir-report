@@ -12,13 +12,15 @@ async function flushSave(){
  if(saveBusy){saveAgain=true;return}
  saveBusy=true;
  try{
-  if(currentObjectId&&currentDailyReportId){
+  if(currentObjectId){
    const project=await ATemir.loadObject(currentObjectId)||{};
    ["object","address","client","contractNumber","contractDate","objectPhoto","participants","workTypes","tasks","deadlines","invoices","actedDays","penalties","financeContracts","financeActs","financePasswordHash"].forEach(k=>project[k]=state[k]);
    await ATemir.saveObject(currentObjectId,project);
-   const daily={};
-   ["reportDate","weather","workDays","workers","responsibles","equipment","reportPhotos"].forEach(k=>daily[k]=state[k]);
-   await ATemir.saveDailyReport(currentDailyReportId,daily);
+   if(currentDailyReportId){
+    const daily={};
+    ["reportDate","weather","workDays","workers","responsibles","equipment","reportPhotos"].forEach(k=>daily[k]=state[k]);
+    await ATemir.saveDailyReport(currentDailyReportId,daily);
+   }
   }else if(currentReportId)await ATemir.save(currentReportId,state)
  }finally{
   saveBusy=false;
@@ -94,17 +96,16 @@ function usedMark(type,code,mark){return arr("workDays").filter(x=>(x.type||"")=
 function deliveredMark(type,code,mark){return arr("invoices").filter(x=>(!x.type||x.type===type)&&(x.code||"")===code&&normMark(x.mark)===normMark(mark)).reduce((s,x)=>s+qtyOf(x),0)}
 function taskStatus(t){const p=taskVol(t),d=doneFor(t.type||"",t.code||""),del=deliveredFor(t.type||"",t.code||"");return{p,d,del,left:Math.max(0,p-d),pct:p?Math.min(100,d/p*100):0}}
 function bomView(){
- const all=bomRows().map(b=>{const q=n(b.qty??b.quantity),d=Math.min(q,usedMark(b.type,b.code,b.mark)),sup=Math.min(q,deliveredMark(b.type,b.code,b.mark));return{...b,q,d,sup,left:Math.max(0,q-d)}});
- const rows=all.filter(x=>bomFilter==="mounted"?x.d>0:bomFilter==="remaining"?x.left>0:true),total=all.reduce((z,x)=>z+x.q,0),done=all.reduce((z,x)=>z+x.d,0);
- const filters=`<div class="bomFilters"><button data-bom-filter="all" class="${bomFilter==="all"?"active":""}">Все</button><button data-bom-filter="mounted" class="${bomFilter==="mounted"?"active":""}">Смонтированные</button><button data-bom-filter="remaining" class="${bomFilter==="remaining"?"active":""}">С остатком</button></div>`;
- const body=rows.length?`<div class="bomSimple">${rows.map(x=>`<div class="bomSimpleRow"><div><b>${esc(x.mark||"—")}</b><span>${esc(x.name||"Без наименования")}</span></div><div class="bomCount"><small>Смонтировано</small><b>${fmt(x.d)} / ${fmt(x.q)}</b><em>Поставлено ${fmt(x.sup)} · Осталось ${fmt(x.left)}</em></div></div>`).join("")}</div>`:'<div class="empty">Нет строк для выбранного фильтра</div>';
- return card("Ведомость марок",`<div class="bomHeadline"><div><small>ВСЕГО</small><b>${fmt(total)}</b></div><div><small>СМОНТИРОВАНО</small><b>${fmt(done)}</b></div><div><small>ОСТАЛОСЬ</small><b>${fmt(Math.max(0,total-done))}</b></div></div>${filters}${body}`)
+ const grouped={};for(const w of arr("workDays")){const key=[w.type||"",w.code||"",w.mark||"",w.unit||""].join("|||");grouped[key]??={type:w.type||"",code:w.code||"",mark:w.mark||"—",name:w.name||"",unit:w.unit||"",qty:0,weight:0};grouped[key].qty+=qtyOf(w);grouped[key].weight+=n(w.totalWeight)||qtyOf(w)*n(w.weight1)}
+ const rows=Object.values(grouped),shown=rows.slice(0,12);
+ return card("Смонтированные марки за день",rows.length?`<div class="dailyMarksList">${shown.map(x=>`<div class="bomSimpleRow"><div><b>${esc(x.mark)}</b><span>${esc(x.name||x.type)} · ${esc(x.code)}</span></div><div class="bomCount"><small>Смонтировано</small><b>${fmt(x.qty)} ${esc(x.unit)}</b>${x.weight?`<em>Вес: ${fmt(x.weight)} тн</em>`:""}</div></div>`).join("")}</div>${rows.length>12?`<div class="listLimitHint">Показано 12 из ${rows.length}. Полный список остаётся в разделе выполненных работ.</div>`:""}`:'<div class="empty">В этом отчёте смонтированных марок пока нет.</div>')
 }
 function dynamicsView(){
- const groups={};arr("workDays").filter(x=>x.date).forEach(x=>{const k=(x.type||"—")+"|||"+(x.code||"—")+"|||"+(x.unit||"");groups[k]??={type:x.type||"—",code:x.code||"—",unit:x.unit||"",daily:{}};groups[k].daily[x.date]=(groups[k].daily[x.date]||0)+qtyOf(x)*rowPer(x)});
- const endRaw=state.reportDate?new Date(state.reportDate+"T12:00:00"):new Date(),end=Number.isFinite(endRaw.getTime())?endRaw:new Date(),days=[];for(let i=20;i>=0;i--){const d=new Date(end);d.setDate(end.getDate()-i);days.push(d.toISOString().slice(0,10))}
- const cards=Object.values(groups).map(g=>{const vals=days.map(d=>g.daily[d]||0),max=Math.max(1,...vals),sum=vals.reduce((a,b)=>a+b,0),best=Math.max(...vals);return `<div class="chartBox dynamicsCard"><div class="dynHead"><div><h3>${esc(g.type)}</h3><span>${esc(g.code)} · ${esc(g.unit)}</span></div><div><small>За 21 день</small><b>${fmt(sum)} ${esc(g.unit)}</b></div></div><div class="bars">${days.map(d=>{const v=g.daily[d]||0;return `<div class="barCol ${v===best&&v>0?"peak":""}" title="${esc(d)}: ${fmt(v)}"><span>${v?fmt(v):""}</span><i style="height:${v?Math.max(4,v/max*100):1}%"></i><small>${d.slice(8,10)}.${d.slice(5,7)}</small></div>`}).join("")}</div></div>`}).join("");
- return card("Динамика выполненных работ",cards||'<div class="empty">Добавьте выполненные работы с датами.</div>')
+ const reports=currentObjectId?(objectAnalyticsData||[]).filter(x=>+x.id===+currentObjectId&&x.reportData).map(x=>x.reportData):[{workDays:arr("workDays")}],groups={};
+ for(const r of reports)for(const x of r.workDays||[]){if(!x.date&&r.reportDate)x.date=r.reportDate;const k=(x.type||"—")+"|||"+(x.code||"—")+"|||"+(x.unit||"");groups[k]??={type:x.type||"—",code:x.code||"—",unit:x.unit||"",daily:{}};const d=x.date||r.reportDate;if(d)groups[k].daily[d]=(groups[k].daily[d]||0)+qtyOf(x)*rowPer(x)}
+ const dates=[...new Set(reports.map(r=>r.reportDate).filter(Boolean))].sort(),endRaw=dates.length?new Date(dates[dates.length-1]+"T12:00:00"):new Date(),days=[];for(let i=20;i>=0;i--){const d=new Date(endRaw);d.setDate(endRaw.getDate()-i);days.push(d.toISOString().slice(0,10))}
+ const cards=Object.values(groups).map(g=>{const vals=days.map(d=>g.daily[d]||0),max=Math.max(1,...vals),sum=vals.reduce((a,b)=>a+b,0);return `<div class="chartBox dynamicsCard"><div class="dynHead"><div><h3>${esc(g.type)}</h3><span>${esc(g.code)} · ${esc(g.unit)}</span></div><div><small>За 21 день</small><b>${fmt(sum)} ${esc(g.unit)}</b></div></div><div class="bars">${days.map(d=>{const v=g.daily[d]||0;return `<div class="barCol" title="${esc(d)}: ${fmt(v)}"><span>${v?fmt(v):""}</span><i style="height:${v?Math.max(4,v/max*100):1}%"></i><small>${d.slice(8,10)}.${d.slice(5,7)}</small></div>`}).join("")}</div></div>`}).join("");
+ return card("Динамика выполненных работ по объекту",cards||'<div class="empty">Пока нет выполненных работ по объекту.</div>')
 }
 function ganttView(){
  const today=state.reportDate||new Date().toISOString().slice(0,10);
@@ -248,7 +249,7 @@ function render(){if(view==="reports"){view="objects"}if(currentObjectId&&curren
 $("#nav").onclick=async e=>{const oj=e.target.closest("[data-object-jump]");if(oj){document.querySelectorAll("#nav button").forEach(x=>x.classList.remove("active"));oj.classList.add("active");document.getElementById("object-"+oj.dataset.objectJump)?.scrollIntoView({behavior:"smooth",block:"start"});return}const jump=e.target.closest("[data-dashboard-jump]");if(jump){const id=jump.dataset.dashboardJump;document.querySelectorAll("#nav button").forEach(x=>x.classList.remove("active"));jump.classList.add("active");if(id==="top")window.scrollTo({top:0,behavior:"smooth"});else document.getElementById(id)?.scrollIntoView({behavior:"smooth",block:"start"});return}const back=e.target.closest("[data-back-objects]");if(back){await saveNow();currentDailyReportId=null;currentObjectId=null;await refreshObjects();view="objects";render();return}const oh=e.target.closest("[data-object-home]");if(oh){await saveNow();await refreshObjects();await openObject(currentObjectId);return}const rt=e.target.closest("[data-reports-tab]");if(rt){reportsTab=rt.dataset.reportsTab;showAllReports=reportsTab==="all";render();return}const b=e.target.closest("[data-v]");if(b){if(b.dataset.v==="finance"&&!(await unlockFinance()))return;view=b.dataset.v;render()}};
 $("#content").onclick=async e=>{const oe=e.target.closest("[data-object-edit]");if(oe){const box=document.getElementById("object-settings");if(box){box.hidden=!box.hidden;if(!box.hidden)box.scrollIntoView({behavior:"smooth",block:"start"})}return}
  const oh=e.target.closest("[data-object-home]");if(oh){await saveNow();await refreshObjects();await openObject(currentObjectId);return}
- const oc=e.target.closest("[data-object-create]");if(oc){const name=($("#newObjectName")?.value||"").trim()||"Новый объект";await ATemir.createObject(name);await refreshObjects();render();return}
+ const oc=e.target.closest("[data-object-create]");if(oc){const name=($("#newObjectName")?.value||"").trim()||"Новый объект";const id=await ATemir.createObject(name);await refreshObjects();await openObject(id);setTimeout(()=>{const box=document.getElementById("object-settings");if(box){box.hidden=false;box.scrollIntoView({behavior:"smooth",block:"start"})}},0);return}
  const oo=e.target.closest("[data-object-open]");if(oo){await saveNow();await openObject(oo.dataset.objectOpen);return}
  const exo=e.target.closest("[data-export-open]");if(exo){document.body.insertAdjacentHTML("beforeend",exportChooser());return}
  const exc=e.target.closest("[data-export-close]");if(exc){e.target.closest(".exportModal")?.remove();return}
