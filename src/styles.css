@@ -38,3 +38,12 @@
 .financeStats b{font-size:18px;color:#183247}
 .financeActions{display:flex;gap:10px;margin:14px 0}
 @media(max-width:900px){.financeStats{grid-template-columns:1fr 1fr}}
+
+.finChartRow{padding:10px 0;border-bottom:1px solid #dce4ea}.finChartRow:last-child{border-bottom:0}
+.finChartName{display:flex;justify-content:space-between;gap:12px;margin-bottom:6px}.finChartName span{font-weight:800}
+.finTrack{height:22px;background:#e7edf2;display:flex;overflow:hidden}.finTrack i{display:block;height:100%}
+.finClosed{background:#1769aa}.finLeft{background:#f2b318}
+.finLegend{display:flex;gap:18px;flex-wrap:wrap;font-size:11px;margin-top:5px;color:#526979}
+.finTimeline{height:240px;display:flex;align-items:flex-end;gap:8px;overflow-x:auto;padding:25px 5px 4px;border-bottom:1px solid #b9c6d0}
+.finPoint{height:100%;min-width:78px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.finPointBar{width:32px;background:#1769aa;min-height:3px}.finPoint b{font-size:9px;margin:4px 0}.finPoint small{font-size:9px;white-space:nowrap}
