@@ -112,3 +112,5 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
 .chartHint{display:block;font-size:9px;color:#71808c;font-weight:400;margin:-3px 0 10px;line-height:1.35}
 
 .linkedField select:disabled{background:#eef2f5;color:#87939c;border-style:dashed;cursor:not-allowed}.readonlyField input{background:#f4f7f9;color:#536b7c;font-weight:600;border-color:#dbe4ea}.editRow.open .field label{font-size:9px;font-weight:800;color:#476071;letter-spacing:.15px}.editRow.open .field input,.editRow.open .field select{height:36px}.editRow.open .field:focus-within label{color:#123e63}.editRow.open .field:focus-within input,.editRow.open .field:focus-within select{border-color:#1769aa;box-shadow:0 0 0 2px #1769aa18}
+
+.editRow.open{grid-template-columns:repeat(auto-fit,minmax(155px,1fr))}.editRow.open .rowSave,.editRow.open>.danger{align-self:end;height:36px}.compactInfo span:has(small:first-child){max-width:250px}.compactInfo span small{letter-spacing:.1px;text-transform:none}.compactInfo span b{line-height:1.25}
