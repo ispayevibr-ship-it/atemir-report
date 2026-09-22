@@ -243,3 +243,5 @@ html,body,button,input,select,textarea{font-family:"Segoe UI",Inter,Arial,sans-s
 .objectGroupTitle{display:flex;align-items:center;justify-content:space-between;margin:14px 0 8px;padding:0 2px;color:#123e63}.objectGroupTitle:first-of-type{margin-top:10px}.objectGroupTitle span{min-width:25px;text-align:center;padding:3px 8px;border-radius:12px;background:#eaf2f8;color:#1769aa;font-size:10px}.objectGroupTitle.closed{margin-top:20px;color:#657985}.objectGroupTitle.closed span{background:#eef1f3;color:#657985}.closedPortfolio{margin-bottom:2px}
 
 .trendSeries{display:block;margin-top:10px}.trendSeries>small{display:block;margin-bottom:5px;font-weight:700;color:#5f7484}.trendSeries+.trendSeries{padding-top:8px;border-top:1px solid rgba(18,62,99,.08)}
+
+.objectDailySeries{margin-top:14px}.objectDailySeries> b{display:block;margin:0 0 7px;color:#183f5c;font-size:12px}.objectDailySeries+.objectDailySeries{padding-top:12px;border-top:1px solid #e7edf1}
