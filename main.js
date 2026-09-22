@@ -23,3 +23,20 @@ ipcMain.handle("file:photos",async()=>{
  if(r.canceled)return [];
  return r.filePaths.slice(0,12).map(p=>{const ext=path.extname(p).toLowerCase();const mime=ext===".png"?"image/png":ext===".webp"?"image/webp":"image/jpeg";return "data:"+mime+";base64,"+fs.readFileSync(p).toString("base64")});
 });
+
+ipcMain.handle("file:bom",async()=>{
+ const r=await dialog.showOpenDialog(win,{properties:["openFile"],filters:[{name:"Excel",extensions:["xlsx","xls","xlsm"]}]});
+ if(r.canceled)return null;
+ const wb=XLSX.readFile(r.filePaths[0],{cellDates:false});
+ const sheet=wb.Sheets[wb.SheetNames[0]], raw=XLSX.utils.sheet_to_json(sheet,{header:1,defval:""});
+ const clean=s=>String(s??"").trim().toLowerCase().replace(/ё/g,"е");
+ let hi=raw.findIndex(row=>row.some(v=>/марка/.test(clean(v)))&&row.some(v=>/наимен/.test(clean(v))));
+ if(hi<0)hi=0;
+ const head=raw[hi].map(clean);
+ const col=(tests)=>head.findIndex(h=>tests.some(t=>t.test(h)));
+ const mi=col([/^марка/,/позици/]), ni=col([/наимен/]), qi=col([/колич/,/^кол-во/]), wi=col([/вес.*1/,/масса.*1/,/вес.*ед/]), ti=col([/общ.*вес/,/итого.*вес/,/общ.*мас/]);
+ if(mi<0||qi<0)throw new Error("Не найдены обязательные колонки «Марка» и «Количество».");
+ const num=v=>{const n=Number(String(v??"").replace(/\s/g,"").replace(",","."));return Number.isFinite(n)?n:0};
+ const rows=raw.slice(hi+1).map(r=>({mark:String(r[mi]??"").trim(),name:ni>=0?String(r[ni]??"").trim():"",qty:num(r[qi]),weight1:wi>=0?num(r[wi]):0,totalWeight:ti>=0?num(r[ti]):0})).filter(x=>x.mark&&x.qty>0);
+ return {sheet:wb.SheetNames[0],rows};
+});
