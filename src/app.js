@@ -18,7 +18,7 @@ async function flushSave(){
    await ATemir.saveObject(currentObjectId,project);
    if(currentDailyReportId){
     const daily={};
-    ["reportDate","weather","workDays","workers","responsibles","equipment","reportPhotos"].forEach(k=>daily[k]=state[k]);
+    ["reportDate","weather","workDays","workers","responsibles","equipment","reportPhotos","reportSections"].forEach(k=>daily[k]=state[k]);
     await ATemir.saveDailyReport(currentDailyReportId,daily);
    }
   }else if(currentReportId)await ATemir.save(currentReportId,state)
