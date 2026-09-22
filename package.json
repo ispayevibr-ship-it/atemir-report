@@ -1,5 +1,5 @@
 {
-  "name": "atemir-report",
+  "name": "smetriqo",
   "version": "2.0.0",
   "description": "Smetriqo — управление строительными объектами и ежедневными отчётами",
   "main": "main.js",
@@ -16,7 +16,7 @@
     "electron-builder": "26.0.12"
   },
   "build": {
-    "appId": "kz.atemir.report",
+    "appId": "kz.smetriqo.app",
     "productName": "Smetriqo",
     "asar": true,
     "files": [
