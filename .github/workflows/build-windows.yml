@@ -16,6 +16,12 @@ jobs:
         with:
           node-version: 22
 
+      - name: Syntax check
+        run: |
+          node --check main.js
+          node --check preload.js
+          node --check src/app.js
+
       - name: Install dependencies
         run: npm install
 
