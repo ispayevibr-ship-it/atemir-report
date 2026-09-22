@@ -39,16 +39,16 @@ function fieldEditor(key,r,i,f){
  if(type==="projectcode"){
   const typeVal=r.type||"", opts=[...new Set(arr("tasks").filter(t=>(t.type||"")===typeVal).map(t=>t.code).filter(Boolean))];
   const all=(val&&!opts.includes(val))?[val,...opts]:opts;
-  return `<div class="field"><label>${label}</label><select data-list="${key}" data-i="${i}" data-k="${k}"><option value="">Выберите шифр</option>${all.map(x=>`<option value="${esc(x)}" ${x===val?"selected":""}>${esc(x)}</option>`).join("")}</select></div>`;
+  return `<div class="field linkedField"><label>${label}</label><select data-list="${key}" data-i="${i}" data-k="${k}" ${typeVal?"":"disabled"}><option value="">${typeVal?"Выберите шифр":"Сначала выберите вид работ"}</option>${all.map(x=>`<option value="${esc(x)}" ${x===val?"selected":""}>${esc(x)}</option>`).join("")}</select></div>`;
  }
  if(type==="bommark"){
   const task=arr("tasks").find(t=>(t.type||"")===(r.type||"")&&(t.code||"")===(r.code||"")), opts=(task?.bom||[]).map(b=>b.mark).filter(Boolean);
   const all=(val&&!opts.includes(val))?[val,...opts]:opts;
-  return `<div class="field"><label>${label}</label><select data-list="${key}" data-i="${i}" data-k="${k}"><option value="">Выберите марку</option>${all.map(x=>{const b=(task?.bom||[]).find(z=>normMark(z.mark)===normMark(x)),left=Math.max(0,n(b?.qty)-usedMark(r.type||"",r.code||"",x)+(key==="workDays"&&normMark(r.mark)===normMark(x)?qtyOf(r):0));return `<option value="${esc(x)}" ${x===val?"selected":""}>${esc(x)} · остаток ${left}</option>`}).join("")}</select></div>`;
+  return `<div class="field linkedField"><label>${label}</label><select data-list="${key}" data-i="${i}" data-k="${k}" ${task?"":"disabled"}><option value="">${task?"Выберите марку":"Сначала выберите шифр проекта"}</option>${all.map(x=>{const b=(task?.bom||[]).find(z=>normMark(z.mark)===normMark(x)),left=Math.max(0,n(b?.qty)-usedMark(r.type||"",r.code||"",x)+(key==="workDays"&&normMark(r.mark)===normMark(x)?qtyOf(r):0));return `<option value="${esc(x)}" ${x===val?"selected":""}>${esc(x)} · остаток ${left}</option>`}).join("")}</select></div>`;
  }
  if(type==="vat") return `<div class="field"><label>${label}</label><select data-list="${key}" data-i="${i}" data-k="${k}">${[0,5,10,12,16,20].map(x=>`<option value="${x}" ${n(val)===x?"selected":""}>${x===0?"Без НДС":x+"%"}</option>`).join("")}</select></div>`;
  if(type==="financecontract"){const opts=arr("financeContracts").map(x=>x.contract).filter(Boolean),all=(val&&!opts.includes(val))?[val,...opts]:opts;return `<div class="field"><label>${label}</label><select data-list="${key}" data-i="${i}" data-k="${k}"><option value="">Выберите договор</option>${all.map(x=>`<option value="${esc(x)}" ${x===val?"selected":""}>${esc(x)}</option>`).join("")}</select></div>`}
- if(type==="readonly") return `<div class="field"><label>${label}</label><input readonly value="${esc(val)}"></div>`;
+ if(type==="readonly") return `<div class="field readonlyField"><label>${label}</label><input readonly value="${esc(val)}"></div>`;
  if(type==="unit"||type==="position"){const opts=type==="unit"?unitOptions:positionOptions;return `<div class="field"><label>${label}</label><input list="${type}Options" data-list="${key}" data-i="${i}" data-k="${k}" value="${esc(val)}" placeholder="Выберите или введите"><datalist id="${type}Options">${opts.map(x=>`<option value="${esc(x)}">`).join("")}</datalist></div>`}
  if(type==="time") return `<div class="field"><label>${label}</label><input data-list="${key}" data-i="${i}" data-k="${k}" type="time" value="${esc(val)}"></div>`;
  if(type==="worktype"){
@@ -245,8 +245,8 @@ window.addEventListener("blur",()=>flushSave());
 window.addEventListener("beforeunload",()=>{try{flushSave()}catch(e){}});
 
 $("#content").onchange=async e=>{if(e.target.dataset.section){state.reportSections=state.reportSections||{};state.reportSections[e.target.dataset.section]=e.target.checked;await save(true);render();return}if(e.target.dataset.list){const key=e.target.dataset.list,r=arr(key)[+e.target.dataset.i],k=e.target.dataset.k;if(r){r[k]=e.target.value;
- if(k==="type"){r.code="";r.mark="";r.name="";r.weight1="";r.remaining="";r.totalWeight="";r.per=""}
- if(k==="code"){r.mark="";r.name="";r.weight1="";r.remaining="";r.totalWeight="";r.per=""}
+ if(k==="type"){r.code="";r.mark="";r.name="";r.weight1="";r.remaining="";r.totalWeight="";r.per="";r.unit=""}
+ if(k==="code"){r.mark="";r.name="";r.weight1="";r.remaining="";r.totalWeight="";r.per="";const task=arr("tasks").find(t=>(t.type||"")===(r.type||"")&&(t.code||"")===(r.code||""));if(task)r.unit=task.unit||""}
  if(k==="mark"&&(key==="workDays"||key==="invoices")){const task=arr("tasks").find(t=>(t.type||"")===(r.type||"")&&(t.code||"")===(r.code||"")),b=(task?.bom||[]).find(x=>normMark(x.mark)===normMark(r.mark));if(b){r.name=b.name||"";r.weight1=n(b.weight1||b.weight);r.unit=task.unit||"шт";r.per=perFor(task,b);if(key==="workDays")r.remaining=Math.max(0,n(b.qty??b.quantity)-usedMark(r.type||"",r.code||"",r.mark)+qtyOf(r));r.totalWeight=qtyOf(r)*n(r.weight1)}}
- if(k==="qty"&&(key==="workDays"||key==="invoices")){const task=arr("tasks").find(t=>(t.type||"")===(r.type||"")&&(t.code||"")===(r.code||"")),b=(task?.bom||[]).find(x=>normMark(x.mark)===normMark(r.mark));if(b){r.per=perFor(task,b);if(key==="workDays"){const max=Math.max(0,n(b.qty??b.quantity)-usedMark(r.type||"",r.code||"",r.mark)+qtyOf(r));if(qtyOf(r)>max)r.qty=max;r.remaining=Math.max(0,max-qtyOf(r))}r.totalWeight=qtyOf(r)*n(r.weight1)}}
+ if(k==="qty"&&(key==="workDays"||key==="invoices")){const task=arr("tasks").find(t=>(t.type||"")===(r.type||"")&&(t.code||"")===(r.code||"")),b=(task?.bom||[]).find(x=>normMark(x.mark)===normMark(r.mark));if(b){r.per=perFor(task,b);if(key==="workDays"){const max=Math.max(0,n(b.qty??b.quantity)-usedMark(r.type||"",r.code||"",r.mark)+qtyOf(r));if(qtyOf(r)<0)r.qty=0;if(qtyOf(r)>max)r.qty=max;r.remaining=Math.max(0,max-qtyOf(r))}r.totalWeight=qtyOf(r)*n(r.weight1)}}
  await save(true);if(["type","code","mark","qty"].includes(k))render()}}};
