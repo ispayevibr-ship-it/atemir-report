@@ -9,3 +9,5 @@
 .calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.calHead{text-align:center;font-size:10px}.calEmpty{min-height:32px}.calDay{min-height:36px;border:1px solid #d9dee7;padding:5px}.calDay.work{background:#dff4e5}.calDay.acted{background:#fbe0e0}.calDay.both{background:linear-gradient(135deg,#dff4e5 0 50%,#fbe0e0 50%)}.legend{font-size:10px;margin-top:7px}
 .photoTools{display:flex;gap:7px;margin-top:12px}.photoGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin-top:10px}.photoGrid img{width:100%;aspect-ratio:4/3;object-fit:cover}.editPhotos>div{position:relative}.editPhotos>div button{position:absolute;right:4px;top:4px;padding:4px 7px}
 @media(max-width:760px){.photoGrid{grid-template-columns:repeat(2,1fr)}.gHead{display:block}}
+
+.companySettings{grid-template-columns:minmax(280px,600px)}.saveReport{background:#f2b318!important;color:#183247!important}.saveReport.saved{background:#2e7d32!important;color:#fff!important}
