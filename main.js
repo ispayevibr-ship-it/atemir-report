@@ -17,3 +17,9 @@ ipcMain.handle("file:logo",async()=>{
  const mime=ext==="jpg"||ext==="jpeg"?"image/jpeg":ext==="webp"?"image/webp":"image/png";
  return "data:"+mime+";base64,"+fs.readFileSync(p).toString("base64");
 });
+
+ipcMain.handle("file:photos",async()=>{
+ const r=await dialog.showOpenDialog(win,{properties:["openFile","multiSelections"],filters:[{name:"Images",extensions:["png","jpg","jpeg","webp"]}]});
+ if(r.canceled)return [];
+ return r.filePaths.slice(0,12).map(p=>{const ext=path.extname(p).toLowerCase();const mime=ext===".png"?"image/png":ext===".webp"?"image/webp":"image/jpeg";return "data:"+mime+";base64,"+fs.readFileSync(p).toString("base64")});
+});
