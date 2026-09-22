@@ -1,7 +1,7 @@
 {
   "name": "atemir-report",
   "version": "2.0.0",
-  "description": "Отчёт строительно-монтажных работ",
+  "description": "BuildControl — управление строительными объектами и ежедневными отчётами",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -17,7 +17,7 @@
   },
   "build": {
     "appId": "kz.atemir.report",
-    "productName": "Отчет строительно-монтажных работ",
+    "productName": "BuildControl",
     "asar": true,
     "files": [
       "main.js",
@@ -27,7 +27,7 @@
     ],
     "win": {
       "target": "portable",
-      "artifactName": "Отчет-СМР-2.0.0-Windows.exe"
+      "artifactName": "BuildControl-2.0.0-Windows.exe"
     }
   }
 }
