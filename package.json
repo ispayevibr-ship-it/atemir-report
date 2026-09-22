@@ -8,7 +8,8 @@
     "dist:win": "electron-builder --win portable --x64"
   },
   "dependencies": {
-    "better-sqlite3": "11.10.0"
+    "better-sqlite3": "11.10.0",
+    "xlsx": "0.18.5"
   },
   "devDependencies": {
     "electron": "36.9.5",
