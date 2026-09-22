@@ -108,3 +108,5 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
 
 .reportsWelcome{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}.reportsWelcome>div{background:linear-gradient(135deg,#123e63,#1b527d);color:#fff;padding:16px 18px;border-bottom:4px solid #f2b318}.reportsWelcome small{display:block;font-size:8px;letter-spacing:1px;opacity:.72}.reportsWelcome b{display:block;font-size:28px;line-height:1;margin:5px 0}.reportsWelcome span{font-size:10px;opacity:.85}.showAllWrap{text-align:center;padding:14px 0 3px}.showAllWrap .btn{min-width:180px}
 @media(max-width:760px){.reportsWelcome{grid-template-columns:1fr}}
+
+.chartHint{display:block;font-size:9px;color:#71808c;font-weight:400;margin:-3px 0 10px;line-height:1.35}
