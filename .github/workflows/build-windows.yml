@@ -26,15 +26,6 @@ jobs:
         run: npm install
       - name: Build Windows installer
         run: npx electron-builder --win nsis --x64 --publish never
-      - name: Upload installer
-        uses: actions/upload-artifact@v4
-        with:
-          name: A-Temir-Stroy-Windows
-          path: |
-            dist/*.exe
-            dist/latest.yml
-            dist/*.blockmap
-          if-no-files-found: error
       - name: Read app version
         id: app_version
         shell: pwsh
