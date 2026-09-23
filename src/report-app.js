@@ -101,7 +101,24 @@ if(active==="invoices"){
   });
   h=list("deadlines","Срок",()=>({type:"",code:"",start:"",date:"",collapsed:false}),[["Вид работы","type"],["Шифр","code"],["Начало","start","date"],["Окончание","date","date"]])+card("График выполнения",cards||'<div class="empty">Добавьте сроки и проектные объёмы</div>');
  }
- if(active==="acted"){let work=new Set(d.workDays.filter(x=>x.date).map(x=>x.date)),act=new Set(d.actedDays.filter(x=>x.date).map(x=>x.date)),dates=[...work,...act].sort(),cal="";if(dates.length){let a=new Date(dates[0]+"T12:00:00"),z=new Date(dates[dates.length-1]+"T12:00:00"),cur=new Date(a.getFullYear(),a.getMonth(),1);while(cur<=z){let y=cur.getFullYear(),m=cur.getMonth(),days=new Date(y,m+1,0).getDate(),cells="";for(let i=1;i<=days;i++){let ds=y+"-"+String(m+1).padStart(2,"0")+"-"+String(i).padStart(2,"0"),cl=work.has(ds)&&act.has(ds)?"both":work.has(ds)?"work":act.has(ds)?"acted":"";cells+=`<span class="${cl}">${i}</span>`}cal+=`<div class="month"><b>${cur.toLocaleDateString("ru-RU",{month:"long",year:"numeric"})}</b><div class="days">${cells}</div></div>`;cur=new Date(y,m+1,1)}}h=list("actedDays","Актированный день",()=>({date:"",reason:"Ветер",value:"",from:"",to:"",collapsed:false}),[["Дата","date","date"],["Причина","reason"],["Значение","value"],["С","from","time"],["До","to","time"]])+card("Календарь работ",cal||'<div class="empty">Календарь появится после добавления дат</div>');}
+ if(active==="acted"){
+  let work=new Set(d.workDays.filter(x=>x.date).map(x=>x.date)),act=new Set(d.actedDays.filter(x=>x.date).map(x=>x.date));
+  let dates=[...new Set([...work,...act])].sort(),cal="";
+  if(dates.length){
+   let first=new Date(dates[0]+"T12:00:00"),last=new Date(dates[dates.length-1]+"T12:00:00"),cur=new Date(first.getFullYear(),first.getMonth(),1);
+   while(cur<=last){
+    let y=cur.getFullYear(),m=cur.getMonth(),days=new Date(y,m+1,0).getDate(),cells="";
+    for(let i=1;i<=days;i++){
+     let ds=y+"-"+String(m+1).padStart(2,"0")+"-"+String(i).padStart(2,"0");
+     let cl=work.has(ds)&&act.has(ds)?"both":work.has(ds)?"work":act.has(ds)?"acted":"";
+     cells+='<span class="'+cl+'">'+i+'</span>';
+    }
+    cal+='<div class="month"><b>'+cur.toLocaleDateString("ru-RU",{month:"long",year:"numeric"})+'</b><div class="days">'+cells+'</div></div>';
+    cur=new Date(y,m+1,1);
+   }
+  }
+  h=list("actedDays","Актированный день",()=>({date:"",reason:"Ветер",value:"",from:"",to:"",collapsed:false}),[["Дата","date","date"],["Причина","reason"],["Значение","value"],["С","from","time"],["До","to","time"]])+card("Календарь работ",cal||'<div class="empty">Календарь появится после добавления дат</div>');
+ }
  if(active==="workers"){let totalWorkers=d.workers.reduce((s,x)=>s+(parseInt(x.qty)||0),0);h=card("Рабочие на объекте",'<div class="stat"><div>Всего работников<b>'+totalWorkers+'</b></div></div>')+list("workers","Работники",()=>({name:"",qty:1}),[["Должность / профессия","name"],["Количество, чел.","qty","number"]]);}
  if(active==="responsibles")h=list("responsibles","Ответственное лицо",()=>({role:"",fio:"",collapsed:false}),[["Должность","role"],["ФИО","fio"]]);
  if(active==="equipment"){let totalEq=d.equipment.reduce((s,x)=>s+(parseInt(x.qty)||0),0);h=card("Машины и механизмы",'<div class="stat"><div>Всего единиц техники<b>'+totalEq+'</b></div></div>')+list("equipment","Техника",()=>({type:"Автокран 25 т",custom:"",qty:1}),[["Наименование","type"],["Свое наименование","custom"],["Количество","qty","number"]]);}
