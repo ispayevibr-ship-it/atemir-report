@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
@@ -25,9 +25,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build Windows installer
-        run: npm run dist:win
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx electron-builder --win nsis --x64 --publish never
       - name: Upload installer
         uses: actions/upload-artifact@v4
         with:
@@ -37,12 +35,14 @@ jobs:
             dist/latest.yml
             dist/*.blockmap
           if-no-files-found: error
-      - name: Publish update release
+      - name: Publish public auto-update release
         if: github.event_name == 'push'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.1
-          name: А-Темир Строй Отчёт v1.0.1
+          repository: ispayevibr-ship-it/atemir-report-updates
+          token: ${{ secrets.UPDATE_REPO_TOKEN }}
+          tag_name: v1.0.3
+          name: А-Темир Строй Отчёт v1.0.3
           files: |
             dist/*.exe
             dist/latest.yml
