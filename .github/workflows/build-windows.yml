@@ -4,36 +4,47 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
-
       - name: Syntax check
         run: |
           node --check main.js
           node --check preload.js
           node --check src/app.js
-
       - name: Install dependencies
         run: npm install
-
-      - name: Prepare Electron dependencies
-        run: npx electron-builder install-app-deps
-
-      - name: Build Windows portable EXE
+      - name: Build Windows installer
         run: npm run dist:win
-
-      - name: Upload EXE
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload installer
         uses: actions/upload-artifact@v4
         with:
           name: A-Temir-Stroy-Windows
-          path: dist/*.exe
+          path: |
+            dist/*.exe
+            dist/latest.yml
+            dist/*.blockmap
           if-no-files-found: error
+      - name: Publish update release
+        if: github.event_name == 'push'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.1
+          name: А-Темир Строй Отчёт v1.0.1
+          files: |
+            dist/*.exe
+            dist/latest.yml
+            dist/*.blockmap
+          fail_on_unmatched_files: true
