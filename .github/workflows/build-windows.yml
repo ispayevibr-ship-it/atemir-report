@@ -35,14 +35,20 @@ jobs:
             dist/latest.yml
             dist/*.blockmap
           if-no-files-found: error
+      - name: Read app version
+        id: app_version
+        shell: pwsh
+        run: |
+          $version = node -p "require('./package.json').version"
+          "version=$version" >> $env:GITHUB_OUTPUT
       - name: Publish public auto-update release
         if: github.event_name == 'push'
         uses: softprops/action-gh-release@v2
         with:
           repository: ispayevibr-ship-it/atemir-report-updates
           token: ${{ secrets.UPDATE_REPO_TOKEN }}
-          tag_name: v1.0.3
-          name: А-Темир Строй Отчёт v1.0.3
+          tag_name: v${{ steps.app_version.outputs.version }}
+          name: А-Темир Строй Отчёт v${{ steps.app_version.outputs.version }}
           files: |
             dist/*.exe
             dist/latest.yml
