@@ -2345,7 +2345,29 @@ html,body{margin-top:0!important;margin-bottom:0!important;padding-top:0!importa
 body:not(.ready243)>.app{visibility:hidden!important}
 body.ready243 #boot243{display:none!important}
 </style>
-</head><body><div id="boot243"><div class="b243"><div class="t243">Загружаем отчёт</div><div class="s243">Подготавливаем данные и интерфейс…</div><div class="l243"></div></div></div><div class="app">
+</head><body><script>
+(function(){
+  const params=new URLSearchParams(location.search), id=params.get("object")||"default";
+  const objects=JSON.parse(localStorage.getItem("atemir-company-objects-v1")||"[]");
+  const current=objects.find(o=>String(o.id)===String(id));
+  window.ATEMIR_OBJECT_ID=id;
+  window.ATEMIR_OBJECT=current||null;
+  const nativeGet=Storage.prototype.getItem, nativeSet=Storage.prototype.setItem, nativeRemove=Storage.prototype.removeItem;
+  const reportKeys=new Set(["atemir_v9","atemir_view188","atemir_manage190"]);
+  const key=k=>reportKeys.has(String(k))?String(k)+"__object_"+id:k;
+  Storage.prototype.getItem=function(k){return nativeGet.call(this,key(k))};
+  Storage.prototype.setItem=function(k,v){return nativeSet.call(this,key(k),v)};
+  Storage.prototype.removeItem=function(k){return nativeRemove.call(this,key(k))};
+  addEventListener("DOMContentLoaded",()=>{
+    const bar=document.createElement("div");
+    bar.id="objectNavBar";
+    bar.style.cssText="position:sticky;top:0;z-index:99999;background:#082b4b;color:white;padding:8px 14px;display:flex;align-items:center;gap:10px;font:700 12px Arial";
+    const back=document.createElement("button"); back.textContent="← Все объекты"; back.style.cssText="background:#f4b41a;border:0;border-radius:6px;padding:7px 10px;font-weight:700;cursor:pointer"; back.onclick=()=>location.href="index.html";
+    const name=document.createElement("span"); name.textContent=current?current.name:"Объект";
+    bar.append(back,name); document.body.prepend(bar);
+  });
+})();
+</script><div id="boot243"><div class="b243"><div class="t243">Загружаем отчёт</div><div class="s243">Подготавливаем данные и интерфейс…</div><div class="l243"></div></div></div><div class="app">
 <div class="top"><div class="actions"><button class="yellow" onclick="window.print()">Печать / PDF</button><button class="red clearReportBtn" type="button" onclick="clearReport()">Очистить отчёт</button><button class="blue" onclick="saveInteractiveReport()">Сохранить интерактивный HTML</button><button class="white" onclick="saveAll()" title="При первом сохранении выберите папку SaveFiles">Сохранить</button><button class="white" onclick="document.getElementById('loadFile').click()">Загрузить</button><input id="loadFile" type="file" accept=".json,application/json" style="display:none" onchange="loadFromFile(this)"><span id="saveStatus" class="saveStatus"></span></div></div>
 <datalist id="responsibleRoles"><option value="Начальник участка"><option value="Производитель работ"><option value="Мастер"><option value="Инженер ПТО"><option value="Менеджер проекта"></datalist><datalist id="workerRoles"><option value="Монтажник"><option value="Сварщик"><option value="Производитель работ"><option value="Мастер"><option value="Инженер ПТО"></datalist><datalist id="unitList"><option value="тн"><option value="м²"><option value="м³"><option value="кг"><option value="шт"><option value="м"><option value="компл."></datalist><div class="layout"><div class="panel">
 <div class="sec sectionCollapsed" id="objectSec"><div class="secHead"><h2>1. Объект</h2><button class="white small" onclick="toggleSection('objectSec',this)">Развернуть</button></div><div class="secBody"><label>Наименование объекта</label><input id="objectName" placeholder="Введите название объекта"><div class="g2"><div><label>Адрес</label><input id="address" placeholder="Введите адрес"></div><div><label>Заказчик</label><input id="client" placeholder="Введите наименование заказчика"></div></div></div></div>
