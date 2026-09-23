@@ -1,142 +1,42 @@
 (()=>{"use strict";
-const id=new URLSearchParams(location.search).get("object")||"default", objects=JSON.parse(localStorage.getItem("atemir-company-objects-v1")||"[]"), obj=objects.find(x=>String(x.id)===String(id))||{};
-const KEY="atemir_v9__object_"+id, legacyKey="atemir_v9";
-const blank=()=>({version:72,base:{objectName:obj.name||"",address:obj.address||"",client:obj.client||""},reportDate:"",weather:{location:"",temp:"",wind:"",precip:""},reportPhotos:[],actedDays:[],penalties:[],workTypes:[],tasks:[],deadlines:[],workDays:[],invoices:[],workers:[],responsibles:[{role:"",fio:"",collapsed:false}],equipment:[]});
-let d;try{d=JSON.parse(localStorage.getItem(KEY)||"null")||blank()}catch(e){d=blank()}
-["actedDays","penalties","workTypes","tasks","deadlines","workDays","invoices","workers","responsibles","equipment","reportPhotos"].forEach(k=>{if(!Array.isArray(d[k]))d[k]=blank()[k]});d.tasks.forEach(t=>{if(!Array.isArray(t.bom))t.bom=[];t.bomName=t.bomName||""});
+const $=s=>document.querySelector(s),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const id=new URLSearchParams(location.search).get("object")||"default",objects=JSON.parse(localStorage.getItem("atemir-company-objects-v1")||"[]"),obj=objects.find(x=>String(x.id)===String(id))||{name:"Объект",address:"",client:""};
+const key="atemir_v9__object_"+id,blank=()=>({version:72,base:{objectName:obj.name||"",address:obj.address||"",client:obj.client||""},reportDate:"",weather:{location:"",temp:"",wind:"",precip:""},reportPhotos:[],actedDays:[],penalties:[],workTypes:[],tasks:[],deadlines:[],workDays:[],invoices:[],workers:[],responsibles:[{role:"",fio:"",collapsed:false}],equipment:[]});
+let d;try{d=Object.assign(blank(),JSON.parse(localStorage.getItem(key)||"{}"))}catch{d=blank()}let active="home",timer;
 const sections=[["home","Сводка"],["scheme","Монтажная схема"],["bom","Ведомость / марки"],["dynamics","Динамика"],["works","Выполненные работы"],["invoices","Поставки / накладные"],["tasks","Проект / объёмы"],["deadlines","Сроки"],["acted","Актированные дни"],["workers","Рабочие"],["responsibles","Ответственные"],["equipment","Техника"],["penalties","Штрафы"],["photos","Фотоотчёт"]];
-let active="home", saveTimer;
-const $=s=>document.querySelector(s), esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function save(){localStorage.setItem(KEY,JSON.stringify({...d,reportPhotos:[]}));$("#saveState").textContent="Сохранено";clearTimeout(saveTimer)}
-function dirty(){ $("#saveState").textContent="Сохраняем…";clearTimeout(saveTimer);saveTimer=setTimeout(save,250)}
-function field(label,path,type="text"){let v=path.reduce((a,k)=>a?.[k],d)??"";return `<div><label>${label}</label><input data-path="${path.join(".")}" type="${type}" value="${esc(v)}"></div>`}
-function card(title,body){return `<div class="card"><h2>${title}</h2>${body}</div>`}
-function list(key,title,make,fields){let a=d[key];return `<div class="toolbar"><button class="primary" data-add="${key}">+ Добавить</button></div>${a.length?a.map((x,i)=>`<div class="card"><div class="rowhead"><b>${title} ${i+1}</b><button class="danger" data-del="${key}:${i}">Удалить</button></div><div class="grid">${fields.map(f=>`<div><label>${f[0]}</label><input data-item="${key}:${i}:${f[1]}" type="${f[2]||"text"}" value="${esc(x[f[1]]??"")}"></div>`).join("")}</div></div>`).join(""):`<div class="empty">Записей пока нет</div>`}
+function save(){clearTimeout(timer);$("#saveState").textContent="Сохраняю…";timer=setTimeout(()=>{localStorage.setItem(key,JSON.stringify({...d,reportPhotos:[]}));$("#saveState").textContent="Сохранено"},250)}
+function field(label,path,type="text"){let v=path.reduce((o,k)=>o?.[k],d)??"";return '<div><label>'+label+'</label><input data-field="'+path.join(".")+'" type="'+type+'" value="'+esc(v)+'"></div>'}
+function card(title,body){return '<div class="card"><h2>'+title+'</h2>'+body+'</div>'}
+function rows(name,title,fields,maker){let arr=d[name]||[],h='<div class="toolbar"><button class="primary" data-add="'+name+'">+ Добавить</button></div>';if(!arr.length)return h+'<div class="empty">Пока нет данных</div>';arr.forEach((x,i)=>{h+='<div class="card"><div class="rowhead"><b>'+title+' '+(i+1)+'</b><button class="danger" data-del="'+name+':'+i+'">Удалить</button></div><div class="grid g3">';fields.forEach(f=>{h+='<div><label>'+f[0]+'</label><input data-item="'+name+':'+i+':'+f[1]+'" type="'+(f[2]||"text")+'" value="'+esc(x[f[1]]??"")+'"></div>'});h+='</div></div>'});return h}
+const makers={tasks:()=>({type:"",code:"",volume:"",unit:"",bom:[],bomName:""}),deadlines:()=>({type:"",code:"",start:"",date:""}),actedDays:()=>({date:"",reason:"Ветер",value:"",from:"",to:""}),workers:()=>({name:"",qty:1}),responsibles:()=>({role:"",fio:""}),equipment:()=>({type:"Автокран 25 т",custom:"",qty:1}),penalties:()=>({date:"",amount:"",responsible:"",reason:""}),invoices:()=>({date:"",no:"",items:[]}),workDays:()=>({date:"",items:[]})};
 function render(){
- $("#objTitle").textContent=obj.name||d.base.objectName||"Объект";$("#pageTitle").textContent=sections.find(x=>x[0]===active)[1];$("#pageSub").textContent=obj.name||"";
- document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===active));
+ $("#objTitle").textContent=obj.name||"Объект";$("#pageTitle").textContent=sections.find(x=>x[0]===active)?.[1]||"Отчёт";$("#pageSub").textContent=(obj.name||"")+" · "+(obj.address||"");
+ $("#nav").innerHTML=sections.map(x=>'<button data-v="'+x[0]+'" class="'+(x[0]===active?"on":"")+'">'+x[1]+'</button>').join("");
  let h="";
- if(active==="home"){h=card("Объект",'<div class="grid g3">'+field("Наименование",["base","objectName"])+field("Адрес",["base","address"])+field("Заказчик",["base","client"])+field("Дата отчёта",["reportDate"],"date")+field("Температура, °C",["weather","temp"],"number")+field("Ветер, м/с",["weather","wind"],"number")+'</div>')+card("Сводка",'<div class="stat"><div>Рабочих<b>'+d.workers.reduce((s,x)=>s+(parseInt(x.qty)||0),0)+'</b></div><div>Техники<b>'+d.equipment.reduce((s,x)=>s+(parseInt(x.qty)||0),0)+'</b></div><div>Дней работ<b>'+d.workDays.length+'</b></div><div>Штрафов<b>'+d.penalties.length+'</b></div></div>');}
- if(active==="scheme"){const N=s=>String(s||"").trim().toUpperCase().replace(/^K(?=\\d)/,"К").replace(/^B(?=\\d)/,"В"),num=v=>parseFloat(String(v??"").replace(",","."))||0,done=(t,m)=>d.workDays.flatMap(x=>x.items||[]).filter(x=>x.type===t.type&&x.code===t.code&&N(x.mark)===N(m)).reduce((s,x)=>s+num(x.qty),0);let ts=d.tasks.filter(t=>Array.isArray(t.bom)&&t.bom.length),all=[];ts.forEach((t,ti)=>t.bom.forEach(r=>{let q=num(r.qty),z=Math.min(q,done(t,r.mark));all.push({ti,t,r,q,z,state:q>0&&z>=q?"done":z>0?"partial":"left"})}));let total=all.reduce((s,x)=>s+x.q,0),z=all.reduce((s,x)=>s+x.z,0);h=card("Монтажная схема — ход выполнения",'<div class="stat"><div>По ведомости<b>'+total+'</b></div><div>Смонтировано<b>'+z+'</b></div><div>Осталось<b>'+Math.max(0,total-z)+'</b></div><div>Готовность<b>'+(total?Math.round(z/total*100):0)+'%</b></div></div><div class="schemefilters"><button class="small on" data-sfilter="all">Все</button><button class="small" data-sfilter="done">Смонтировано</button><button class="small" data-sfilter="left">Осталось</button></div><div class="schemegrid">'+all.map(x=>'<button class="schemept '+x.state+'" data-state="'+x.state+'" title="'+esc(x.r.mark)+' — '+esc(x.r.name||"")+'">'+esc(x.r.mark)+'<small>'+x.z+' / '+x.q+'</small></button>').join("")+'</div>')+(ts.length?ts.map((t,i)=>card(esc(t.type||"Проект")+' · '+esc(t.code||""),'<div class="grid g3">'+[['Ось от','axisMin'],['Ось до','axisMax'],['Мин. отметка','levelMin'],['Макс. отметка','levelMax']].map(f=>'<div><label>'+f[0]+'</label><input data-item="tasks:'+d.tasks.indexOf(t)+':'+f[1]+'" value="'+esc(t[f[1]]||"")+'"></div>').join("")+'</div>')).join(""):'<div class="empty">Сначала загрузите ведомость в проектную позицию</div>');}if(active==="bom"){let norm=v=>String(v||"").trim().toUpperCase().replace(/^K(?=\\d)/,"К").replace(/\\s+/g,""),tasks=d.tasks.filter(t=>Array.isArray(t.bom)&&t.bom.length);h=tasks.length?tasks.map(t=>{let rows=t.bom.map(r=>{let q=Number(r.qty)||0,done=d.workDays.flatMap(x=>x.items||[]).filter(x=>x.type===t.type&&x.code===t.code&&norm(x.mark)===norm(r.mark)).reduce((s,x)=>s+(Number(x.qty)||0),0),state=q>0&&done>=q?"done":done>0?"partial":"left";return {r,q,done:Math.min(q,done),state}}),total=rows.reduce((s,x)=>s+x.q,0),done=rows.reduce((s,x)=>s+x.done,0);return card("Статус марок по ведомости — "+esc(t.type||"")+" · "+esc(t.code||""),'<div class="stat"><div>По ведомости<b>'+total+'</b></div><div>Смонтировано<b>'+done+'</b></div><div>Осталось<b>'+Math.max(0,total-done)+'</b></div><div>Готовность<b>'+(total?Math.round(done/total*100):0)+'%</b></div></div><div class="tablewrap"><table><thead><tr><th>Марка</th><th>Наименование</th><th>Кол-во</th><th>Вес 1 ед.</th><th>Общий вес</th><th>Смонтировано</th><th>Осталось</th></tr></thead><tbody>'+rows.map(x=>'<tr class="bom-'+x.state+'"><td><b>'+esc(x.r.mark||"—")+'</b></td><td>'+esc(x.r.name||"—")+'</td><td>'+x.q+'</td><td>'+esc(x.r.weight1??"—")+'</td><td>'+esc(x.r.weightTotal??"—")+'</td><td>'+x.done+'</td><td>'+Math.max(0,x.q-x.done)+'</td></tr>').join("")+'</tbody></table></div>')}).join(""):'<div class="empty">Ведомость ещё не загружена в проектные позиции</div>';}if(active==="dynamics"){let valid=d.workDays.filter(x=>x.date&&(x.items||[]).length),groups={};valid.forEach(day=>(day.items||[]).forEach(x=>{let k=(x.type||"—")+"|||"+(x.code||"—")+"|||"+(x.unit||"");(groups[k]||(groups[k]={type:x.type||"—",code:x.code||"—",unit:x.unit||"",days:{}})).days[day.date]=(groups[k].days[day.date]||0)+(Number(x.qty)||0)*(Number(x.per)||1)}));h=Object.values(groups).length?Object.values(groups).map(g=>card(esc(g.type)+" · "+esc(g.code),'<div class="dyn">'+Object.entries(g.days).sort().map(([dt,v])=>'<div><span>'+dt.split("-").reverse().slice(0,2).join(".")+'</span><i style="height:'+Math.max(4,Math.min(100,v/Math.max(...Object.values(g.days),1)*100))+'%"></i><b>'+Math.round(v*1000)/1000+'</b></div>').join("")+'</div><div class="muted">'+esc(g.unit)+'</div>')).join(""):'<div class="empty">Добавьте выполненные работы с датами</div>';}if(active==="works"){
- const num=v=>parseFloat(String(v??"").replace(",","."))||0;
- const same=(a,b)=>String(a||"").trim()===String(b||"").trim();
- const norm=s=>String(s||"").trim().toUpperCase();
- const taskFor=(type,code)=>d.tasks.find(t=>same(t.type,type)&&same(t.code,code))||d.tasks.find(t=>same(t.code,code));
- const used=(type,code,mark,exclude)=>d.workDays.flatMap(day=>day.items||[]).filter(x=>x!==exclude&&same(x.type,type)&&same(x.code,code)&&norm(x.mark)===norm(mark)).reduce((z,x)=>z+num(x.qty),0);
- const remaining=(task,row,x)=>Math.max(0,num(row?.qty)-used(task.type,task.code,row?.mark,x));
- let html='<div class="toolbar"><button class="primary" data-add="workDays">+ Добавить день</button></div>';
- if(!d.workDays.length) html+='<div class="empty">Выполненных работ пока нет</div>';
- d.workDays.forEach((day,di)=>{
-  html+='<div class="card"><div class="rowhead"><b>Выполненные работы — '+esc(day.date||"дата не указана")+'</b><button class="danger" data-del="workDays:'+di+'">Удалить день</button></div>';
-  html+='<div class="grid"><div><label>Дата</label><input data-item="workDays:'+di+':date" type="date" value="'+esc(day.date||"")+'"></div></div><div class="toolbar" style="margin-top:14px"><button class="small" data-addwork="'+di+'">+ Работа</button></div>';
-  (day.items||[]).forEach((x,wi)=>{
-   let task=taskFor(x.type,x.code),row=(task?.bom||[]).find(r=>norm(r.mark)===norm(x.mark)),rem=row?remaining(task,row,x):0;
-   let types=[...new Set(d.tasks.map(t=>t.type).filter(Boolean))],codes=d.tasks.filter(t=>!x.type||same(t.type,x.type)).map(t=>t.code).filter(Boolean);
-   let option=(arr,val,label)=>'<option value="">'+label+'</option>'+arr.map(v=>'<option value="'+esc(v)+'" '+(String(v)===String(val)?'selected':'')+'>'+esc(v)+'</option>').join("");
-   let marks='<option value="">'+(task?.bom?.length?"— выберите марку —":"Сначала загрузите ведомость в задаче")+'</option>';
-   marks+=(task?.bom||[]).map(r=>{let rr=remaining(task,r,x),sel=norm(x.mark)===norm(r.mark);return '<option value="'+esc(r.mark)+'" '+(sel?'selected':'')+' '+(rr<=0&&!sel?'disabled':'')+'>'+esc(r.mark)+' — '+esc(r.name||"без наименования")+' · остаток '+rr+' шт.</option>'}).join("");
-   html+='<div class="card" style="background:#f8fbfd"><div class="rowhead"><b>Работа '+(wi+1)+'</b><button class="danger" data-delwork="'+di+':'+wi+'">Удалить</button></div><div class="grid g3">';
-   html+='<div><label>Вид работы</label><select data-work="'+di+':'+wi+':type">'+option(types,x.type,"— выберите —")+'</select></div>';
-   html+='<div><label>Шифр</label><select data-work="'+di+':'+wi+':code">'+option(codes,x.code,"— выберите —")+'</select></div>';
-   html+='<div><label>Марка</label><select data-mark="'+di+':'+wi+'">'+marks+'</select><div class="muted">'+(x.mark?'Остаток по ведомости: '+rem+' шт.':'Выберите марку')+'</div></div>';
-   html+='<div><label>Наименование</label><input readonly value="'+esc(x.name||"")+'"></div><div><label>Вес 1 ед.</label><input readonly value="'+esc(x.per??"")+'"></div><div><label>Ед. измерения</label><input readonly value="'+esc(x.unit||task?.unit||"")+'"></div>';
-   html+='<div><label>Ось</label><input data-work="'+di+':'+wi+':axis" value="'+esc(x.axis||"")+'"></div><div><label>Отметка</label><input data-work="'+di+':'+wi+':level" value="'+esc(x.level||"")+'"></div>';
-   html+='<div><label>Количество</label><input data-work="'+di+':'+wi+':qty" type="number" min="0" step="1" value="'+esc(x.qty??"")+'"></div><div><label>Общий вес / объём</label><input readonly value="'+(Math.round(num(x.qty)*num(x.per)*1000)/1000)+'"></div></div></div>';
-  });
-  html+='</div>';
- });
- h=html;
-}
-if(active==="invoices"){
- let html='<div class="toolbar"><button class="primary" data-add="invoices">+ Добавить накладную</button></div>';
- if(!d.invoices.length) html+='<div class="empty">Накладных пока нет</div>';
- d.invoices.forEach((inv,ii)=>{
-  html+='<div class="card"><div class="rowhead"><b>Накладная '+esc(inv.number||ii+1)+'</b><button class="danger" data-del="invoices:'+ii+'">Удалить</button></div>';
-  html+='<div class="grid"><div><label>Дата</label><input data-item="invoices:'+ii+':date" type="date" value="'+esc(inv.date||"")+'"></div><div><label>Номер</label><input data-item="invoices:'+ii+':number" value="'+esc(inv.number||"")+'"></div></div>';
-  html+='<div class="toolbar" style="margin-top:14px"><button class="small" data-addinv="'+ii+'">+ Позиция</button></div>';
-  (inv.items||[]).forEach((x,xi)=>{
-   html+='<div class="card" style="background:#f8fbfd"><div class="rowhead"><b>Позиция '+(xi+1)+'</b><button class="danger" data-delinv="'+ii+':'+xi+'">Удалить</button></div><div class="grid g3">';
-   [["Вид работы","type"],["Шифр","code"],["Наименование","name"],["Марка","mark"],["Количество","qty","number"],["Ед.","unit"],["Кол-во в 1 шт.","per","number"]].forEach(f=>{html+='<div><label>'+f[0]+'</label><input data-inv="'+ii+':'+xi+':'+f[1]+'" type="'+(f[2]||"text")+'" value="'+esc(x[f[1]]??"")+'"></div>'});
-   html+='</div></div>';
-  });
-  html+='</div>';
- });
- h=html;
-}
- if(active==="tasks"){
-  const n=v=>parseFloat(String(v??"").replace(",","."))||0,total=(q,p)=>n(q)*(n(p)||1);
-  const delivered=(type,code)=>d.invoices.flatMap(x=>x.items||[]).filter(x=>(x.code||"")===code&&(!(x.type||"")||(x.type||"")===type)).reduce((s,x)=>s+total(x.qty,x.per),0);
-  const completed=(type,code)=>d.workDays.flatMap(x=>x.items||[]).filter(x=>x.type===type&&x.code===code).reduce((s,x)=>s+total(x.qty,x.per),0);
-  let html='<div class="toolbar"><button class="primary" data-add="tasks">+ Добавить проектный объём</button></div>';
-  d.tasks.forEach((t,i)=>{
-   html+='<div class="card"><div class="rowhead"><b>Проектная позиция '+(i+1)+'</b><button class="danger" data-del="tasks:'+i+'">Удалить</button></div><div class="grid">';
-   [["Вид работы","type"],["Шифр","code"],["Проектный объём","volume","number"],["Ед.","unit"]].forEach(f=>{html+='<div><label>'+f[0]+'</label><input data-item="tasks:'+i+':'+f[1]+'" type="'+(f[2]||"text")+'" value="'+esc(t[f[1]]??"")+'"></div>'});
-   html+='</div><div class="bomctl"><b>Ведомость элементов</b><div><label class="small bomfile">Загрузить ведомость<input type="file" data-bom="'+i+'" accept=".xlsx,.csv,.txt,text/csv"></label>';
-   if(t.bom?.length) html+='<button class="small" data-clearbom="'+i+'">Очистить</button>';
-   html+='</div><small>Excel/CSV: Марка | Наименование | Количество | Вес 1 ед. | Общий вес</small><strong>'+(t.bom?.length?esc(t.bomName||"Ведомость")+' · '+t.bom.length+' марок':'Ведомость ещё не загружена')+'</strong></div></div>';
-  });
-  let groups={};d.tasks.forEach(t=>{let k=(t.type||"")+"|||"+(t.code||"");if(!groups[k])groups[k]={type:t.type||"",code:t.code||"",volume:0,unit:t.unit||""};groups[k].volume+=n(t.volume)});
-  let rows='';Object.values(groups).forEach(t=>{let a=delivered(t.type,t.code),z=completed(t.type,t.code);rows+='<tr><td>'+esc(t.type||"—")+'</td><td>'+esc(t.code||"—")+'</td><td>'+t.volume+'</td><td>'+(a||"—")+'</td><td>'+(z||"—")+'</td><td>'+(t.volume-z)+'</td><td>'+esc(t.unit||"—")+'</td></tr>'});
-  html+=card("Проект → поставлено → выполнено → остаток",'<div class="tablewrap"><table><thead><tr><th>Вид работы</th><th>Шифр</th><th>Проект</th><th>Поставлено</th><th>Выполнено</th><th>Остаток</th><th>Ед.</th></tr></thead><tbody>'+rows+'</tbody></table></div>');
-  h=html;
- }
- if(active==="deadlines"){
-  const n=v=>parseFloat(String(v??"").replace(",","."))||0,total=(q,p)=>n(q)*(n(p)||1);
-  const completed=(type,code)=>d.workDays.flatMap(x=>x.items||[]).filter(x=>x.type===type&&x.code===code).reduce((s,x)=>s+total(x.qty,x.per),0);
-  const today=new Date().toISOString().slice(0,10);
-  let cards="";
-  d.deadlines.forEach(dl=>{
-   let t=d.tasks.find(q=>q.code===dl.code&&(q.type===dl.type||!dl.type))||d.tasks.find(q=>q.code===dl.code);
-   let status="Нет проектного объёма",pct=0,cls="";
-   if(t&&dl.start&&dl.date){
-    let st=new Date(dl.start+"T12:00:00"),en=new Date(dl.date+"T12:00:00"),td=new Date(today+"T12:00:00");
-    let days=Math.max(1,Math.floor((en-st)/86400000)+1),elapsed=td<st?0:(td>en?days:Math.floor((td-st)/86400000)+1);
-    let plan=Math.max(0,Math.min(100,elapsed/days*100)),vol=n(t.volume),fact=completed(t.type,t.code);
-    pct=vol?Math.max(0,Math.min(100,fact/vol*100)):0;
-    let delta=fact-vol*plan/100;
-    cls=Math.abs(delta)<.0001?"ontime":delta<0?"behind":"ahead";
-    status=Math.abs(delta)<.0001?"По графику":delta<0?"Отставание "+Math.abs(delta).toFixed(2)+" "+(t.unit||""):"Опережение "+delta.toFixed(2)+" "+(t.unit||"");
-   }
-   cards+='<div class="schedule '+cls+'"><div><b>'+esc(dl.type||"Работа")+'</b><small>'+esc(dl.code||"")+'</small></div><strong>'+status+'</strong><div class="bar"><i style="width:'+pct+'%"></i></div><small>'+(dl.start||"—")+' → '+(dl.date||"—")+' · выполнено '+Math.round(pct)+'%</small></div>';
-  });
-  h=list("deadlines","Срок",()=>({type:"",code:"",start:"",date:"",collapsed:false}),[["Вид работы","type"],["Шифр","code"],["Начало","start","date"],["Окончание","date","date"]])+card("График выполнения",cards||'<div class="empty">Добавьте сроки и проектные объёмы</div>');
- }
- if(active==="acted"){
-  let work=new Set(d.workDays.filter(x=>x.date).map(x=>x.date)),act=new Set(d.actedDays.filter(x=>x.date).map(x=>x.date));
-  let dates=[...new Set([...work,...act])].sort(),cal="";
-  if(dates.length){
-   let first=new Date(dates[0]+"T12:00:00"),last=new Date(dates[dates.length-1]+"T12:00:00"),cur=new Date(first.getFullYear(),first.getMonth(),1);
-   while(cur<=last){
-    let y=cur.getFullYear(),m=cur.getMonth(),days=new Date(y,m+1,0).getDate(),cells="";
-    for(let i=1;i<=days;i++){
-     let ds=y+"-"+String(m+1).padStart(2,"0")+"-"+String(i).padStart(2,"0");
-     let cl=work.has(ds)&&act.has(ds)?"both":work.has(ds)?"work":act.has(ds)?"acted":"";
-     cells+='<span class="'+cl+'">'+i+'</span>';
-    }
-    cal+='<div class="month"><b>'+cur.toLocaleDateString("ru-RU",{month:"long",year:"numeric"})+'</b><div class="days">'+cells+'</div></div>';
-    cur=new Date(y,m+1,1);
-   }
-  }
-  h=list("actedDays","Актированный день",()=>({date:"",reason:"Ветер",value:"",from:"",to:"",collapsed:false}),[["Дата","date","date"],["Причина","reason"],["Значение","value"],["С","from","time"],["До","to","time"]])+card("Календарь работ",cal||'<div class="empty">Календарь появится после добавления дат</div>');
- }
- if(active==="workers"){let totalWorkers=d.workers.reduce((s,x)=>s+(parseInt(x.qty)||0),0);h=card("Рабочие на объекте",'<div class="stat"><div>Всего работников<b>'+totalWorkers+'</b></div></div>')+list("workers","Работники",()=>({name:"",qty:1}),[["Должность / профессия","name"],["Количество, чел.","qty","number"]]);}
- if(active==="responsibles")h=list("responsibles","Ответственное лицо",()=>({role:"",fio:"",collapsed:false}),[["Должность","role"],["ФИО","fio"]]);
- if(active==="equipment"){let totalEq=d.equipment.reduce((s,x)=>s+(parseInt(x.qty)||0),0);h=card("Машины и механизмы",'<div class="stat"><div>Всего единиц техники<b>'+totalEq+'</b></div></div>')+list("equipment","Техника",()=>({type:"Автокран 25 т",custom:"",qty:1}),[["Наименование","type"],["Свое наименование","custom"],["Количество","qty","number"]]);}
- if(active==="penalties"){let sum=d.penalties.reduce((s,x)=>s+(parseFloat(String(x.amount||0).replace(",","."))||0),0);h=card("Анализ штрафов за время выполнения",'<div class="stat"><div>Общая сумма<b>'+sum.toLocaleString("ru-RU")+' тг</b></div><div>Количество штрафов<b>'+d.penalties.length+'</b></div></div>')+list("penalties","Штраф",()=>({date:"",amount:"",responsible:"",reason:"",collapsed:false}),[["Дата","date","date"],["Сумма, тг","amount","number"],["Ответственный","responsible"],["За что штраф","reason"]]);}
- if(active==="photos")h=card("Фотоотчёт",'<div class="photohead"><b>Фотографии к отчёту</b><span>'+(d.reportPhotos?.length||0)+'/12</span></div><label class="primary photoload">Выбрать фотографии<input id="reportPhotoInput" type="file" accept="image/*" multiple></label><p class="muted">При новой загрузке набор фотографий заменяется. Максимум 12.</p><div class="photogrid">'+(d.reportPhotos||[]).map((p,i)=>'<div class="photothumb"><img src="'+p+'"><button data-rmphoto="'+i+'">×</button></div>').join("")+'</div>');
+ if(active==="home"){let workers=d.workers.reduce((s,x)=>s+(Number(x.qty)||0),0),eq=d.equipment.reduce((s,x)=>s+(Number(x.qty)||0),0);h=card("Объект",'<div class="grid g3">'+field("Наименование",["base","objectName"])+field("Адрес",["base","address"])+field("Заказчик",["base","client"])+field("Дата отчёта",["reportDate"],"date")+field("Температура, °C",["weather","temp"],"number")+field("Ветер, м/с",["weather","wind"],"number")+'</div>')+card("Сводка",'<div class="stat"><div>Рабочих<b>'+workers+'</b></div><div>Техники<b>'+eq+'</b></div><div>Дней работ<b>'+d.workDays.length+'</b></div><div>Штрафов<b>'+d.penalties.length+'</b></div></div>')}
+ else if(active==="tasks")h=rows("tasks","Проектная позиция",[["Вид работы","type"],["Шифр","code"],["Проектный объём","volume","number"],["Ед.","unit"]]);
+ else if(active==="deadlines")h=rows("deadlines","Срок",[["Вид работы","type"],["Шифр","code"],["Начало","start","date"],["Окончание","date","date"]]);
+ else if(active==="acted")h=rows("actedDays","Актированный день",[["Дата","date","date"],["Причина","reason"],["Значение","value"],["С","from","time"],["До","to","time"]]);
+ else if(active==="workers")h=rows("workers","Рабочие",[["Специальность / группа","name"],["Количество","qty","number"]]);
+ else if(active==="responsibles")h=rows("responsibles","Ответственный",[["Должность","role"],["ФИО","fio"]]);
+ else if(active==="equipment")h=rows("equipment","Машина / механизм",[["Тип","type"],["Другое","custom"],["Количество","qty","number"]]);
+ else if(active==="penalties")h=rows("penalties","Штраф",[["Дата","date","date"],["Сумма","amount","number"],["Ответственный","responsible"],["Причина","reason"]]);
+ else if(active==="works")h=rows("workDays","День работ",[["Дата","date","date"]]);
+ else if(active==="invoices")h=rows("invoices","Накладная",[["Дата","date","date"],["Номер","no"]]);
+ else if(active==="bom"){let n=d.tasks.reduce((s,t)=>s+(t.bom?.length||0),0);h=card("Ведомость / марки",'<div class="stat"><div>Проектных позиций<b>'+d.tasks.length+'</b></div><div>Марок в ведомостях<b>'+n+'</b></div></div><div class="empty">Ведомости подключаются в разделе «Проект / объёмы».</div>')}
+ else if(active==="scheme")h=card("Монтажная схема",'<div class="empty">Статусы схемы появятся после загрузки ведомости и выполненных работ.</div>');
+ else if(active==="dynamics")h=card("Динамика",'<div class="empty">Динамика появится после заполнения выполненных работ.</div>');
+ else if(active==="photos")h=card("Фотоотчёт",'<div class="empty">Фотоотчёт будет восстановлен отдельным следующим шагом.</div>');
  $("#view").innerHTML=h;
+ bind();
 }
-$("#nav").innerHTML=sections.map(x=>'<button data-v="'+x[0]+'">'+x[1]+'</button>').join("");
-$("#nav").onclick=e=>{let b=e.target.closest("[data-v]");if(b){active=b.dataset.v;render()}};
-$("#view").addEventListener("input",e=>{let p=e.target.dataset.path;if(p){let ks=p.split("."),o=d;while(ks.length>1)o=o[ks.shift()];o[ks[0]]=e.target.value;dirty()}let q=e.target.dataset.item;if(q){let[k,i,f]=q.split(":");d[k][+i][f]=e.target.value;dirty()}let w=e.target.dataset.work;if(w){let[a,b,f]=w.split(":");d.workDays[+a].items[+b][f]=e.target.value;if(f==="type"){d.workDays[+a].items[+b].code="";d.workDays[+a].items[+b].mark=""}if(f==="code")d.workDays[+a].items[+b].mark="";dirty();if(f==="type"||f==="code")render()}let v=e.target.dataset.inv;if(v){let[a,b,f]=v.split(":");d.invoices[+a].items[+b][f]=e.target.value;dirty()}});
-$("#view").addEventListener("click",e=>{let a=e.target.dataset.add;if(a){const makers={workDays:()=>({date:"",items:[],collapsed:false}),invoices:()=>({date:"",number:"",items:[],collapsed:false}),tasks:()=>({type:"",code:"",volume:"",unit:"тн",collapsed:false,bom:[],bomName:"",axisMin:"",axisMax:"",levelMin:"",levelMax:""}),deadlines:()=>({type:"",code:"",start:"",date:"",collapsed:false}),actedDays:()=>({date:"",reason:"",value:"",from:"",to:"",collapsed:false}),workers:()=>({fio:"",role:"",qty:"",collapsed:false}),responsibles:()=>({role:"",fio:"",collapsed:false}),equipment:()=>({type:"",custom:"",qty:1,collapsed:false}),penalties:()=>({date:"",amount:"",responsible:"",reason:"",collapsed:false})};d[a].unshift(makers[a]());dirty();render()}let q=e.target.dataset.del;if(q){let[k,i]=q.split(":");d[k].splice(+i,1);dirty();render()}let aw=e.target.dataset.addwork;if(aw!==undefined){let day=d.workDays[+aw];day.items=day.items||[];day.items.push({type:"",code:"",name:"",mark:"",axis:"",level:"",qty:"",unit:"тн",per:"",photos:[]});dirty();render()}let dw=e.target.dataset.delwork;if(dw){let[a,b]=dw.split(":");d.workDays[+a].items.splice(+b,1);dirty();render()}let ai=e.target.dataset.addinv;if(ai!==undefined){let inv=d.invoices[+ai];inv.items=inv.items||[];inv.items.push({type:"",code:"",name:"",mark:"",qty:"",unit:"тн",per:""});dirty();render()}let di=e.target.dataset.delinv;if(di){let[a,b]=di.split(":");d.invoices[+a].items.splice(+b,1);dirty();render()}});
-function compressPhoto(file){return new Promise((resolve,reject)=>{let fr=new FileReader();fr.onerror=reject;fr.onload=()=>{let im=new Image();im.onerror=reject;im.onload=()=>{let max=1100,scale=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*scale);c.height=Math.round(im.height*scale);c.getContext("2d").drawImage(im,0,0,c.width,c.height);resolve(c.toDataURL("image/jpeg",.68))};im.src=fr.result};fr.readAsDataURL(file)})}
-function photoDB(){return new Promise((res,rej)=>{let q=indexedDB.open("ATemirReportPhotos",2);q.onupgradeneeded=()=>{if(!q.result.objectStoreNames.contains("photos"))q.result.createObjectStore("photos")};q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)})}async function savePhotos(){try{let db=await photoDB();await new Promise((res,rej)=>{let tx=db.transaction("photos","readwrite");tx.objectStore("photos").put((d.reportPhotos||[]).slice(0,12),"object_"+id);tx.oncomplete=res;tx.onerror=()=>rej(tx.error)});db.close()}catch(e){}}async function loadPhotos(){try{let db=await photoDB(),arr=await new Promise((res,rej)=>{let tx=db.transaction("photos","readonly"),q=tx.objectStore("photos").get("object_"+id);q.onsuccess=()=>res(q.result||[]);q.onerror=()=>rej(q.error)});db.close();d.reportPhotos=Array.isArray(arr)?arr.slice(0,12):[];if(active==="photos")render()}catch(e){}}
-function normBom(s){return String(s||"").trim().toUpperCase().replace(/^K(?=\\d)/,"К").replace(/^B(?=\\d)/,"В")}function numBom(v){return parseFloat(String(v??"").replace(/\\s/g,"").replace(",","."))||0}function rowsToBom(rows){rows=rows.filter(r=>r.some(v=>String(v||"").trim()));let hi=rows.findIndex(r=>r.some(v=>/марка/i.test(String(v||""))));if(hi<0)hi=0;let h=rows[hi].map(v=>String(v||"").toLowerCase().replace(/ё/g,"е")),find=names=>h.findIndex(v=>names.some(n=>v.includes(n))),im=find(["марка"]),ina=find(["наименование"]),iq=find(["кол-во","количество","кол."]),iw=find(["вес 1","масса 1","вес ед","масса ед"]),it=find(["общий вес","масса всего","вес всего","всего, кг"]);return rows.slice(hi+1).map(r=>{let mark=normBom(r[im]),name=String(r[ina]||"").trim(),qty=numBom(r[iq]),weight1=numBom(r[iw]),weightTotal=numBom(r[it]);if(!qty&&weight1&&weightTotal)qty=Math.round(weightTotal/weight1*1000)/1000;if(!weightTotal&&qty&&weight1)weightTotal=qty*weight1;return {mark,name,qty,weight1,weightTotal}}).filter(r=>r.mark)}function parseDelimited(text){let lines=String(text||"").split(/\\r?\\n/).filter(Boolean),sep=lines.some(x=>x.includes(";"))?";":lines.some(x=>x.includes("\\t"))?"\\t":",";return rowsToBom(lines.map(x=>x.split(sep)))}async function inflateRaw(u){let ds=new DecompressionStream("deflate-raw"),w=ds.writable.getWriter();w.write(u);w.close();return new Uint8Array(await new Response(ds.readable).arrayBuffer())}
-async function unzipXlsx(buf){let u=new Uint8Array(buf),dv=new DataView(buf),e=-1;for(let i=u.length-22;i>=Math.max(0,u.length-65557);i--)if(dv.getUint32(i,true)===0x06054b50){e=i;break}if(e<0)throw Error("ZIP");let count=dv.getUint16(e+10,true),p=dv.getUint32(e+16,true),files={};for(let z=0;z<count;z++){if(dv.getUint32(p,true)!==0x02014b50)break;let method=dv.getUint16(p+10,true),cs=dv.getUint32(p+20,true),fn=dv.getUint16(p+28,true),ex=dv.getUint16(p+30,true),cm=dv.getUint16(p+32,true),off=dv.getUint32(p+42,true),name=new TextDecoder().decode(u.slice(p+46,p+46+fn)),lfn=dv.getUint16(off+26,true),lex=dv.getUint16(off+28,true),st=off+30+lfn+lex,data=u.slice(st,st+cs);if(method===8)data=await inflateRaw(data);else if(method!==0){p+=46+fn+ex+cm;continue}files[name]=new TextDecoder("utf-8").decode(data);p+=46+fn+ex+cm}return files}
-async function parseXlsx(f){let files=await unzipXlsx(await f.arrayBuffer()),ss=[];if(files["xl/sharedStrings.xml"]){let doc=new DOMParser().parseFromString(files["xl/sharedStrings.xml"],"application/xml");ss=[...doc.querySelectorAll("si")].map(si=>[...si.querySelectorAll("t")].map(t=>t.textContent).join(""))}let sheet=files["xl/worksheets/sheet1.xml"]||Object.entries(files).find(([k])=>/^xl\/worksheets\/sheet\d+\.xml$/.test(k))?.[1];if(!sheet)throw Error("SHEET");let doc=new DOMParser().parseFromString(sheet,"application/xml"),rows=[];[...doc.querySelectorAll("row")].forEach(row=>{let arr=[];[...row.querySelectorAll("c")].forEach(c=>{let ref=c.getAttribute("r")||"",col=(ref.match(/[A-Z]+/)||["A"])[0],ci=0;for(let ch of col)ci=ci*26+ch.charCodeAt(0)-64;ci--;let typ=c.getAttribute("t"),v=c.querySelector("v")?.textContent??"",val=typ==="s"?(ss[+v]??""):typ==="inlineStr"?(c.querySelector("is")?.textContent??""):v;arr[ci]=val});rows.push(arr)});return rowsToBom(rows)}
-async function readBomFile(f){return /\.xlsx$/i.test(f.name)?parseXlsx(f):parseDelimited(await f.text())}
-function openLegacy(print){save();localStorage.setItem(legacyKey,JSON.stringify(d));location.href="legacy-report.html?object="+encodeURIComponent(id)+(print?"&print=1":"")}
-$("#htmlExport").onclick=()=>openLegacy(false);$("#pdfExport").onclick=()=>openLegacy(true);
-$("#view").addEventListener("change",async e=>{if(e.target.id==="reportPhotoInput"){let fresh=[];for(const f of [...e.target.files].slice(0,12)){try{fresh.push(await compressPhoto(f))}catch(_){}}d.reportPhotos=fresh;await savePhotos();dirty();render();return}let mk=e.target.dataset.mark;if(mk){let[a,b]=mk.split(":"),x=d.workDays[+a].items[+b],same=(q,w)=>String(q||"").trim()===String(w||"").trim(),N=s=>String(s||"").trim().toUpperCase().replace(/^K(?=\\d)/,"К").replace(/^B(?=\\d)/,"В"),task=d.tasks.find(t=>same(t.type,x.type)&&same(t.code,x.code))||d.tasks.find(t=>same(t.code,x.code)),row=(task?.bom||[]).find(r=>N(r.mark)===N(e.target.value));if(row){let w=parseFloat(row.weight1)||0;x.mark=row.mark;x.name=row.name;x.unit=task.unit||"тн";x.per=x.unit==="тн"?w/1000:w}else{x.mark="";x.name="";x.per=""}dirty();render()}let bi=e.target.dataset.bom;if(bi!==undefined){let f=e.target.files&&e.target.files[0];if(!f)return;try{let bom=await readBomFile(f);if(!bom.length)throw 0;d.tasks[+bi].bom=bom;d.tasks[+bi].bomName=f.name;dirty();render()}catch(err){alert("Не удалось прочитать ведомость. Проверьте файл и заголовки: Марка, Наименование, Количество, Вес 1 ед., Общий вес.")}}});$("#view").addEventListener("click",e=>{let rp=e.target.dataset.rmphoto;if(rp!==undefined){d.reportPhotos.splice(+rp,1);savePhotos();dirty();render();return}let sf=e.target.dataset.sfilter;if(sf){document.querySelectorAll("[data-sfilter]").forEach(b=>b.classList.toggle("on",b.dataset.sfilter===sf));document.querySelectorAll(".schemept").forEach(p=>p.style.display=sf==="all"||p.dataset.state===sf||(sf==="left"&&p.dataset.state==="partial")?"":"none")}let i=e.target.dataset.clearbom;if(i!==undefined){d.tasks[+i].bom=[];d.tasks[+i].bomName="";dirty();render()}});addEventListener("beforeunload",save);render();loadPhotos();
+function bind(){
+ document.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{active=b.dataset.v;render()});
+ document.querySelectorAll("[data-field]").forEach(e=>e.oninput=()=>{let p=e.dataset.field.split("."),o=d;for(let i=0;i<p.length-1;i++)o=o[p[i]];o[p.at(-1)]=e.value;save()});
+ document.querySelectorAll("[data-item]").forEach(e=>e.oninput=()=>{let [n,i,k]=e.dataset.item.split(":");d[n][+i][k]=e.value;save()});
+ document.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>{let n=b.dataset.add;d[n].unshift(makers[n]());save();render()});
+ document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{let [n,i]=b.dataset.del.split(":");d[n].splice(+i,1);save();render()});
+}
+function legacy(print){localStorage.setItem("atemir_v9",JSON.stringify(d));location.href="legacy-report.html?object="+encodeURIComponent(id)+(print?"&print=1":"")}
+$("#htmlExport").onclick=()=>legacy(false);$("#pdfExport").onclick=()=>legacy(true);render();
 })();
