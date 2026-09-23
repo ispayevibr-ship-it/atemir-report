@@ -2,7 +2,7 @@ const views=[["home","▦ Отчёт"],["manage","＋ Ввод данных"],["
 const manageViews=[["reportInfo","◷","Дата и погода"],["works","✓","Смонтированные марки"],["workers","♟","Работники"],["responsibles","★","Ответственные"],["equipment","▣","Техника"],["photos","▧","Фото"]];
 const unitOptions=["тн","кг","м²","м³","м.п.","шт.","компл.","смена","маш.-час","чел.-час","рейс","сутки"];
 const positionOptions=["Директор","Заместитель директора","Руководитель проекта","Начальник участка","Производитель работ","Мастер участка","Инженер ПТО","Инженер ОТ и ТБ","Геодезист","Монтажник","Электрогазосварщик","Сварщик","Стропальщик","Машинист крана","Водитель","Электрик","Разнорабочий"];
-let editingRows={},showAllDailyMarks=false,objectSettingsOpen=false,objectWizard=null;
+let editingRows={},showAllDailyMarks=false,objectSettingsOpen=false,companyProfileOpen=false,objectWizard=null;
 let bomFilter="all",financeUnlocked=false,currentReportId=null,currentObjectId=null,currentDailyReportId=null,currentCompanyId=null,companyList=[],companyProfile={},reportList=[],portfolioData=[],objectList=[],objectAnalyticsData=[],dailyReportList=[],reportsTab="overview",showAllReports=false;
 let state={companyName:"",object:"",address:"",client:"",status:"active",contractNumber:"",contractDate:"",reportDate:"",weather:{temp:"",wind:"",precip:""},workTypes:[],tasks:[],workDays:[],invoices:[],workers:[],responsibles:[],equipment:[],deadlines:[],actedDays:[],penalties:[],reportPhotos:[],companyLogo:"",reportSections:{},financeContracts:[],financeActs:[],financePasswordHash:""},view="home",manageView="object";
 const $=s=>document.querySelector(s), esc=v=>String(v??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
