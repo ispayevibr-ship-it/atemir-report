@@ -1970,23 +1970,14 @@ document.addEventListener("DOMContentLoaded", function () {
    tune243();
    document.body.classList.add("ready243");
  }
- function waitForCalm246(){
-   var last=document.documentElement.innerHTML.length, stable=0, ticks=0;
-   var iv=setInterval(function(){
-     ticks++;
-     var now=document.documentElement.innerHTML.length;
-     if(now===last) stable++; else stable=0;
-     last=now;
-     /* ~0.7 сек спокойного DOM либо максимум ~4 сек ожидания */
-     if(stable>=4 || ticks>=24){
-       clearInterval(iv);
-       requestAnimationFrame(function(){requestAnimationFrame(ready)});
-     }
-   },170);
+ function finishBoot246(){
+   /* В desktop-приложении не ждём искусственно "спокойного DOM".
+      Основной отчёт показываем сразу после первой отрисовки. */
+   requestAnimationFrame(function(){requestAnimationFrame(ready)});
  }
  if(document.readyState==="loading")
-   document.addEventListener("DOMContentLoaded",waitForCalm246,{once:true});
- else waitForCalm246();
+   document.addEventListener("DOMContentLoaded",finishBoot246,{once:true});
+ else finishBoot246();
 })();
 
 
