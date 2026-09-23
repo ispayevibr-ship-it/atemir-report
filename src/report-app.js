@@ -80,7 +80,27 @@ if(active==="invoices"){
   html+=card("Проект → поставлено → выполнено → остаток",'<div class="tablewrap"><table><thead><tr><th>Вид работы</th><th>Шифр</th><th>Проект</th><th>Поставлено</th><th>Выполнено</th><th>Остаток</th><th>Ед.</th></tr></thead><tbody>'+rows+'</tbody></table></div>');
   h=html;
  }
- if(active==="deadlines"){const n=v=>parseFloat(String(v??"").replace(",","."))||0,total=(q,p)=>n(q)*(n(p)||1),done=(t,c)=>d.workDays.flatMap(x=>x.items||[]).filter(x=>x.type===t&&x.code===c).reduce((s,x)=>s+total(x.qty,x.per),0),today=new Date().toISOString().slice(0,10);let cards=d.deadlines.map(dl=>{let t=d.tasks.find(q=>q.code===dl.code&&(q.type===dl.type||!dl.type))||d.tasks.find(q=>q.code===dl.code),status="Нет проектного объёма",pct=0,cls="";if(t&&dl.start&&dl.date){let st=new Date(dl.start+"T12:00:00"),en=new Date(dl.date+"T12:00:00"),td=new Date(today+"T12:00:00"),days=Math.max(1,Math.floor((en-st)/86400000)+1),elapsed=td<st?0:(td>en?days:Math.floor((td-st)/86400000)+1),plan=Math.max(0,Math.min(100,elapsed/days*100)),vol=n(t.volume),fact=done(t.type,t.code);pct=vol?Math.max(0,Math.min(100,fact/vol*100)):0;let delta=fact-vol*plan/100;cls=Math.abs(delta)<.0001?"ontime":delta<0?"behind":"ahead";status=Math.abs(delta)<.0001?"По графику":delta<0?"Отставание "+Math.abs(delta).toFixed(2)+" "+(t.unit||""):"Опережение "+delta.toFixed(2)+" "+(t.unit||"")}return `<div class="schedule ${cls}"><div><b>${esc(dl.type||"Работа")}</b><small>${esc(dl.code||"")}</small></div><strong>${status}</strong><div class="bar"><i style="width:${pct}%"></i></div><small>${dl.start||"—"} → ${dl.date||"—"} · выполнено ${Math.round(pct)}%</small></div>`}).join("");h=list("deadlines","Срок",()=>({type:"",code:"",start:"",date:"",collapsed:false}),[["Вид работы","type"],["Шифр","code"],["Начало","start","date"],["Окончание","date","date"]])+card("График выполнения",cards||'<div class="empty">Добавьте сроки и проектные объёмы</div>');}
+ if(active==="deadlines"){
+  const n=v=>parseFloat(String(v??"").replace(",","."))||0,total=(q,p)=>n(q)*(n(p)||1);
+  const completed=(type,code)=>d.workDays.flatMap(x=>x.items||[]).filter(x=>x.type===type&&x.code===code).reduce((s,x)=>s+total(x.qty,x.per),0);
+  const today=new Date().toISOString().slice(0,10);
+  let cards="";
+  d.deadlines.forEach(dl=>{
+   let t=d.tasks.find(q=>q.code===dl.code&&(q.type===dl.type||!dl.type))||d.tasks.find(q=>q.code===dl.code);
+   let status="Нет проектного объёма",pct=0,cls="";
+   if(t&&dl.start&&dl.date){
+    let st=new Date(dl.start+"T12:00:00"),en=new Date(dl.date+"T12:00:00"),td=new Date(today+"T12:00:00");
+    let days=Math.max(1,Math.floor((en-st)/86400000)+1),elapsed=td<st?0:(td>en?days:Math.floor((td-st)/86400000)+1);
+    let plan=Math.max(0,Math.min(100,elapsed/days*100)),vol=n(t.volume),fact=completed(t.type,t.code);
+    pct=vol?Math.max(0,Math.min(100,fact/vol*100)):0;
+    let delta=fact-vol*plan/100;
+    cls=Math.abs(delta)<.0001?"ontime":delta<0?"behind":"ahead";
+    status=Math.abs(delta)<.0001?"По графику":delta<0?"Отставание "+Math.abs(delta).toFixed(2)+" "+(t.unit||""):"Опережение "+delta.toFixed(2)+" "+(t.unit||"");
+   }
+   cards+='<div class="schedule '+cls+'"><div><b>'+esc(dl.type||"Работа")+'</b><small>'+esc(dl.code||"")+'</small></div><strong>'+status+'</strong><div class="bar"><i style="width:'+pct+'%"></i></div><small>'+(dl.start||"—")+' → '+(dl.date||"—")+' · выполнено '+Math.round(pct)+'%</small></div>';
+  });
+  h=list("deadlines","Срок",()=>({type:"",code:"",start:"",date:"",collapsed:false}),[["Вид работы","type"],["Шифр","code"],["Начало","start","date"],["Окончание","date","date"]])+card("График выполнения",cards||'<div class="empty">Добавьте сроки и проектные объёмы</div>');
+ }
  if(active==="acted"){let work=new Set(d.workDays.filter(x=>x.date).map(x=>x.date)),act=new Set(d.actedDays.filter(x=>x.date).map(x=>x.date)),dates=[...work,...act].sort(),cal="";if(dates.length){let a=new Date(dates[0]+"T12:00:00"),z=new Date(dates[dates.length-1]+"T12:00:00"),cur=new Date(a.getFullYear(),a.getMonth(),1);while(cur<=z){let y=cur.getFullYear(),m=cur.getMonth(),days=new Date(y,m+1,0).getDate(),cells="";for(let i=1;i<=days;i++){let ds=y+"-"+String(m+1).padStart(2,"0")+"-"+String(i).padStart(2,"0"),cl=work.has(ds)&&act.has(ds)?"both":work.has(ds)?"work":act.has(ds)?"acted":"";cells+=`<span class="${cl}">${i}</span>`}cal+=`<div class="month"><b>${cur.toLocaleDateString("ru-RU",{month:"long",year:"numeric"})}</b><div class="days">${cells}</div></div>`;cur=new Date(y,m+1,1)}}h=list("actedDays","Актированный день",()=>({date:"",reason:"Ветер",value:"",from:"",to:"",collapsed:false}),[["Дата","date","date"],["Причина","reason"],["Значение","value"],["С","from","time"],["До","to","time"]])+card("Календарь работ",cal||'<div class="empty">Календарь появится после добавления дат</div>');}
  if(active==="workers"){let totalWorkers=d.workers.reduce((s,x)=>s+(parseInt(x.qty)||0),0);h=card("Рабочие на объекте",'<div class="stat"><div>Всего работников<b>'+totalWorkers+'</b></div></div>')+list("workers","Работники",()=>({name:"",qty:1}),[["Должность / профессия","name"],["Количество, чел.","qty","number"]]);}
  if(active==="responsibles")h=list("responsibles","Ответственное лицо",()=>({role:"",fio:"",collapsed:false}),[["Должность","role"],["ФИО","fio"]]);
