@@ -1,0 +1,3144 @@
+
+*{box-sizing:border-box}:root{--b:#103b64;--b2:#082b4b;--y:#f4b41a;--bg:#eef3f7;--line:#d6e0e8;--muted:#6e7e8c}
+body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:#172535}.app{padding:14px}.top{background:linear-gradient(135deg,var(--b2),var(--b));color:#fff;border-radius:11px;padding:10px 15px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.brand{display:flex;align-items:center;gap:11px}.brand img{width:190px;height:auto;padding:15px;object-fit:contain;background:#fff;border-radius:8px}.actions,.ra{display:flex;gap:5px;flex-wrap:wrap}
+button{border:0;border-radius:6px;padding:8px 10px;font-weight:700;cursor:pointer}.yellow{background:var(--y);color:#172535}.blue{background:var(--b);color:#fff}.white{background:#fff;color:var(--b);border:1px solid #ccd8e1}.red{background:#f7e5e5;color:#8c2929}.small{font-size:10px;padding:5px 7px}
+.layout{display:grid;grid-template-columns:620px minmax(0,1fr);gap:12px}.panel{background:#fff;border-radius:10px;padding:15px;max-height:calc(100vh - 92px);overflow:auto}.sec{border-bottom:1px solid #e5ebef;padding-bottom:13px;margin-bottom:13px}.sec h2{font-size:16px;color:var(--b);margin:0 0 9px}.secHead{display:flex;justify-content:space-between;align-items:center;gap:8px}.secHead h2{margin:0}.sec.sectionCollapsed .secBody{display:none}.saveStatus{font-size:10px;color:#dbe8f2;min-width:90px;text-align:right}
+label{display:block;font-size:10.5px;font-weight:700;color:#536777;margin:5px 0 3px}input,select{width:100%;padding:7px;border:1px solid #cbd6df;border-radius:5px;font:inherit;font-size:12px}.g2{display:grid;grid-template-columns:1fr 1fr;gap:7px}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.card{border:1px solid var(--line);border-left:4px solid var(--y);border-radius:7px;padding:9px;margin:7px 0;background:#fbfcfd}.head{display:flex;justify-content:space-between;align-items:center;gap:8px}.head b{font-size:12px;color:var(--b)}.detail{margin-top:5px}.summary{display:none;font-size:11px;gap:7px;align-items:center;min-width:0}.summary span{white-space:normal;overflow-wrap:anywhere;word-break:break-word;min-width:0}.compact-summary{grid-template-columns:minmax(0,1fr);width:100%}.collapsed .detail{display:none}.collapsed .summary{display:grid}.collapsed{background:#f5f8fa}
+.invoice{border:1px solid #c9d6e0;border-radius:8px;margin:8px 0;background:#f8fafc}.invoiceTop{padding:8px;background:#edf3f7;border-radius:8px 8px 0 0}.invoiceBody{padding:8px}.invSummary{display:none;font-size:11px;overflow-wrap:anywhere;word-break:break-word;margin-top:5px}.invoiceCollapsed .invoiceBody,.invoiceCollapsed .invFields{display:none}.invoiceCollapsed .invSummary{display:block}.item{border-top:1px dashed #ccd7df;margin-top:7px;padding-top:7px}
+.preview{min-width:0;overflow:auto}.report{background:#fff;min-height:calc(100vh - 92px);box-shadow:0 4px 20px #0002}.rh{background:linear-gradient(135deg,var(--b2),var(--b));color:#fff;padding:20px 28px;display:flex;gap:18px;align-items:center}.rh img{width:215px;height:auto;padding:15px;object-fit:contain;background:#fff;border-radius:8px}.rh h1{font-size:21px;margin:0}.yl{height:4px;background:var(--y)}.rb{padding:20px 28px}.obj{font-size:22px;font-weight:800;color:var(--b)}.addr{font-size:11px;color:#667788;margin:3px 0 11px}.rsec{margin-top:15px}.peopleGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.machinesBlock{margin-top:12px}@media(max-width:900px){.peopleGrid{grid-template-columns:1fr}}.rsec h3{font-size:14px;color:var(--b);border-bottom:3px solid var(--y);padding-bottom:4px;margin:0 0 6px}
+table{width:100%;border-collapse:collapse;font-size:9px}th{background:var(--b);color:#fff;text-align:left;padding:5px}td{border:1px solid #dbe3e9;padding:5px}.num{text-align:right}.muted{color:var(--muted)}
+.chartCard{border:1px solid #d7e1e8;border-radius:8px;padding:10px;margin:7px 0;break-inside:avoid}
+.vchart{height:190px;display:flex;align-items:flex-end;gap:7px;padding:22px 8px 30px;border-bottom:1px solid #cbd6df;overflow-x:auto}
+.vcol{min-width:42px;flex:1;max-width:80px;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;position:relative}
+.vbar{width:70%;min-height:2px;border-radius:5px 5px 0 0}.lagCard{border:1px solid #d7e1e8;border-radius:8px;padding:9px;margin:7px 0;break-inside:avoid}.lagLine{height:13px;background:#e9eef2;border-radius:8px;overflow:hidden;margin:5px 0}.lagFill{height:100%;background:#103b64}.lagFill.behind{background:#c83b3b}.lagText{font-size:9px}.behindText{color:#b72d2d;font-weight:700}.okText{color:#246a43;font-weight:700}
+.vval{font-size:8px;font-weight:700;margin-bottom:3px;white-space:nowrap}.vlab{position:absolute;top:calc(100% + 5px);font-size:8px;white-space:nowrap;color:#607080}
+.chartMode{font-size:9px;color:#6d7d8a;margin-bottom:5px}.c0{background:#103b64}.c1{background:#f4b41a}.c2{background:#2d7f5e}.c3{background:#8b5bb5}.c4{background:#d7653b}.c5{background:#3f78b5}.chartTitle{font-size:10px;font-weight:800;color:var(--b);margin-bottom:7px}.chartGrid{display:grid;grid-template-columns:88px 1fr 65px;gap:5px;align-items:center;font-size:9px;margin:5px 0}.track{height:14px;background:#e9eef2;border-radius:8px;overflow:hidden;border:1px solid #dde5eb}.bar{height:100%}.bar.plan{background:#7b8e9f}.bar.del{background:#f4b41a}.bar.done{background:#103b64}.legend{display:flex;gap:12px;font-size:8px;color:#667788;margin-bottom:5px}.dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:3px}.d1{background:#7b8e9f}.d2{background:#f4b41a}.d3{background:#103b64}
+@media(max-width:1200px){.layout{grid-template-columns:540px minmax(0,1fr)}}@media(max-width:850px){.layout{grid-template-columns:1fr}.panel{max-height:none}}
+@media print{.peopleGrid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important}.machinesBlock{margin-top:10px!important}@page{size:A4;margin:7mm}body{background:#fff;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}.app{padding:0}.top,.panel{display:none!important}.layout{display:block}.preview{overflow:visible}.report{box-shadow:none;min-height:0}.rh{padding:6mm 8mm;background:#103b64!important}.rh img{width:44mm;height:14mm}.rh h1{font-size:15pt}.yl{background:#f4b41a!important}.rb{padding:5mm 8mm}.obj{font-size:15pt}.rsec{margin-top:3.5mm}.peopleGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.machinesBlock{margin-top:12px}@media(max-width:900px){.peopleGrid{grid-template-columns:1fr}}.rsec h3{font-size:9.5pt;margin-bottom:1.5mm;border-color:#f4b41a!important}table{font-size:7pt}th,td{padding:1.2mm}th{background:#103b64!important;color:#fff!important}.bar.plan{background:#7b8e9f!important}.bar.del{background:#f4b41a!important}.bar.done{background:#103b64!important}.vbar{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}.c0{background:#103b64!important}.c1{background:#f4b41a!important}.c2{background:#2d7f5e!important}.c3{background:#8b5bb5!important}.c4{background:#d7653b!important}.c5{background:#3f78b5!important}.lagFill{background:#103b64!important}.lagFill.behind{background:#c83b3b!important}.track{background:#e9eef2!important}.chartCard{padding:2mm;margin:2mm 0}}
+.weatherHint{font-size:10px;color:#8a94a3;margin-top:5px}.reportMeta{display:grid;grid-template-columns:150px 1fr;gap:10px}.reportDateBox,.weatherBox{border:1px solid #dce3ec;border-radius:8px;padding:9px 11px;background:#fafbfd}.reportDateBox span,.weatherBox>span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:#667085;margin-bottom:4px}.reportDateBox b{font-size:16px}
+.multiCalendar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}.monthCard{border:1px solid #dce3ec;border-radius:8px;padding:7px;break-inside:avoid}.monthTitle{text-align:center;font-size:12px;font-weight:800;margin-bottom:4px}.monthCard .workCalendar{margin-top:0;gap:2px}.monthCard .calDay{min-height:26px;padding:3px;font-size:10px;border-radius:4px}.monthCard .calHead{font-size:9px;padding:2px}@media(max-width:900px){.multiCalendar{grid-template-columns:1fr}}@media print{.multiCalendar{grid-template-columns:repeat(3,1fr);gap:6px}.monthCard{padding:5px}}
+.requiredSec{border:2px solid #c62828!important;background:#fffafa}.requiredSec .secHead{background:#fff0f0}.requiredSec .secHead h2{color:#b42318}.requiredMark{display:inline-block;font-size:9px;letter-spacing:.5px;background:#c62828;color:#fff;border-radius:4px;padding:3px 6px;margin-left:7px;vertical-align:2px}.actedSummary{display:flex;flex-direction:column;gap:3px}.actedSummary .adateLine{font-weight:800}.actedSummary .adetailLine{font-size:12px;color:#475467}
+
+.panel{scrollbar-width:auto;scrollbar-color:#7b8794 #eef2f6}
+.panel::-webkit-scrollbar{width:16px}
+.panel::-webkit-scrollbar-track{background:#eef2f6;border-radius:10px}
+.panel::-webkit-scrollbar-thumb{background:#7b8794;border:3px solid #eef2f6;border-radius:10px}
+.panel::-webkit-scrollbar-thumb:hover{background:#52606d}
+
+.requiredSec .secHead{padding:14px 16px}
+.requiredSec .secBody{padding:16px 18px 18px}
+.requiredSec .weatherHint{margin-top:9px}
+
+.penaltySummary{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0 10px}
+.penaltyStat{border:1px solid #e2e7ee;border-radius:8px;padding:9px 12px;background:#fafbfd;min-width:150px}
+.penaltyStat span{display:block;font-size:10px;color:#667085;text-transform:uppercase;letter-spacing:.35px;margin-bottom:3px}
+.penaltyStat b{font-size:16px}
+.penaltyCompact{display:flex;flex-direction:column;gap:3px}
+.penaltyCompact .pdate{font-weight:800}
+.penaltyCompact .pdetail{font-size:12px;color:#475467}
+
+.reportWorkDay{border:1px solid #dce3ec;border-radius:8px;margin:7px 0;background:#fff;break-inside:avoid}
+.reportWorkDay summary{cursor:pointer;list-style:none;padding:9px 11px;font-size:11px}
+.reportWorkDay summary::-webkit-details-marker{display:none}
+.reportWorkDay summary{position:relative;padding-right:48px}
+.reportWorkDay summary:after{content:"";position:absolute;right:17px;top:50%;width:9px;height:9px;border-right:2px solid #315b7d;border-bottom:2px solid #315b7d;transform:translateY(-65%) rotate(45deg);transition:transform .18s ease}
+.reportWorkDay summary:before{content:"";position:absolute;right:9px;top:50%;width:27px;height:27px;transform:translateY(-50%);border-radius:50%;background:#eef3f8;transition:background .18s ease}
+.reportWorkDay summary:hover:before{background:#dfeaf4}
+.reportWorkDay[open] summary:after{transform:translateY(-35%) rotate(225deg)}
+.reportWorkDay.today{border:2px solid #2f7d45}
+.reportWorkDay .rwDate{font-weight:800;font-size:12px;margin-bottom:4px}
+.reportWorkDay .rwLine{color:#344054;line-height:1.4}
+.reportWorkDay .rwDetail{padding:0 10px 10px}
+.reportWorkDay .rwDetail table{margin-top:3px}
+@media print{.reportWorkDay summary:after{display:none}.reportWorkDay:not([open]) .rwDetail{display:none}}
+
+
+
+.unitField{display:flex;align-items:center;gap:7px}.unitField input{flex:1}.unitField span{font-weight:700;white-space:nowrap;color:#52606d}
+.workCalendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:10px}
+.calHead{text-align:center;font-size:11px;font-weight:800;color:#667085;padding:4px}
+.calDay{min-height:42px;border:1px solid #d9dee7;border-radius:7px;padding:5px;font-size:12px;background:#fff}
+.calDay.empty{border-color:transparent;background:transparent}.calDay.work{background:#dff4e5;border-color:#8bc79b}.calDay.acted{background:#fbe0e0;border-color:#df8b8b}.calDay.both{background:linear-gradient(135deg,#dff4e5 0 50%,#fbe0e0 50% 100%);border-color:#c7a27d}
+.calLegend{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:12px}.calDot{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}.calDot.work{background:#8bc79b}.calDot.acted{background:#df8b8b}
+.calendarNav{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px}.calendarNav b{font-size:14px}
+
+.actedMonth{border:1px solid #dce3ec;border-radius:8px;margin:7px 0;background:#fff;break-inside:avoid}
+.actedMonth summary{cursor:pointer;list-style:none;padding:10px 48px 10px 11px;position:relative;font-size:11px}
+.actedMonth summary::-webkit-details-marker{display:none}
+.actedMonth summary:before{content:"";position:absolute;right:9px;top:50%;width:27px;height:27px;transform:translateY(-50%);border-radius:50%;background:#eef3f8}
+.actedMonth summary:after{content:"";position:absolute;right:17px;top:50%;width:9px;height:9px;border-right:2px solid #315b7d;border-bottom:2px solid #315b7d;transform:translateY(-65%) rotate(45deg);transition:transform .18s ease}
+.actedMonth[open] summary:after{transform:translateY(-35%) rotate(225deg)}
+.actedMonth summary:hover:before{background:#dfeaf4}
+.actedMonth.latest{border-color:#9fb8cc}
+.amTitle{font-weight:800;color:#103b64;font-size:12px}
+.amMeta{margin-top:3px;color:#667085;font-size:10px}
+.amDetail{padding:0 10px 10px}
+.penaltyFull{width:100%;display:block;clear:both}
+.penaltyFull .penaltySummary{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;margin:8px 0 0}
+.penaltyFull .penaltyStat{width:100%;min-width:0;padding:12px 14px}
+
+@media(max-width:760px){
+  html,body{max-width:100%;overflow-x:hidden}
+  body{padding:6px!important}
+  .report{width:100%!important;max-width:100%!important;min-width:0!important;margin:0!important;overflow:hidden}
+  .report *{box-sizing:border-box;min-width:0}
+  .rh{padding:10px!important;gap:8px;flex-wrap:wrap}
+  .rh img{max-width:100%;width:180px!important;height:auto!important;padding:10px!important}
+  .rsec{width:100%!important;max-width:100%!important;overflow:hidden}
+  .peopleGrid{grid-template-columns:1fr!important}
+  .reportWorkDay,.actedMonth{width:100%;max-width:100%}
+  .reportWorkDay summary,.actedMonth summary{overflow-wrap:anywhere}
+  .rwLine{overflow-wrap:anywhere;white-space:normal}
+  .penaltyFull .penaltySummary{grid-template-columns:1fr!important}
+  .multiCalendar{grid-template-columns:1fr!important}
+  .calLegend{flex-wrap:wrap}
+
+  .report table{display:block;width:100%!important;max-width:100%!important;border:0}
+  .report table thead{display:none}
+  .report table tbody{display:block;width:100%}
+  .report table tr{display:block;width:100%;margin:0 0 8px;padding:7px 9px;border:1px solid #dce3ec;border-radius:7px;background:#fff}
+  .report table td{display:grid;grid-template-columns:minmax(88px,38%) minmax(0,1fr);gap:8px;width:100%!important;max-width:100%!important;padding:4px 0!important;border:0!important;text-align:left!important;white-space:normal!important;overflow-wrap:anywhere}
+  .report table td:before{content:"";font-weight:700;color:#667085;font-size:9px}
+  .report table td.num{text-align:left!important}
+
+  /* Выполненные работы */
+  .reportWorkDay table td:nth-child(1):before{content:"Вид работ"}
+  .reportWorkDay table td:nth-child(2):before{content:"Позиция"}
+  .reportWorkDay table td:nth-child(3):before{content:"Марка / поз."}
+  .reportWorkDay table td:nth-child(4):before{content:"Кол-во"}
+  .reportWorkDay table td:nth-child(5):before{content:"Ед. изм."}
+  .reportWorkDay table td:nth-child(6):before{content:"Объём ед."}
+  .reportWorkDay table td:nth-child(7):before{content:"Итого"}
+
+  /* Актированные дни */
+  .actedMonth table td:nth-child(1):before{content:"Дата"}
+  .actedMonth table td:nth-child(2):before{content:"Причина"}
+  .actedMonth table td:nth-child(3):before{content:"Значение"}
+  .actedMonth table td:nth-child(4):before{content:"Время"}
+
+  .amDetail{padding:0 7px 7px!important}
+}
+
+@media(max-width:760px){
+  /* Погода: каждый показатель отдельной строкой с нормальным отступом */
+  .reportMeta{grid-template-columns:1fr!important;gap:8px!important}
+  .weatherBox{display:flex!important;flex-direction:column!important;gap:9px!important}
+  .weatherBox>span{margin:0!important}
+  .weatherBox>div{display:block!important;margin:0!important;line-height:1.45!important}
+  .weatherBox b{display:inline!important}
+
+  /* Сводка: на телефоне оставляем только ключевые показатели */
+  #rProgress tr{padding:9px 10px!important}
+  #rProgress td:nth-child(2),
+  #rProgress td:nth-child(4),
+  #rProgress td:nth-child(6){display:none!important}
+  #rProgress td:nth-child(1):before{content:"Вид работы"}
+  #rProgress td:nth-child(3):before{content:"К выполнению по проекту"}
+  #rProgress td:nth-child(5):before{content:"На сегодняшний день выполнено"}
+  #rProgress td:nth-child(7):before{content:"Ед. изм."}
+
+  /* Люди и механизмы: используем всю ширину, без пустых боков */
+  .peopleMech,.peopleGrid,.machinesBlock{width:100%!important;max-width:100%!important}
+  .peopleGrid{display:block!important}
+  .peopleGrid>div{width:100%!important;margin:0 0 10px!important}
+  .machinesBlock{margin-top:0!important}
+  #rResp tr,#rWorkers tr,#rEquip tr{padding:8px 10px!important}
+  #rResp td,#rWorkers td,#rEquip td{grid-template-columns:minmax(115px,44%) minmax(0,1fr)!important}
+  #rResp td:nth-child(1):before{content:"Должность"}
+  #rResp td:nth-child(2):before{content:"ФИО"}
+  #rWorkers td:nth-child(1):before{content:"Профессия"}
+  #rWorkers td:nth-child(2):before{content:"Кол-во"}
+  #rEquip td:nth-child(1):before{content:"Механизм"}
+  #rEquip td:nth-child(2):before{content:"Кол-во"}
+
+  /* Сроки: карточка полностью на ширину экрана */
+  #rDeadlines tr{padding:9px 10px!important;width:100%!important}
+  #rDeadlines td{grid-template-columns:minmax(105px,40%) minmax(0,1fr)!important}
+  #rDeadlines td:nth-child(1):before{content:"Вид работы"}
+  #rDeadlines td:nth-child(2):before{content:"Шифр"}
+  #rDeadlines td:nth-child(3):before{content:"Начало"}
+  #rDeadlines td:nth-child(4):before{content:"Окончание"}
+  #rLag,.lagCard{width:100%!important;max-width:100%!important}
+}
+
+.reportInvoice{border:1px solid #dce3ec;border-radius:8px;margin:7px 0;background:#fff;break-inside:avoid}
+.reportInvoice summary{cursor:pointer;list-style:none;padding:10px 48px 10px 11px;position:relative}
+.reportInvoice summary::-webkit-details-marker{display:none}
+.reportInvoice summary:before{content:"";position:absolute;right:9px;top:50%;width:27px;height:27px;transform:translateY(-50%);border-radius:50%;background:#eef3f8}
+.reportInvoice summary:after{content:"";position:absolute;right:17px;top:50%;width:9px;height:9px;border-right:2px solid #315b7d;border-bottom:2px solid #315b7d;transform:translateY(-65%) rotate(45deg)}
+.reportInvoice[open] summary:after{transform:translateY(-35%) rotate(225deg)}
+.reportInvoice.latest{border-color:#9fb8cc}
+.riTitle{font-weight:800;color:#103b64;font-size:12px}.riMeta{margin-top:3px;color:#667085;font-size:10px}.riDetail{padding:0 10px 10px}
+.rwLine{padding:5px 0}.rwLine+.rwLine{border-top:1px solid #d9e2ea;margin-top:3px;padding-top:8px}
+@media(max-width:760px){
+ .reportInvoice{width:100%;max-width:100%}.reportInvoice summary{overflow-wrap:anywhere}
+ .reportInvoice table td:nth-child(1):before{content:"Шифр"}.reportInvoice table td:nth-child(2):before{content:"Позиция"}
+ .reportInvoice table td:nth-child(3):before{content:"Марка / поз."}.reportInvoice table td:nth-child(4):before{content:"Кол-во"}
+ .reportInvoice table td:nth-child(5):before{content:"Ед. изм."}.reportInvoice table td:nth-child(6):before{content:"Объём ед."}
+ .reportInvoice table td:nth-child(7):before{content:"Итого"}
+}
+.invProjectSummary{margin-top:5px}.invProjectSummary>div{padding:3px 0}.invProjectSummary>div+div{border-top:1px solid #dce3ec}
+.headTotal{display:inline-block;margin-left:7px;padding:2px 7px;border-radius:10px;background:#eef3f8;color:#315b7d;font-size:10px;font-weight:800;white-space:nowrap}
+
+@media(max-width:760px){
+  #rMultiCalendar .monthCard:not(:last-child),
+  #rMultiCalendar .month:not(:last-child),
+  #rMultiCalendar > div:not(:last-child){display:none!important}
+}
+
+.clientLine{margin-top:3px;color:#344054}
+@media(max-width:760px){
+  html,body{width:100%;max-width:100%;margin:0!important;padding:0!important;overflow-x:hidden}
+  body{font-size:14px!important;line-height:1.45!important}
+  .report{width:100%!important;max-width:100%!important;margin:0!important;border-radius:0!important;padding:0!important}
+  .rb{padding:10px 8px 14px!important}
+  .rh{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;padding:12px 8px!important}
+  .rh img{display:block!important;margin:0 auto 7px!important;width:min(230px,78vw)!important;max-width:78vw!important;height:auto!important;padding:10px!important}
+  .rh h1{font-size:17px!important;line-height:1.25!important;margin:2px 0 4px!important}
+  .rh>div>div{font-size:13px!important}
+  .obj{font-size:16px!important;line-height:1.3!important}
+  .addr,.clientLine{font-size:13px!important;line-height:1.45!important}
+  .clientLine{margin-top:5px!important}
+  .rsec{margin-top:11px!important;padding:9px 7px!important}
+  .rsec h3{font-size:14px!important;line-height:1.3!important;margin:0 0 7px!important}
+  .report table{font-size:13px!important}
+  .report table tr{margin-bottom:7px!important;padding:8px!important}
+  .report table td{font-size:13px!important;line-height:1.35!important;grid-template-columns:minmax(105px,42%) minmax(0,1fr)!important;gap:7px!important}
+  .report table td:before{font-size:11px!important;line-height:1.25!important}
+  .rwDate,.riTitle,.amTitle{font-size:14px!important}
+  .rwLine,.riMeta,.amMeta{font-size:12px!important;line-height:1.45!important}
+  .reportWorkDay summary,.reportInvoice summary,.actedMonth summary{padding-left:9px!important}
+  .rwDetail,.riDetail,.amDetail{padding-left:6px!important;padding-right:6px!important}
+  .headTotal{font-size:11px!important}
+  .calDay{font-size:12px!important}
+  .calHead{font-size:11px!important}
+  .penaltyFull .penaltyStat{padding:9px!important}
+}
+
+.rowNo span,.workDayNo{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#103b64;color:#fff;font-weight:800;font-size:11px}
+.reportWorkDay[open],.reportInvoice[open],.actedMonth[open]{border:2px solid #1769aa!important;box-shadow:0 0 0 2px rgba(23,105,170,.08)}
+@media(max-width:760px){
+  #rProgress .rowNo{display:block!important;width:auto!important;padding:0 0 5px!important}
+  #rProgress .rowNo:before{display:none!important}
+  #rProgress .rowNo span{width:28px;height:28px;font-size:13px}
+  .workDayNo{width:27px;height:27px;font-size:12px;margin-right:4px}
+  .peopleMech{margin-bottom:0!important;padding-bottom:3px!important}
+  .peopleMech+.rsec{margin-top:5px!important}
+  .machinesBlock{margin-bottom:0!important;padding-bottom:0!important}
+}
+
+/* Нумерация-шильдик: половина номера внутри карточки, половина снаружи */
+#rProgress tr{position:relative}
+#rProgress .rowNo{position:relative;overflow:visible}
+#rProgress .rowNo span{
+  position:relative;
+  z-index:3;
+  margin-left:-22px;
+  border:3px solid #fff;
+  box-shadow:0 2px 7px rgba(16,59,100,.24);
+}
+.reportWorkDay{position:relative;overflow:visible}
+.reportWorkDay .workDayNo{
+  position:absolute;
+  left:-15px;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:4;
+  border:3px solid #fff;
+  box-shadow:0 2px 7px rgba(16,59,100,.24);
+}
+.reportWorkDay .rwDate{position:relative;padding-left:18px}
+@media(max-width:760px){
+  #rProgress tr{margin-left:13px!important;width:calc(100% - 13px)!important;overflow:visible!important}
+  #rProgress .rowNo{
+    position:absolute!important;
+    left:-14px!important;
+    top:10px!important;
+    padding:0!important;
+    width:30px!important;
+    z-index:4!important;
+  }
+  #rProgress .rowNo span{
+    position:static!important;
+    margin:0!important;
+    width:30px!important;
+    height:30px!important;
+    border-width:3px!important;
+  }
+  #rProgress td:nth-child(2){padding-left:20px!important}
+  .reportWorkDay{margin-left:13px!important;width:calc(100% - 13px)!important}
+  .reportWorkDay .workDayNo{
+    left:-15px!important;
+    width:30px!important;
+    height:30px!important;
+    font-size:13px!important;
+  }
+  .reportWorkDay .rwDate{padding-left:20px!important}
+}
+
+/* v50: без нумерации — чередование карточек синим/жёлтым бордером */#rProgress tr{margin-left:0!important;width:100%!important}
+#rProgress tr:nth-child(odd){border-left:5px solid #1769aa!important}
+#rProgress tr:nth-child(even){border-left:5px solid #f2c230!important}
+
+.reportWorkDay{margin-left:0!important;width:100%!important}
+.reportWorkDay .workDayNo{display:none!important}
+.reportWorkDay .rwDate{padding-left:0!important}
+#rWorks .reportWorkDay:nth-child(odd){border-left:5px solid #1769aa!important}
+#rWorks .reportWorkDay:nth-child(even){border-left:5px solid #f2c230!important}
+
+@media(max-width:760px){
+  #rProgress .rowNo{display:none!important}
+  #rProgress tr{margin-left:0!important;width:100%!important}
+  #rProgress td:nth-child(2){padding-left:4px!important}
+  .reportWorkDay{margin-left:0!important;width:100%!important}
+  .reportWorkDay .rwDate{padding-left:0!important}
+}
+
+@media(min-width:761px){
+  #rProgress tr{position:relative}
+  #rProgress tr:nth-child(odd),
+  #rProgress tr:nth-child(even){border-left:0!important}
+  #rProgress tr:nth-child(odd):before,
+  #rProgress tr:nth-child(even):before{
+    content:"";
+    position:absolute;
+    left:6px;
+    top:5px;
+    bottom:5px;
+    width:5px;
+    border-radius:4px;
+  }
+  #rProgress tr:nth-child(odd):before{background:#1769aa}
+  #rProgress tr:nth-child(even):before{background:#f2c230}
+  #rProgress td:first-of-type{padding-left:17px!important}
+}
+
+@media(min-width:761px){
+ .progressTable{width:100%!important;table-layout:fixed!important;border-collapse:collapse!important}
+ .progressTable thead{display:table-header-group!important}
+ .progressTable tbody{display:table-row-group!important}
+ .progressTable tr{display:table-row!important;position:static!important}
+ .progressTable th,.progressTable td{display:table-cell!important;position:static!important;box-sizing:border-box!important}
+ .progressTable tbody tr:before{display:none!important;content:none!important}
+ .progressTable tbody tr:nth-child(odd) td:first-child{box-shadow:inset 5px 0 #1769aa!important;padding-left:13px!important}
+ .progressTable tbody tr:nth-child(even) td:first-child{box-shadow:inset 5px 0 #f2c230!important;padding-left:13px!important}
+ .progressTable th:nth-child(n+3){text-align:right!important}
+ .progressTable th:last-child,.progressTable td:last-child{white-space:nowrap!important;text-align:center!important}
+}
+
+html,body{margin-top:0!important;padding-top:0!important}
+.report{margin-top:0!important}
+@media(min-width:761px){
+  body{padding-top:0!important}
+  .report{margin-top:0!important}
+}
+@media(max-width:760px){
+  html,body{margin-top:0!important;padding-top:0!important}
+  .report{margin-top:0!important}
+}
+
+/* v57: без верхнего/нижнего внешнего отступа + более крупный шрифт отчёта */
+html,body{margin-top:0!important;margin-bottom:0!important;padding-top:0!important;padding-bottom:0!important}
+.report{margin-top:0!important;margin-bottom:0!important}
+.rb{font-size:12px}
+.rsec{font-size:12px}
+.report table{font-size:11px}
+.report th{font-size:10px}
+.obj{font-size:18px}
+.addr,.clientLine{font-size:12px}
+.rsec h3{font-size:14px}
+@media(max-width:760px){
+  html,body{margin:0!important;padding:0!important}
+  body{font-size:15px!important;line-height:1.48!important}
+  .report{margin:0!important}
+  .rb{padding-bottom:0!important;font-size:15px!important}
+  .rsec{font-size:14px!important}
+  .rsec h3{font-size:15px!important}
+  .report table{font-size:14px!important}
+  .report table td{font-size:14px!important}
+  .report table td:before{font-size:12px!important}
+  .obj{font-size:17px!important}
+  .addr,.clientLine{font-size:14px!important}
+  .rwLine,.riMeta,.amMeta{font-size:13px!important}
+}
+
+.invoiceVol{display:inline-block;margin:2px 8px 2px 0;padding:2px 6px;border-radius:5px;background:#eef3f8}
+.photoEditor{margin-top:10px;padding-top:8px;border-top:1px solid #dce3ec}
+.photoEditorHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.photoThumbs{display:flex;flex-wrap:wrap;gap:6px}
+.photoThumb{position:relative;width:72px;height:58px}
+.photoThumb img{width:100%;height:100%;object-fit:cover;border-radius:6px;border:1px solid #dce3ec}
+.photoRemove{position:absolute;right:-5px;top:-6px;width:21px;height:21px;border:0;border-radius:50%;background:#b42318;color:#fff;font-weight:800;cursor:pointer}
+.photoAddBtn{display:inline-block;margin-top:7px;padding:6px 10px;border-radius:6px;background:#1769aa;color:#fff;font-weight:700;cursor:pointer}
+.reportPhotos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:10px}
+.reportPhotos img{width:100%;height:120px;object-fit:cover;border-radius:7px;border:1px solid #dce3ec;cursor:zoom-in}
+.photoLightbox{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:20px}
+.photoLightbox img{max-width:96vw;max-height:92vh;object-fit:contain;border-radius:6px}
+.photoClose{position:fixed;right:18px;top:12px;border:0;background:#fff;color:#103b64;border-radius:50%;width:38px;height:38px;font-size:26px;line-height:1;cursor:pointer}
+@media(max-width:760px){
+ .invoiceVol{display:block;margin:4px 0}
+ .reportPhotos{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+ .reportPhotos img{height:90px}
+ .photoLightbox{padding:8px}
+}
+
+/* v61 — фото и активное редактирование */
+.photoThumb{position:relative;width:82px;height:64px;border-radius:8px;overflow:visible}
+.photoThumb img{width:100%;height:100%;object-fit:cover;border-radius:8px;border:1px solid #cfd9e5;display:block}
+.photoRemove{
+ position:absolute!important;right:4px!important;top:4px!important;
+ width:27px!important;height:27px!important;min-width:27px!important;
+ padding:0!important;margin:0!important;border:0!important;border-radius:7px!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ background:rgba(255,255,255,.94)!important;color:#b42318!important;
+ box-shadow:0 1px 5px rgba(0,0,0,.24)!important;cursor:pointer!important;
+ font-size:14px!important;line-height:1!important
+}
+.photoRemove:hover{background:#fff!important;transform:scale(1.06)}
+.photoRemove span{display:block;line-height:1}
+
+/* Правая часть: аккуратная одинаковая сетка фотографий */
+.reportPhotos{
+ display:grid!important;
+ grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ gap:8px!important;margin:12px 0 2px!important
+}
+.reportPhotos img{
+ width:100%!important;aspect-ratio:4/3!important;height:auto!important;
+ object-fit:cover!important;display:block!important;
+ border-radius:8px!important;border:1px solid #d5dde7!important;
+ box-shadow:0 2px 7px rgba(24,57,89,.10)!important;
+ cursor:zoom-in!important
+}
+
+/* В левом редакторе развёрнутая карточка сразу заметна */
+#works .card:not(.collapsed){
+ border:2px solid #e0a800!important;
+ box-shadow:0 0 0 3px rgba(242,194,48,.16),0 5px 14px rgba(26,55,84,.08)!important;
+}
+#works .card:not(.collapsed)>.head{
+ background:linear-gradient(90deg,#fff9df,#fff)!important;
+ border-bottom:1px solid #f0d36d!important;
+}
+#works .card.collapsed{border-color:#d8e0e9!important;box-shadow:none!important}
+
+/* Внутри активной даты каждая отдельная работа тоже читается как редактируемая */
+#works .card:not(.collapsed) .item{
+ border-left:4px solid #1769aa!important;
+ background:#fbfdff!important;
+}
+
+@media(max-width:760px){
+ .reportPhotos{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important}
+ .reportPhotos img{aspect-ratio:1/1!important}
+ .photoThumb{width:76px;height:60px}
+}
+
+/* v62 — фотоколлаж в стиле строительной брошюры */
+.reportPhotos{
+ display:grid!important;
+ grid-template-columns:repeat(12,minmax(0,1fr))!important;
+ grid-auto-rows:78px!important;
+ grid-auto-flow:dense!important;
+ gap:7px!important;
+ margin:12px 0 3px!important;
+ padding:7px!important;
+ background:#f3f6f9!important;
+ border-radius:10px!important;
+ border:1px solid #dde5ed!important;
+}
+.reportPhotos img{
+ width:100%!important;height:100%!important;min-width:0!important;
+ aspect-ratio:auto!important;object-fit:cover!important;display:block!important;
+ border-radius:7px!important;border:0!important;
+ box-shadow:0 2px 7px rgba(24,57,89,.13)!important;
+ cursor:zoom-in!important;
+}
+/* Первая фотография — главный кадр */
+.reportPhotos img:nth-child(9n+1){
+ grid-column:span 7!important;
+ grid-row:span 3!important;
+}
+/* Второй крупный вертикальный кадр */
+.reportPhotos img:nth-child(9n+2){
+ grid-column:span 5!important;
+ grid-row:span 2!important;
+}
+/* Средние кадры */
+.reportPhotos img:nth-child(9n+3),
+.reportPhotos img:nth-child(9n+4){
+ grid-column:span 5!important;
+ grid-row:span 1!important;
+}
+/* Нижний ряд — три кадра разной ширины */
+.reportPhotos img:nth-child(9n+5){
+ grid-column:span 4!important;
+ grid-row:span 2!important;
+}
+.reportPhotos img:nth-child(9n+6){
+ grid-column:span 5!important;
+ grid-row:span 2!important;
+}
+.reportPhotos img:nth-child(9n+7){
+ grid-column:span 3!important;
+ grid-row:span 2!important;
+}
+.reportPhotos img:nth-child(9n+8){
+ grid-column:span 7!important;
+ grid-row:span 2!important;
+}
+.reportPhotos img:nth-child(9n){
+ grid-column:span 5!important;
+ grid-row:span 2!important;
+}
+.reportPhotos img:hover{filter:brightness(.96);transform:scale(1.005)}
+
+/* На телефоне тоже коллаж, но без тесноты */
+@media(max-width:760px){
+ .reportPhotos{
+   grid-template-columns:repeat(6,minmax(0,1fr))!important;
+   grid-auto-rows:62px!important;
+   gap:4px!important;padding:4px!important
+ }
+ .reportPhotos img:nth-child(9n+1){grid-column:span 6!important;grid-row:span 3!important}
+ .reportPhotos img:nth-child(9n+2){grid-column:span 4!important;grid-row:span 2!important}
+ .reportPhotos img:nth-child(9n+3){grid-column:span 2!important;grid-row:span 2!important}
+ .reportPhotos img:nth-child(9n+4){grid-column:span 3!important;grid-row:span 2!important}
+ .reportPhotos img:nth-child(9n+5){grid-column:span 3!important;grid-row:span 2!important}
+ .reportPhotos img:nth-child(9n+6){grid-column:span 2!important;grid-row:span 2!important}
+ .reportPhotos img:nth-child(9n+7){grid-column:span 4!important;grid-row:span 2!important}
+ .reportPhotos img:nth-child(9n+8){grid-column:span 3!important;grid-row:span 2!important}
+ .reportPhotos img:nth-child(9n){grid-column:span 3!important;grid-row:span 2!important}
+}
+
+/* v63 — ровный фотоколлаж без дырок */
+.reportPhotos{
+ display:grid!important;
+ grid-template-columns:repeat(6,minmax(0,1fr))!important;
+ grid-template-rows:repeat(4,92px)!important;
+ grid-auto-flow:dense!important;
+ gap:7px!important;
+ margin:12px 0 3px!important;
+ padding:7px!important;
+ background:#f3f6f9!important;
+ border:1px solid #dde5ed!important;
+ border-radius:10px!important;
+ overflow:hidden!important;
+}
+.reportPhotos img{
+ width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;
+ object-fit:cover!important;display:block!important;aspect-ratio:auto!important;
+ border:0!important;border-radius:7px!important;
+ box-shadow:0 2px 7px rgba(24,57,89,.13)!important;
+ cursor:zoom-in!important;
+}
+/* Композиция для 9 фото: все 4 ряда заполнены, без пустого хвоста */
+.reportPhotos img:nth-child(1){grid-column:1/4!important;grid-row:1/3!important}
+.reportPhotos img:nth-child(2){grid-column:4/7!important;grid-row:1/2!important}
+.reportPhotos img:nth-child(3){grid-column:4/7!important;grid-row:2/3!important}
+.reportPhotos img:nth-child(4){grid-column:1/3!important;grid-row:3/4!important}
+.reportPhotos img:nth-child(5){grid-column:3/5!important;grid-row:3/5!important}
+.reportPhotos img:nth-child(6){grid-column:5/7!important;grid-row:3/4!important}
+.reportPhotos img:nth-child(7){grid-column:1/2!important;grid-row:4/5!important}
+.reportPhotos img:nth-child(8){grid-column:2/3!important;grid-row:4/5!important}
+.reportPhotos img:nth-child(9){grid-column:5/7!important;grid-row:4/5!important}
+
+/* При малом количестве фото — более естественная раскладка */
+.reportPhotos img:only-child{grid-column:1/7!important;grid-row:1/5!important}
+.reportPhotos:has(img:nth-child(2):last-child) img:nth-child(1){grid-column:1/4!important;grid-row:1/5!important}
+.reportPhotos:has(img:nth-child(2):last-child) img:nth-child(2){grid-column:4/7!important;grid-row:1/5!important}
+.reportPhotos:has(img:nth-child(3):last-child) img:nth-child(1){grid-column:1/5!important;grid-row:1/5!important}
+.reportPhotos:has(img:nth-child(3):last-child) img:nth-child(2){grid-column:5/7!important;grid-row:1/3!important}
+.reportPhotos:has(img:nth-child(3):last-child) img:nth-child(3){grid-column:5/7!important;grid-row:3/5!important}
+.reportPhotos:has(img:nth-child(4):last-child) img:nth-child(1){grid-column:1/4!important;grid-row:1/3!important}
+.reportPhotos:has(img:nth-child(4):last-child) img:nth-child(2){grid-column:4/7!important;grid-row:1/3!important}
+.reportPhotos:has(img:nth-child(4):last-child) img:nth-child(3){grid-column:1/4!important;grid-row:3/5!important}
+.reportPhotos:has(img:nth-child(4):last-child) img:nth-child(4){grid-column:4/7!important;grid-row:3/5!important}
+
+/* Убираем возможные подписи/оверлеи поверх коллажа */
+.reportPhotos::before,.reportPhotos::after{display:none!important;content:none!important}
+
+@media(max-width:760px){
+ .reportPhotos{
+   grid-template-columns:repeat(4,minmax(0,1fr))!important;
+   grid-template-rows:repeat(6,70px)!important;
+   gap:4px!important;padding:4px!important
+ }
+ .reportPhotos img:nth-child(1){grid-column:1/5!important;grid-row:1/3!important}
+ .reportPhotos img:nth-child(2){grid-column:1/3!important;grid-row:3/5!important}
+ .reportPhotos img:nth-child(3){grid-column:3/5!important;grid-row:3/4!important}
+ .reportPhotos img:nth-child(4){grid-column:3/5!important;grid-row:4/5!important}
+ .reportPhotos img:nth-child(5){grid-column:1/3!important;grid-row:5/7!important}
+ .reportPhotos img:nth-child(6){grid-column:3/5!important;grid-row:5/6!important}
+ .reportPhotos img:nth-child(7){grid-column:3/4!important;grid-row:6/7!important}
+ .reportPhotos img:nth-child(8){grid-column:4/5!important;grid-row:6/7!important}
+ .reportPhotos img:nth-child(9){display:none!important}
+}
+
+.photoUrlRow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px;margin-top:8px;align-items:center}.photoUrlRow input{min-width:0}.photoHint{margin-top:5px;font-size:11px;color:#6b7785}@media(max-width:760px){.photoUrlRow{grid-template-columns:1fr}.photoUrlRow button{width:100%}}
+
+/* v65 */
+#works .card{box-sizing:border-box!important;overflow:hidden!important}
+#works .card:not(.collapsed){border:2px solid #e0a800!important;border-radius:10px!important;box-shadow:0 0 0 2px rgba(242,194,48,.12),0 5px 14px rgba(26,55,84,.08)!important}
+#works .card:not(.collapsed)>.detail{padding-left:12px!important;padding-right:12px!important;box-sizing:border-box!important}
+#works .card:not(.collapsed) .item{box-sizing:border-box!important;width:100%!important;border:1px solid #d8e3ee!important;border-left:4px solid #1769aa!important;border-radius:8px!important;padding:10px!important;margin:8px 0!important;background:#fbfdff!important}
+#works .card:not(.collapsed) .item>*{max-width:100%;box-sizing:border-box!important}
+.photoHint{margin-top:6px;font-size:11px;color:#6b7785}
+
+/* v67 — исправление рамки карточки "Выполненные работы" */
+#works .card{
+  position:relative!important;
+  box-sizing:border-box!important;
+  width:100%!important;
+  border-radius:10px!important;
+}
+#works .card:not(.collapsed){
+  overflow:hidden!important;
+  border:2px solid #e0a800!important;
+  background:#fff!important;
+}
+#works .card:not(.collapsed)>.head{
+  box-sizing:border-box!important;
+  width:100%!important;
+  margin:0!important;
+  padding:9px 10px!important;
+  min-height:42px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  background:#fff9df!important;
+  border:0!important;
+  border-bottom:1px solid #ead36b!important;
+  border-radius:0!important;
+}
+#works .card:not(.collapsed)>.summary{margin:0!important}
+#works .card:not(.collapsed)>.detail{
+  box-sizing:border-box!important;
+  width:100%!important;
+  margin:0!important;
+  padding:10px!important;
+}
+#works .card:not(.collapsed)>.head .ra{
+  display:flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  margin:0!important;
+}
+#works .card:not(.collapsed)>.head button{
+  margin:0!important;
+}
+
+/* v68 — редактор растёт по содержимому, без внутреннего вертикального скролла */
+@media (min-width:761px){
+  .left,.editor,.panel.left,.leftPanel{
+    height:auto!important;
+    max-height:none!important;
+    min-height:0!important;
+    overflow-y:visible!important;
+  }
+  .app,.layout,.workspace,.main{
+    height:auto!important;
+    max-height:none!important;
+    min-height:0!important;
+    overflow:visible!important;
+    align-items:start!important;
+  }
+}
+
+/* v69 — очистка отчёта */
+.clearReportBtn{background:#fff1f1!important;color:#a52626!important;border:1px solid #e7bcbc!important;font-weight:700!important}
+.clearReportBtn:hover{background:#ffe4e4!important}
+.clearReportWrap{display:flex;justify-content:flex-end;margin:0 0 8px}
+@media(max-width:760px){.clearReportBtn{font-size:12px!important;padding:7px 9px!important}}
+
+
+
+.secBody > button.movedAddTop{display:block!important;margin:0 0 10px!important}
+
+
+
+/* v82 — безопасный Гант: исходная логика отчета не изменяется */
+#rDeadlines{display:none!important}
+#rDeadlinesContainerFix{display:none!important}
+.g82{border:1px solid #d7e0ea;border-left:5px solid #1769aa;border-radius:10px;padding:11px 12px;margin:9px 0;background:#fff}
+.g82.behind{border-left-color:#c62828}.g82.ahead{border-left-color:#2e7d32}.g82.ontime{border-left-color:#1769aa}
+.g82h{display:flex;align-items:center;justify-content:space-between;gap:10px}.g82h b{font-size:12px}.g82h small{display:block;color:#68798a;margin-top:2px}
+.g82s{display:inline-flex;align-items:center;justify-content:center;min-height:24px;box-sizing:border-box;line-height:1.15;font-size:10px;font-weight:700;padding:4px 7px;border-radius:12px;margin:0}
+.behind .g82s{color:#a61f1f;background:#fdeaea}.ahead .g82s{color:#236b2a;background:#e8f5e9}.ontime .g82s{color:#31566f;background:#edf3f7}
+.g82dates{display:grid;grid-template-columns:1fr 1fr 1fr;font-size:9px;color:#68798a;margin:8px 0 4px}.g82dates span:nth-child(2){text-align:center}.g82dates span:last-child{text-align:right}
+.g82track{height:20px;background:#dfe8f0;border-radius:7px;position:relative}.g82fact{height:100%;border-radius:7px;background:#1769aa}.behind .g82fact{background:#c62828}.ahead .g82fact{background:#2e7d32}
+.g82today{position:absolute;top:-5px;bottom:-5px;width:2px;background:#e0a800}
+.g82meta{display:flex;flex-wrap:wrap;gap:5px 15px;margin-top:7px;font-size:9.5px;color:#536576}
+@media(max-width:760px){.g82h{display:block}.g82s{margin-top:6px}.g82dates{font-size:10px}.g82track{height:22px}.g82meta{display:grid;font-size:11px}}
+
+
+
+/* v83 — в правом отчете показываем первые 3 записи */
+.reportLimitHidden{display:none!important}
+.reportShowAllBtn{
+ display:block!important;width:100%!important;margin:8px 0 2px!important;padding:8px 12px!important;
+ border:1px solid #1769aa!important;border-radius:8px!important;background:#f4f8fc!important;
+ color:#1769aa!important;font-weight:700!important;font-size:11px!important;cursor:pointer!important;
+ text-align:center!important
+}
+.reportShowAllBtn:hover{background:#eaf3fb!important}
+@media(max-width:760px){
+ .reportShowAllBtn{min-height:42px!important;font-size:13px!important}
+}
+@media print{
+ .reportShowAllBtn{display:none!important}
+ .reportLimitHidden{display:block!important}
+}
+
+
+
+/* v85 — полностью убираем старую таблицу сроков */
+.rsec table:has(#rDeadlines){display:none!important}
+@media print{.rsec table:has(#rDeadlines){display:none!important}}
+
+
+
+/* v86 — ограничение динамики: первые 2 графика */
+#rCharts .dynLimitHidden{display:none!important}
+.dynShowAllBtn{
+ display:block!important;width:100%!important;margin:8px 0 2px!important;padding:8px 12px!important;
+ border:1px solid #1769aa!important;border-radius:8px!important;background:#f4f8fc!important;
+ color:#1769aa!important;font-weight:700!important;font-size:11px!important;cursor:pointer!important;text-align:center!important
+}
+.dynShowAllBtn:hover{background:#eaf3fb!important}
+@media(max-width:760px){.dynShowAllBtn{min-height:42px!important;font-size:13px!important}}
+@media print{.dynShowAllBtn{display:none!important}#rCharts .dynLimitHidden{display:block!important}}
+
+
+
+/* v87 */
+
+
+
+/* v90 — активная (развернутая) накладная */
+#invoices .card:not(.collapsed){
+  border:2px solid #e0a800!important;
+  background:#fff!important;
+  box-shadow:0 0 0 3px rgba(242,194,48,.15),0 5px 14px rgba(26,55,84,.08)!important;
+}
+#invoices .card:not(.collapsed)>.head{
+  background:linear-gradient(90deg,#fff7cf,#fffdf3)!important;
+  border-bottom:1px solid #e7ca54!important;
+}
+#invoices .card:not(.collapsed)>.summary{
+  background:#fffdf5!important;
+}
+#invoices .card.collapsed{
+  border-color:#d8e0e9!important;
+  box-shadow:none!important;
+}
+
+
+
+/* v91 — правильная подсветка развернутой накладной */
+#invoices .invoice:not(.invoiceCollapsed){
+  border:2px solid #e0a800!important;
+  border-radius:10px!important;
+  overflow:hidden!important;
+  background:#fffdf5!important;
+  box-shadow:0 0 0 3px rgba(242,194,48,.18),0 5px 14px rgba(26,55,84,.08)!important;
+}
+#invoices .invoice:not(.invoiceCollapsed) .invoiceTop{
+  background:#fff8d8!important;
+}
+#invoices .invoice:not(.invoiceCollapsed) .invoiceTop>.head{
+  background:linear-gradient(90deg,#fff3b8,#fffbe8)!important;
+  border-bottom:1px solid #e0a800!important;
+}
+#invoices .invoice:not(.invoiceCollapsed) .invoiceBody{
+  background:#fffdf5!important;
+}
+#invoices .invoice.invoiceCollapsed{
+  box-shadow:none!important;
+}
+
+
+
+/* v92 — подсветка ВСЕГО раздела №6 при раскрытии */
+#invoicesSec.sectionOpen92{
+  background:#fff8d8!important;
+  border:2px solid #e0a800!important;
+  border-radius:12px!important;
+  box-shadow:0 0 0 3px rgba(242,194,48,.15)!important;
+}
+#invoicesSec.sectionOpen92>.secHead{
+  background:#fff1ad!important;
+  border-radius:9px 9px 0 0!important;
+}
+
+
+
+/* v93 — единая спокойная подсветка всех раскрытых левых разделов */
+.left .sec.sectionOpen93,
+.editor .sec.sectionOpen93,
+.panel.left .sec.sectionOpen93{
+  background:#f3f7fb!important;
+  border:2px solid #9fb8cf!important;
+  border-radius:12px!important;
+  box-shadow:0 2px 10px rgba(26,55,84,.07)!important;
+  overflow:hidden!important;
+}
+.left .sec.sectionOpen93>.secHead,
+.editor .sec.sectionOpen93>.secHead,
+.panel.left .sec.sectionOpen93>.secHead{
+  box-sizing:border-box!important;
+  margin:0!important;
+  padding:10px 14px!important;
+  background:#e7f0f8!important;
+  border-bottom:1px solid #c6d6e4!important;
+}
+.left .sec.sectionOpen93>.secBody,
+.editor .sec.sectionOpen93>.secBody,
+.panel.left .sec.sectionOpen93>.secBody{
+  box-sizing:border-box!important;
+  padding:12px 14px 14px!important;
+}
+/* отменяем прежнюю желтую подсветку всего раздела №6 */
+#invoicesSec.sectionOpen92{
+  background:#f3f7fb!important;
+  border:2px solid #9fb8cf!important;
+  box-shadow:0 2px 10px rgba(26,55,84,.07)!important;
+}
+#invoicesSec.sectionOpen92>.secHead{
+  background:#e7f0f8!important;
+  border-bottom:1px solid #c6d6e4!important;
+}
+/* заголовок и кнопки не прижимаются к краям */
+.sec.sectionOpen93>.secHead h2{margin:0!important}
+.sec.sectionOpen93>.secHead button{margin-left:10px!important}
+
+
+
+/* v94 — нормальные внутренние отступы у ВСЕХ левых блоков 1–11 */
+.left .sec,
+.editor .sec,
+.panel.left .sec{
+  box-sizing:border-box!important;
+  padding:0!important;
+  overflow:hidden!important;
+}
+.left .sec>.secHead,
+.editor .sec>.secHead,
+.panel.left .sec>.secHead{
+  box-sizing:border-box!important;
+  width:100%!important;
+  margin:0!important;
+  padding:12px 16px!important;
+}
+.left .sec>.secBody,
+.editor .sec>.secBody,
+.panel.left .sec>.secBody{
+  box-sizing:border-box!important;
+  width:100%!important;
+  padding:12px 16px 16px!important;
+}
+.left .sec>.secHead h2,
+.editor .sec>.secHead h2,
+.panel.left .sec>.secHead h2{
+  margin:0!important;
+  padding:0!important;
+  line-height:1.25!important;
+}
+/* раскрытый блок — спокойное выделение, с теми же отступами */
+.left .sec.sectionOpen93>.secHead,
+.editor .sec.sectionOpen93>.secHead,
+.panel.left .sec.sectionOpen93>.secHead{
+  padding:12px 16px!important;
+}
+.left .sec.sectionOpen93>.secBody,
+.editor .sec.sectionOpen93>.secBody,
+.panel.left .sec.sectionOpen93>.secBody{
+  padding:12px 16px 16px!important;
+}
+
+
+
+/* v95 — ВСЕ развернутые секции левого блока заметно отличаются цветом */
+.sec:not(.sectionCollapsed){
+  background:#eef5fb!important;
+  border:2px solid #7fa5c4!important;
+  border-radius:12px!important;
+  box-shadow:0 3px 12px rgba(26,55,84,.10)!important;
+  overflow:hidden!important;
+}
+.sec:not(.sectionCollapsed)>.secHead{
+  background:#dceaf5!important;
+  border-bottom:1px solid #a9c2d6!important;
+  padding:12px 16px!important;
+}
+.sec:not(.sectionCollapsed)>.secBody{
+  background:#f5f9fc!important;
+  padding:12px 16px 16px!important;
+}
+/* свернутые секции остаются в обычном оформлении */
+.sec.sectionCollapsed{
+  background:#fff!important;
+  box-shadow:none!important;
+}
+
+
+
+/* v96 — текст карточек выполненных работ не заходит под кнопки */
+#works .card.collapsed{
+  position:relative!important;
+}
+#works .card.collapsed>.summary{
+  box-sizing:border-box!important;
+  padding-right:190px!important;
+  min-height:58px!important;
+}
+#works .card.collapsed>.ra,
+#works .card.collapsed>.head .ra{
+  flex-shrink:0!important;
+}
+@media(max-width:760px){
+  #works .card.collapsed>.summary{
+    padding-right:150px!important;
+  }
+}
+/* Фото в правом отчете всегда видны у последней записи,
+   даже когда сама запись свернута */
+#rWorks .reportWorkDay>.reportPhotos{
+  margin:8px 10px 10px!important;
+}
+
+
+
+/* v97 — небольшой единый зазор между текстом и кнопками во всех карточках */
+#works .card.collapsed>.summary{
+  padding-right:0!important;
+  min-height:0!important;
+}
+#works .card.collapsed>.head,
+#invoices .invoice.invoiceCollapsed>.head,
+#acted .card.collapsed>.head,
+#penalties .card.collapsed>.head,
+#deadlines .card.collapsed>.head,
+#workers .card.collapsed>.head,
+#responsibles .card.collapsed>.head,
+#equipment .card.collapsed>.head{
+  gap:12px!important;
+}
+#works .card.collapsed>.head>:first-child,
+#invoices .invoice.invoiceCollapsed>.head>:first-child,
+#acted .card.collapsed>.head>:first-child,
+#penalties .card.collapsed>.head>:first-child,
+#deadlines .card.collapsed>.head>:first-child,
+#workers .card.collapsed>.head>:first-child,
+#responsibles .card.collapsed>.head>:first-child,
+#equipment .card.collapsed>.head>:first-child{
+  min-width:0!important;
+  flex:1 1 auto!important;
+  padding-right:4px!important;
+}
+#works .card.collapsed>.head .ra,
+#invoices .invoice.invoiceCollapsed>.head .ra,
+#acted .card.collapsed>.head .ra,
+#penalties .card.collapsed>.head .ra,
+#deadlines .card.collapsed>.head .ra,
+#workers .card.collapsed>.head .ra,
+#responsibles .card.collapsed>.head .ra,
+#equipment .card.collapsed>.head .ra{
+  flex:0 0 auto!important;
+  margin-left:8px!important;
+}
+
+
+
+/* v98 — фото последней выполненной работы */
+#rWorks .reportWorkWrap{margin:0 0 8px}
+#rWorks .reportWorkWrap>.reportPhotos{
+  display:grid!important;
+  margin:8px 10px 10px!important;
+}
+/* На левой стороне фото-редактор последней работы не теряется из-за индекса массива */
+#works .photoEditor{display:block}
+
+
+
+/* v99 — небольшой зазор между текстом и кнопками в свернутых карточках */
+#works .card.collapsed>.head{
+  column-gap:16px!important;
+}
+#works .card.collapsed>.head .ra{
+  margin-left:12px!important;
+}
+
+
+
+/* v100 — небольшой реальный зазор перед кнопками, как отмечено на скриншоте */
+#works .card.collapsed>.summary{
+  box-sizing:border-box!important;
+  padding-right:18px!important;
+}
+#works .card.collapsed>.head{
+  gap:8px!important;
+}
+#works .card.collapsed>.head .ra{
+  margin-left:8px!important;
+}
+
+
+
+/* v101 — резервируем место под кнопки справа, чтобы текст не заходил под них */
+#works .card.collapsed>.summary{
+  box-sizing:border-box!important;
+  padding-right:135px!important;
+}
+/* на узком экране кнопки занимают чуть больше места */
+@media(max-width:760px){
+  #works .card.collapsed>.summary{padding-right:145px!important}
+}
+
+
+
+/* v102 — фото справа снова используют исходную геометрию отчета */
+#rWorks>.reportPhotos{
+  margin:8px 0 10px!important;
+}
+/* галерея не считается отдельной выполненной работой при Показать/Скрыть */
+#rWorks>.reportPhotos.reportLimitHidden{display:grid!important}
+
+
+
+/* v103 — дневная динамика последнего месяца, в котором были работы */
+.dayVchart{min-height:155px!important;grid-template-columns:repeat(31,minmax(8px,1fr))!important;gap:2px!important}
+.dayVcol .vval{font-size:7px!important}
+.dayVcol .vlab{font-size:8px!important}
+@media(max-width:760px){
+ .dayVchart{display:flex!important;overflow-x:auto!important;align-items:flex-end!important;gap:3px!important;padding-bottom:4px!important}
+ .dayVcol{flex:0 0 20px!important}
+}
+
+
+
+/* v104 — на телефоне сначала видны последние дни; прошлые смотрим листая влево */
+@media(max-width:760px){
+  .dayVchart{
+    direction:ltr!important;
+    scroll-behavior:smooth!important;
+    overscroll-behavior-x:contain!important;
+    scrollbar-width:thin;
+  }
+}
+
+
+
+/* v105 — выбор месяца для динамики */
+.dynMonthPicker105{
+ display:flex;align-items:center;gap:8px;justify-content:flex-end;
+ margin:0 0 8px;padding:7px 9px;background:#f4f8fc;border:1px solid #d5e1eb;border-radius:8px;
+ font-size:10px
+}
+.dynMonthPicker105 label{font-weight:700;color:#52697d}
+.dynMonthPicker105 select{
+ min-width:145px;padding:5px 8px;border:1px solid #b9c9d7;border-radius:6px;background:#fff;font-size:10px
+}
+@media(max-width:760px){ .dynMonthPicker105{justify-content:space-between;font-size:12px}
+ .dynMonthPicker105 select{font-size:12px;min-width:160px}
+}
+
+
+
+.dateCollapsed106{
+ margin-left:auto;
+ margin-right:10px;
+ font-size:11px;
+ color:#52697d;
+ white-space:nowrap;
+}
+.sectionCollapsed>.secHead .dateCollapsed106{display:block}
+@media(max-width:760px){
+ .dateCollapsed106{font-size:11px;margin-right:6px}
+}
+
+
+
+/* v109 FIX — краткая дата в свернутом левом блоке */
+.dateCollapsed106{
+ display:none!important;
+ margin-left:auto!important;
+ margin-right:14px!important;
+ font-size:12px!important;
+ font-weight:700!important;
+ color:#8a2525!important;
+ white-space:nowrap!important;
+}
+.sec.sectionCollapsed>.secHead .dateCollapsed106{
+ display:block!important;
+}
+@media(max-width:760px){
+ .sec.sectionCollapsed>.secHead .dateCollapsed106{
+   font-size:11px!important;
+   margin-right:8px!important;
+ }
+}
+
+
+
+/* v110 — сравнение поставки и монтажа в правом блоке сроков */
+.deadlineSupply110{
+ margin:8px 0 10px;padding:9px 10px;border:1px solid #cbd9e5;border-radius:9px;background:#f7fafc;
+}
+.deadlineSupply110 .dsTitle{font-weight:800;font-size:11px;margin-bottom:7px;color:#29475f}
+.deadlineSupply110 .dsGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.deadlineSupply110 .dsBox{background:#fff;border:1px solid #dbe5ed;border-radius:7px;padding:7px 8px}
+.deadlineSupply110 .dsBox span{display:block;font-size:9px;color:#6b7d8c;margin-bottom:2px}
+.deadlineSupply110 .dsBox b{font-size:12px;color:#20384c}
+@media(max-width:760px){
+ .deadlineSupply110 .dsGrid{grid-template-columns:1fr}
+ .deadlineSupply110 .dsTitle{font-size:13px}
+ .deadlineSupply110 .dsBox span{font-size:11px}
+ .deadlineSupply110 .dsBox b{font-size:14px}
+}
+
+
+
+/* v115 — подсветка элементов при наведении курсора */
+/* Карточки/строки левого редактора */
+.left .card,
+.editor .card,
+.panel.left .card,
+.left .invoice,
+.editor .invoice,
+.left .acted,
+.left .penalty,
+.left .deadline,
+.left .worker,
+.left .responsible,
+.left .equipment{
+ transition:background-color .16s ease,border-color .16s ease,box-shadow .16s ease,transform .16s ease!important;
+}
+.left .card:hover,
+.editor .card:hover,
+.panel.left .card:hover,
+.left .invoice:hover,
+.editor .invoice:hover,
+.left .acted:hover,
+.left .penalty:hover,
+.left .deadline:hover,
+.left .worker:hover,
+.left .responsible:hover,
+.left .equipment:hover{
+ background:#e8f3fb!important;
+ border-color:#6f9fbe!important;
+ box-shadow:0 3px 11px rgba(35,83,118,.14)!important;
+}
+
+/* Заголовок конкретной выполненной работы, накладной и т.п. */
+.left .card>.head,
+.left .invoice>.head,
+.left .acted>.head,
+.left .penalty>.head,
+.left .deadline>.head,
+.left .worker>.head,
+.left .responsible>.head,
+.left .equipment>.head{
+ transition:background-color .16s ease!important;
+}
+.left .card:hover>.head,
+.left .invoice:hover>.head,
+.left .acted:hover>.head,
+.left .penalty:hover>.head,
+.left .deadline:hover>.head,
+.left .worker:hover>.head,
+.left .responsible:hover>.head,
+.left .equipment:hover>.head{
+ background:#d9ebf7!important;
+}
+
+/* Все обычные кнопки тоже слегка реагируют */
+.left button:not(.red),
+.editor button:not(.red){
+ transition:background-color .14s ease,border-color .14s ease,box-shadow .14s ease!important;
+}
+.left button:not(.red):hover,
+.editor button:not(.red):hover{
+ box-shadow:0 2px 7px rgba(31,74,105,.18)!important;
+ filter:brightness(.97);
+}
+
+/* Правый отчёт: выполненные работы, накладные, актированные дни и графики */
+.report details,
+.report .chartCard,
+.report .dayDynCard,
+.report .deadlineSupply110,
+.report .reportPhotos{
+ transition:background-color .16s ease,border-color .16s ease,box-shadow .16s ease!important;
+}
+.report details:hover,
+.report .chartCard:hover,
+.report .dayDynCard:hover,
+.report .deadlineSupply110:hover,
+.report .reportPhotos:hover{
+ background:#f1f7fb!important;
+ border-color:#7fa8c5!important;
+ box-shadow:0 3px 10px rgba(35,83,118,.12)!important;
+}
+
+/* Строки таблиц справа */
+.report tbody tr{
+ transition:background-color .14s ease!important;
+}
+.report tbody tr:hover{
+ background:#eaf4fa!important;
+}
+
+/* На сенсорных экранах hover не фиксируем после касания */
+@media(hover:none){
+ .left .card:hover,.editor .card:hover,.panel.left .card:hover,
+ .left .invoice:hover,.left .acted:hover,.left .penalty:hover,
+ .left .deadline:hover,.left .worker:hover,.left .responsible:hover,.left .equipment:hover,
+ .report details:hover,.report .chartCard:hover,.report .dayDynCard:hover,
+ .report .deadlineSupply110:hover,.report .reportPhotos:hover,
+ .report tbody tr:hover{
+   box-shadow:inherit!important;
+ }
+}
+
+
+
+/* v116 — hover во ВСЁМ левом блоке, включая свернутые строки/карточки */
+.left .sec,
+.editor .sec,
+.panel.left .sec,
+.left .secHead,
+.editor .secHead,
+.left .summary,
+.editor .summary,
+.left .head,
+.editor .head{
+ transition:background-color .16s ease,border-color .16s ease,box-shadow .16s ease!important;
+}
+
+/* Наведение на целый раздел слева */
+.left .sec:hover,
+.editor .sec:hover,
+.panel.left .sec:hover{
+ border-color:#6f9fbe!important;
+ box-shadow:0 3px 12px rgba(35,83,118,.14)!important;
+}
+
+/* Наведение на заголовок раздела 1,2,3... */
+.left .sec>.secHead:hover,
+.editor .sec>.secHead:hover,
+.panel.left .sec>.secHead:hover{
+ background:#dcecf7!important;
+}
+
+/* Наведение именно на свернутую карточку:
+   выполненная работа за дату, накладная, актированный день и т.д. */
+.left .card.collapsed:hover,
+.editor .card.collapsed:hover,
+.left .invoiceCollapsed:hover,
+.left [class*="Collapsed"]:hover{
+ background:#dfeff9!important;
+ border-color:#6799bb!important;
+ box-shadow:0 3px 10px rgba(35,83,118,.15)!important;
+}
+.left .card.collapsed:hover>.head,
+.editor .card.collapsed:hover>.head,
+.left .card.collapsed:hover>.summary,
+.editor .card.collapsed:hover>.summary{
+ background:#dfeff9!important;
+}
+
+/* Поля ввода слева — лёгкая подсветка при наведении */
+.left input:hover,.left select:hover,.left textarea:hover,
+.editor input:hover,.editor select:hover,.editor textarea:hover{
+ border-color:#79a6c4!important;
+ background:#fbfdff!important;
+}
+
+
+
+/* v117 FIX — реальный левый блок в разметке: .layout > .panel:first-child */
+.layout > .panel:first-child .sec,
+.layout > .panel:first-child .secHead,
+.layout > .panel:first-child .card,
+.layout > .panel:first-child .card > .head,
+.layout > .panel:first-child .card > .summary,
+.layout > .panel:first-child .item{
+ transition:background-color .15s ease,border-color .15s ease,box-shadow .15s ease!important;
+}
+
+/* Заголовки разделов 1–11 */
+.layout > .panel:first-child .sec > .secHead:hover{
+ background:#cfe5f4!important;
+ box-shadow:inset 4px 0 0 #1769aa!important;
+}
+
+/* Любая карточка внутри левого редактора */
+.layout > .panel:first-child .card:hover{
+ background:#e2f0f9!important;
+ border-color:#5f96ba!important;
+ box-shadow:0 3px 11px rgba(23,105,170,.18)!important;
+}
+
+/* Особенно заметно для свернутой выполненной работы / накладной / дня */
+.layout > .panel:first-child .card.collapsed:hover,
+.layout > .panel:first-child #works .card.collapsed:hover,
+.layout > .panel:first-child #invoices .card.collapsed:hover,
+.layout > .panel:first-child #actedDays .card.collapsed:hover,
+.layout > .panel:first-child #penalties .card.collapsed:hover{
+ background:#d6eaf7!important;
+ border-color:#4f8eb8!important;
+ box-shadow:inset 4px 0 0 #1769aa,0 3px 10px rgba(23,105,170,.16)!important;
+}
+.layout > .panel:first-child .card.collapsed:hover > .head,
+.layout > .panel:first-child .card.collapsed:hover > .summary{
+ background:#d6eaf7!important;
+}
+
+/* Отдельные строки работ внутри раскрытой карточки */
+.layout > .panel:first-child .item:hover{
+ background:#edf7fd!important;
+ border-color:#6da4c7!important;
+ box-shadow:0 2px 8px rgba(23,105,170,.12)!important;
+}
+
+/* Поля */
+.layout > .panel:first-child input:hover,
+.layout > .panel:first-child select:hover,
+.layout > .panel:first-child textarea:hover{
+ border-color:#5f96ba!important;
+ background:#f7fbfe!important;
+}
+
+
+
+/* v118 — аккуратный hover без синей полосы и без изменения геометрии */
+.layout > .panel:first-child .sec > .secHead:hover{
+ background:#e7f1f8!important;
+ box-shadow:none!important;
+ border-radius:0!important;
+}
+.layout > .panel:first-child .card:hover{
+ background:#edf6fb!important;
+ border-color:#91b3ca!important;
+ box-shadow:0 2px 7px rgba(35,83,118,.10)!important;
+}
+.layout > .panel:first-child .card.collapsed:hover,
+.layout > .panel:first-child #works .card.collapsed:hover,
+.layout > .panel:first-child #invoices .card.collapsed:hover{
+ background:#e7f3fa!important;
+ border-color:#7fa8c5!important;
+ box-shadow:0 2px 7px rgba(35,83,118,.10)!important;
+}
+.layout > .panel:first-child .card.collapsed:hover > .head,
+.layout > .panel:first-child .card.collapsed:hover > .summary{
+ background:#e7f3fa!important;
+}
+
+
+
+/* v119 — центральное уведомление после сохранения */
+.saveToast119{
+ position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.96);
+ z-index:100000;padding:18px 30px;border-radius:12px;
+ background:rgba(25,61,88,.94);color:#fff;
+ font-size:20px;font-weight:800;letter-spacing:.5px;
+ box-shadow:0 8px 30px rgba(0,0,0,.24);
+ opacity:0;pointer-events:none;
+ transition:opacity .18s ease,transform .18s ease;
+}
+.saveToast119.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
+@media(max-width:760px){.saveToast119{font-size:17px;padding:15px 22px}}
+@media print{.saveToast119{display:none!important}}
+
+
+
+/* v121 — исправление колонки "Ед. изм." в правой сводке */
+.report .progressTable{
+ table-layout:fixed!important;
+ width:100%!important;
+}
+.report .progressTable col:nth-child(1){width:28%!important}
+.report .progressTable col:nth-child(2){width:24%!important}
+.report .progressTable col:nth-child(3){width:10%!important}
+.report .progressTable col:nth-child(4){width:10%!important}
+.report .progressTable col:nth-child(5){width:10%!important}
+.report .progressTable col:nth-child(6){width:10%!important}
+.report .progressTable col:nth-child(7){width:8%!important}
+
+.report .progressTable th:nth-child(7),
+.report .progressTable td:nth-child(7){
+ box-sizing:border-box!important;
+ min-width:0!important;
+ text-align:center!important;
+ white-space:nowrap!important;
+ overflow:visible!important;
+ padding-left:4px!important;
+ padding-right:4px!important;
+}
+.report .progressTable th:nth-child(7){
+ font-size:9px!important;
+ letter-spacing:0!important;
+}
+
+/* На телефоне остаётся карточный режим — там ширины колонок не мешают */
+@media(max-width:760px){
+ .report .progressTable th:nth-child(7),
+ .report .progressTable td:nth-child(7){
+   white-space:normal!important;
+   font-size:14px!important;
+ }
+}
+
+
+
+/* v123 — мобильная "Сводка объёмов работ": единица измерения не плывёт */
+@media(max-width:760px){
+  .report .progressTable{
+    display:block!important;
+    width:100%!important;
+    table-layout:auto!important;
+  }
+  .report .progressTable tbody,
+  .report .progressTable tr{
+    display:block!important;
+    width:100%!important;
+    box-sizing:border-box!important;
+  }
+  .report .progressTable tr{
+    margin:0 0 8px!important;
+    overflow:hidden!important;
+  }
+
+  /* В мобильной карточке оставляем: Вид работы / Проект / Выполнено / Ед. изм. */
+  .report .progressTable td:nth-child(1),
+  .report .progressTable td:nth-child(3),
+  .report .progressTable td:nth-child(5),
+  .report .progressTable td:nth-child(7){
+    display:grid!important;
+    grid-template-columns:minmax(105px,42%) minmax(0,1fr)!important;
+    align-items:center!important;
+    width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+    padding:7px 9px!important;
+    white-space:normal!important;
+    overflow:hidden!important;
+    text-align:right!important;
+  }
+
+  /* Ед. изм. — отдельная ровная строка, значение справа */
+  .report .progressTable td:nth-child(7){
+    min-width:0!important;
+    font-size:14px!important;
+    line-height:1.25!important;
+  }
+  .report .progressTable td:nth-child(7)::before{
+    content:"Ед. изм."!important;
+    display:block!important;
+    position:static!important;
+    width:auto!important;
+    margin:0!important;
+    padding:0!important;
+    text-align:left!important;
+    white-space:nowrap!important;
+  }
+
+  .report .progressTable td:nth-child(2),
+  .report .progressTable td:nth-child(4),
+  .report .progressTable td:nth-child(6){
+    display:none!important;
+  }
+}
+
+
+
+/* v124 — понятная мобильная сводка: не таблица цифр, а карточка показателей */
+@media(max-width:760px){
+  .report .progressTable tr{
+    position:relative!important;
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:0!important;
+    margin:0 0 12px!important;
+    padding:0!important;
+    border:1px solid #cbdbe7!important;
+    border-radius:11px!important;
+    background:#fff!important;
+    box-shadow:0 2px 8px rgba(38,76,105,.08)!important;
+    overflow:hidden!important;
+  }
+
+  /* Вид работы — заголовок карточки */
+  .report .progressTable td:nth-child(1){
+    grid-column:1/-1!important;
+    display:block!important;
+    padding:10px 11px 5px!important;
+    background:#edf5fa!important;
+    color:#183e5a!important;
+    font-size:15px!important;
+    font-weight:800!important;
+    text-align:left!important;
+    border:0!important;
+  }
+  .report .progressTable td:nth-child(1)::before{display:none!important}
+
+  /* Проект/шифр — подзаголовок */
+  .report .progressTable td:nth-child(3){
+    grid-column:1/-1!important;
+    display:block!important;
+    padding:0 11px 9px!important;
+    background:#edf5fa!important;
+    color:#607587!important;
+    font-size:12px!important;
+    font-weight:600!important;
+    text-align:left!important;
+    border:0!important;
+  }
+  .report .progressTable td:nth-child(3)::before{
+    content:"Проект / шифр: "!important;
+    display:inline!important;
+    position:static!important;
+    font-size:11px!important;
+    color:#7b8c99!important;
+    font-weight:500!important;
+  }
+
+  /* На мобильном показываем все три главных показателя */
+  .report .progressTable td:nth-child(4),
+  .report .progressTable td:nth-child(5),
+  .report .progressTable td:nth-child(6){
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    align-items:flex-start!important;
+    min-width:0!important;
+    width:auto!important;
+    padding:9px 10px!important;
+    text-align:left!important;
+    border:0!important;
+    border-top:1px solid #e3ebf1!important;
+    background:#fff!important;
+    font-size:16px!important;
+    font-weight:800!important;
+    color:#20384b!important;
+    box-sizing:border-box!important;
+  }
+
+  /* Поставлено — на всю ширину */
+  .report .progressTable td:nth-child(4){grid-column:1/-1!important}
+  /* Смонтировано и остаток — рядом */
+  .report .progressTable td:nth-child(5){grid-column:1!important;border-right:1px solid #e3ebf1!important}
+  .report .progressTable td:nth-child(6){grid-column:2!important}
+
+  .report .progressTable td:nth-child(4)::before,
+  .report .progressTable td:nth-child(5)::before,
+  .report .progressTable td:nth-child(6)::before{
+    display:block!important;
+    position:static!important;
+    width:auto!important;
+    margin:0 0 3px!important;
+    padding:0!important;
+    font-size:10px!important;
+    line-height:1.15!important;
+    font-weight:700!important;
+    text-transform:uppercase!important;
+    letter-spacing:.35px!important;
+    color:#748696!important;
+    text-align:left!important;
+  }
+  .report .progressTable td:nth-child(4)::before{content:"Поставлено"!important}
+  .report .progressTable td:nth-child(5)::before{content:"Смонтировано"!important}
+  .report .progressTable td:nth-child(6)::before{content:"Остаток"!important}
+
+  /* Единица измерения — компактный бейдж внизу */
+  .report .progressTable td:nth-child(7){
+    grid-column:1/-1!important;
+    display:block!important;
+    width:auto!important;
+    padding:6px 10px 8px!important;
+    background:#f8fafc!important;
+    border:0!important;
+    border-top:1px solid #e3ebf1!important;
+    color:#536b7d!important;
+    font-size:11px!important;
+    font-weight:700!important;
+    text-align:right!important;
+  }
+  .report .progressTable td:nth-child(7)::before{
+    content:"Единица измерения: "!important;
+    display:inline!important;
+    position:static!important;
+    font-size:10px!important;
+    color:#8797a4!important;
+    font-weight:500!important;
+  }
+
+  /* Техническую колонку с кодом не дублируем */
+  .report .progressTable td:nth-child(2){display:none!important}
+}
+
+
+
+/* v125 — полная мобильная сводка: возвращены шифр, проектный объём, поставка, монтаж и остаток */
+@media(max-width:760px){
+ .report .progressTable tr{
+   display:grid!important;
+   grid-template-columns:1fr 1fr!important;
+   width:100%!important;
+   margin:0 0 12px!important;
+   padding:0!important;
+   border:1px solid #cbdbe7!important;
+   border-radius:11px!important;
+   background:#fff!important;
+   overflow:hidden!important;
+   box-shadow:0 2px 8px rgba(38,76,105,.08)!important;
+ }
+
+ /* 1. Вид работы */
+ .report .progressTable td:nth-child(1){
+   display:block!important;grid-column:1/-1!important;
+   padding:10px 11px 5px!important;background:#edf5fa!important;
+   color:#183e5a!important;font-size:15px!important;font-weight:800!important;
+   text-align:left!important;border:0!important;width:auto!important;
+ }
+ .report .progressTable td:nth-child(1)::before{display:none!important}
+
+ /* 2. Шифр */
+ .report .progressTable td:nth-child(2){
+   display:block!important;grid-column:1/-1!important;
+   padding:0 11px 9px!important;background:#edf5fa!important;
+   color:#607587!important;font-size:12px!important;font-weight:600!important;
+   text-align:left!important;border:0!important;width:auto!important;
+ }
+ .report .progressTable td:nth-child(2)::before{
+   content:"Шифр: "!important;display:inline!important;position:static!important;
+   color:#81909c!important;font-size:11px!important;font-weight:500!important;
+ }
+
+ /* 3-6 показатели */
+ .report .progressTable td:nth-child(3),
+ .report .progressTable td:nth-child(4),
+ .report .progressTable td:nth-child(5),
+ .report .progressTable td:nth-child(6){
+   display:flex!important;flex-direction:column!important;align-items:flex-start!important;
+   justify-content:center!important;width:auto!important;min-width:0!important;
+   padding:9px 10px!important;background:#fff!important;border:0!important;
+   border-top:1px solid #e3ebf1!important;
+   color:#20384b!important;font-size:16px!important;font-weight:800!important;
+   text-align:left!important;box-sizing:border-box!important;
+ }
+ .report .progressTable td:nth-child(3),
+ .report .progressTable td:nth-child(5){border-right:1px solid #e3ebf1!important}
+
+ .report .progressTable td:nth-child(3)::before,
+ .report .progressTable td:nth-child(4)::before,
+ .report .progressTable td:nth-child(5)::before,
+ .report .progressTable td:nth-child(6)::before{
+   display:block!important;position:static!important;width:auto!important;
+   margin:0 0 3px!important;padding:0!important;
+   color:#748696!important;font-size:9.5px!important;font-weight:700!important;
+   line-height:1.15!important;text-transform:uppercase!important;letter-spacing:.25px!important;
+   text-align:left!important;
+ }
+ .report .progressTable td:nth-child(3)::before{content:"ПО ПРОЕКТУ"!important}
+ .report .progressTable td:nth-child(4)::before{content:"ПОСТАВЛЕНО"!important}
+ .report .progressTable td:nth-child(5)::before{content:"СМОНТИРОВАНО"!important}
+ .report .progressTable td:nth-child(6)::before{content:"ОСТАТОК"!important}
+
+ /* 7. Единица измерения */
+ .report .progressTable td:nth-child(7){
+   display:block!important;grid-column:1/-1!important;width:auto!important;
+   padding:6px 10px 8px!important;background:#f8fafc!important;
+   border:0!important;border-top:1px solid #e3ebf1!important;
+   color:#536b7d!important;font-size:11px!important;font-weight:700!important;
+   text-align:right!important;white-space:normal!important;
+ }
+ .report .progressTable td:nth-child(7)::before{
+   content:"Единица измерения: "!important;display:inline!important;position:static!important;
+   color:#8797a4!important;font-size:10px!important;font-weight:500!important;
+ }
+}
+
+
+
+/* v128 — мобильная сводка: ВСЕ 4 показателя */
+@media(max-width:760px){
+ .report .progressTable td:nth-child(3),
+ .report .progressTable td:nth-child(4),
+ .report .progressTable td:nth-child(5),
+ .report .progressTable td:nth-child(6){
+   display:flex!important;
+   visibility:visible!important;
+   opacity:1!important;
+   height:auto!important;
+   min-height:66px!important;
+   position:static!important;
+   flex-direction:column!important;
+   justify-content:center!important;
+   align-items:flex-start!important;
+   width:auto!important;
+   max-width:none!important;
+   margin:0!important;
+   padding:9px 10px!important;
+   overflow:visible!important;
+   background:#fff!important;
+   box-sizing:border-box!important;
+ }
+
+ .report .progressTable td:nth-child(3){grid-column:1!important;grid-row:auto!important}
+ .report .progressTable td:nth-child(4){grid-column:2!important;grid-row:auto!important}
+ .report .progressTable td:nth-child(5){grid-column:1!important;grid-row:auto!important}
+ .report .progressTable td:nth-child(6){grid-column:2!important;grid-row:auto!important}
+
+ .report .progressTable td:nth-child(3)::before{content:"ПО ПРОЕКТУ"!important}
+ .report .progressTable td:nth-child(4)::before{content:"ПОСТАВЛЕНО"!important}
+ .report .progressTable td:nth-child(5)::before{content:"СМОНТИРОВАНО"!important}
+ .report .progressTable td:nth-child(6)::before{content:"ОСТАТОК"!important}
+
+ .report .progressTable td:nth-child(3)::before,
+ .report .progressTable td:nth-child(4)::before,
+ .report .progressTable td:nth-child(5)::before,
+ .report .progressTable td:nth-child(6)::before{
+   display:block!important;
+   visibility:visible!important;
+   position:static!important;
+   width:auto!important;
+   height:auto!important;
+   margin:0 0 4px!important;
+   font-size:10px!important;
+   font-weight:800!important;
+   color:#748696!important;
+   text-align:left!important;
+ }
+}
+
+
+
+/* v129 — отдельная мобильная сводка, больше не зависит от старых table/nth-child стилей */
+.mobileProgress129{display:none}
+@media(max-width:760px){
+ .report .progressTable{display:none!important}
+ .mobileProgress129{display:block!important}
+ .mpCard129{margin:0 0 12px;border:1px solid #cbdbe7;border-radius:11px;background:#fff;overflow:hidden;box-shadow:0 2px 8px rgba(38,76,105,.08)}
+ .mpHead129{padding:11px 12px 6px;background:#edf5fa;color:#183e5a;font-size:15px;font-weight:800}
+ .mpCode129{padding:0 12px 10px;background:#edf5fa;color:#6d7f8d;font-size:11px}
+ .mpGrid129{display:grid;grid-template-columns:1fr 1fr}
+ .mpCell129{padding:10px 11px;border-top:1px solid #e2eaf0;min-height:55px}
+ .mpCell129:nth-child(odd){border-right:1px solid #e2eaf0}
+ .mpLabel129{display:block;margin-bottom:4px;color:#758796;font-size:9.5px;font-weight:800;letter-spacing:.25px}
+ .mpValue129{display:block;color:#20384b;font-size:17px;font-weight:800}
+ .mpUnit129{padding:7px 11px;background:#f8fafc;border-top:1px solid #e2eaf0;text-align:right;color:#607484;font-size:10px}
+ .mpUnit129 b{font-size:11px}
+}
+@media print{.mobileProgress129{display:none!important}.report .progressTable{display:table!important}}
+
+
+
+/* v130 TEST — мобильное представление блока сроков/Gantt.
+   Desktop не меняется. Если вариант не понравится — v129 остаётся точкой отката. */
+@media(max-width:760px){
+  /* Сам блок сроков */
+  #rLag{
+    width:100%!important;
+    max-width:100%!important;
+    overflow:visible!important;
+    box-sizing:border-box!important;
+  }
+
+  /* Каждая строка/карточка Ганта */
+  #rLag > div{
+    width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+  }
+
+  /* Если внутри используются таблицы — превращаем их в нормальные карточки */
+  #rLag table{
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    table-layout:auto!important;
+    overflow:visible!important;
+  }
+  #rLag thead{display:none!important}
+  #rLag tbody{display:block!important;width:100%!important}
+  #rLag tr{
+    display:block!important;
+    width:100%!important;
+    box-sizing:border-box!important;
+    margin:0 0 11px!important;
+    padding:10px!important;
+    border:1px solid #cbdbe7!important;
+    border-radius:10px!important;
+    background:#fff!important;
+    box-shadow:0 2px 7px rgba(38,76,105,.07)!important;
+  }
+  #rLag td{
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    box-sizing:border-box!important;
+    padding:3px 0!important;
+    border:0!important;
+    white-space:normal!important;
+    overflow:visible!important;
+  }
+
+  /* Горизонтальные шкалы не должны вылезать за экран */
+  #rLag [style*="width"]{
+    max-width:100%!important;
+    box-sizing:border-box!important;
+  }
+
+  /* Компактнее блок сравнения поставки/монтажа перед Гантом */
+  #deadlineSupply110 .dsGrid{
+    grid-template-columns:1fr 1fr!important;
+    gap:6px!important;
+  }
+  #deadlineSupply110 .dsBox{
+    min-width:0!important;
+    padding:7px!important;
+  }
+  #deadlineSupply110 .dsBox:last-child{
+    grid-column:1/-1!important;
+  }
+}
+
+
+
+#mobileGanttHint130{display:none}
+@media(max-width:760px){
+ #mobileGanttHint130{
+   display:flex;justify-content:space-between;align-items:flex-end;gap:10px;
+   margin:9px 0 7px;padding:0 1px;color:#244a66;font-size:12px
+ }
+ #mobileGanttHint130 b{font-size:13px}
+ #mobileGanttHint130 span{font-size:10px;color:#778996;text-align:right}
+}
+@media print{#mobileGanttHint130{display:none!important}}
+
+
+
+/* v131 — даты в "Динамике выполненных работ" крупнее и жирнее */
+.dayVchart .vlab,
+.dayVcol .vlab,
+#rCharts .vlab{
+  font-size:11px!important;
+  font-weight:800!important;
+  line-height:1.15!important;
+  color:#20384b!important;
+  opacity:1!important;
+  white-space:nowrap!important;
+}
+
+/* Значения над столбцами тоже чуть читабельнее */
+.dayVchart .vval,
+.dayVcol .vval,
+#rCharts .vval{
+  font-size:9px!important;
+  font-weight:800!important;
+  color:#20384b!important;
+}
+
+@media(max-width:760px){
+  .dayVchart{
+    padding-bottom:8px!important;
+  }
+  .dayVcol{
+    flex:0 0 28px!important;
+    min-width:28px!important;
+  }
+  .dayVchart .vlab,
+  .dayVcol .vlab,
+  #rCharts .vlab{
+    display:block!important;
+    visibility:visible!important;
+    height:auto!important;
+    min-height:17px!important;
+    margin-top:4px!important;
+    font-size:12px!important;
+    font-weight:900!important;
+    line-height:1!important;
+    color:#183e5a!important;
+    text-align:center!important;
+    overflow:visible!important;
+  }
+  .dayVchart .vval,
+  .dayVcol .vval,
+  #rCharts .vval{
+    font-size:10px!important;
+    font-weight:900!important;
+  }
+}
+
+
+
+/* v134 — мобильная динамика: сохраняем исходную геометрию графика.
+   Только добавляем место СНИЗУ под даты, не растягивая столбцы. */
+@media(max-width:760px){
+  #rCharts .dayVchart{
+    height:190px!important;
+    min-height:190px!important;
+    padding:22px 8px 46px!important;
+    box-sizing:content-box!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    align-items:flex-end!important;
+  }
+  #rCharts .dayVcol{
+    height:100%!important;
+    padding:0!important;
+    flex:0 0 28px!important;
+    min-width:28px!important;
+    max-width:28px!important;
+    position:relative!important;
+    overflow:visible!important;
+  }
+  #rCharts .dayVcol .vlab{
+    position:absolute!important;
+    top:calc(100% + 7px)!important;
+    left:50%!important;
+    transform:translateX(-50%)!important;
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+    width:auto!important;
+    height:20px!important;
+    min-height:20px!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:visible!important;
+    white-space:nowrap!important;
+    font-size:12px!important;
+    font-weight:900!important;
+    line-height:20px!important;
+    color:#183e5a!important;
+    text-align:center!important;
+    z-index:5!important;
+  }
+  #rCharts .dayVcol .vval{
+    font-size:10px!important;
+    font-weight:900!important;
+  }
+  #rCharts .chartCard.dayChart{
+    overflow:hidden!important;
+  }
+}
+
+
+
+/* v135 — динамика как на референсе: 7 дней, крупные столбцы, значения и даты */
+#rCharts .dayVchart{
+  display:grid!important;
+  grid-template-columns:repeat(7,minmax(0,1fr))!important;
+  gap:14px!important;
+  height:245px!important;
+  min-height:245px!important;
+  padding:26px 12px 34px!important;
+  box-sizing:border-box!important;
+  overflow:visible!important;
+  align-items:end!important;
+  border-bottom:1px solid #d9e0e5!important;
+}
+#rCharts .dayVcol{
+  min-width:0!important;
+  width:100%!important;
+  height:100%!important;
+  position:relative!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:flex-end!important;
+  align-items:center!important;
+  overflow:visible!important;
+  padding:0!important;
+}
+#rCharts .dayVcol .vbar{
+  width:min(48px,72%)!important;
+  min-height:4px;
+  border-radius:5px 5px 0 0!important;
+}
+#rCharts .dayVcol .vval{
+  position:static!important;
+  display:block!important;
+  min-height:22px!important;
+  margin:0 0 5px!important;
+  font-size:14px!important;
+  line-height:1.1!important;
+  font-weight:900!important;
+  color:#152d40!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+}
+#rCharts .dayVcol .vlab{
+  position:absolute!important;
+  left:50%!important;
+  bottom:-27px!important;
+  transform:translateX(-50%)!important;
+  display:block!important;
+  width:auto!important;
+  height:20px!important;
+  margin:0!important;
+  font-size:13px!important;
+  line-height:20px!important;
+  font-weight:800!important;
+  color:#53697a!important;
+  white-space:nowrap!important;
+  overflow:visible!important;
+}
+#rCharts .chartMode{
+  margin-bottom:6px!important;
+}
+@media(max-width:760px){
+  #rCharts .dayVchart{
+    display:grid!important;
+    grid-template-columns:repeat(7,minmax(0,1fr))!important;
+    gap:5px!important;
+    width:100%!important;
+    height:220px!important;
+    min-height:220px!important;
+    padding:24px 4px 36px!important;
+    overflow:visible!important;
+    box-sizing:border-box!important;
+  }
+  #rCharts .dayVcol{
+    min-width:0!important;
+    max-width:none!important;
+    width:100%!important;
+    height:100%!important;
+    flex:initial!important;
+    padding:0!important;
+  }
+  #rCharts .dayVcol .vbar{
+    width:min(34px,78%)!important;
+  }
+  #rCharts .dayVcol .vval{
+    min-height:20px!important;
+    margin-bottom:4px!important;
+    font-size:12px!important;
+    font-weight:900!important;
+  }
+  #rCharts .dayVcol .vlab{
+    bottom:-29px!important;
+    font-size:11px!important;
+    font-weight:900!important;
+    line-height:18px!important;
+  }
+  #rCharts .chartCard.dayChart{
+    overflow:visible!important;
+    padding-bottom:8px!important;
+  }
+}
+
+
+
+/* v136 — 7 дней в окне + прокрутка к предыдущим дням */
+#rCharts .dayVchart{
+  display:flex!important;
+  grid-template-columns:none!important;
+  gap:14px!important;
+  overflow-x:auto!important;
+  overflow-y:visible!important;
+  scrollbar-width:auto!important;
+  scroll-behavior:smooth!important;
+}
+#rCharts .dayVcol{
+  flex:0 0 calc((100% - 84px)/7)!important;
+  min-width:calc((100% - 84px)/7)!important;
+  max-width:calc((100% - 84px)/7)!important;
+}
+@media(max-width:760px){
+ #rCharts .dayVchart{
+   display:flex!important;
+   gap:5px!important;
+   overflow-x:auto!important;
+   overflow-y:visible!important;
+   -webkit-overflow-scrolling:touch!important;
+   scrollbar-width:auto!important;
+   padding-bottom:38px!important;
+ }
+ #rCharts .dayVcol{
+   flex:0 0 calc((100% - 30px)/7)!important;
+   min-width:calc((100% - 30px)/7)!important;
+   max-width:calc((100% - 30px)/7)!important;
+ }
+}
+
+
+
+/* v139 — динамика: горизонтальные направляющие на desktop/mobile */
+#rCharts .dayVchart{
+  background-image:
+    linear-gradient(to bottom,
+      transparent 24.6%, rgba(91,116,135,.16) 25%, transparent 25.4%,
+      transparent 49.6%, rgba(91,116,135,.16) 50%, transparent 50.4%,
+      transparent 74.6%, rgba(91,116,135,.16) 75%, transparent 75.4%)!important;
+  background-repeat:no-repeat!important;
+}
+@media(max-width:760px){
+ #rCharts .dayVchart{
+   background-image:
+    linear-gradient(to bottom,
+      transparent 24.5%, rgba(91,116,135,.18) 25%, transparent 25.5%,
+      transparent 49.5%, rgba(91,116,135,.18) 50%, transparent 50.5%,      transparent 74.5%, rgba(91,116,135,.18) 75%, transparent 75.5%)!important;
+ }
+}
+
+
+
+/* v140 — шкала значений слева + линии уровня, desktop/mobile */
+#rCharts .dayVchart{
+  margin-left:42px!important;
+  width:calc(100% - 42px)!important;
+  position:relative!important;
+}
+#rCharts .dynScale140{
+  position:absolute;
+  left:-42px;
+  top:0;
+  bottom:0;
+  width:36px;
+  pointer-events:none;
+  color:#617484;
+  font-size:10px;
+  font-weight:700;
+  z-index:3;
+}
+#rCharts .dynScale140 span{
+  position:absolute;
+  right:4px;
+  transform:translateY(50%);
+  white-space:nowrap;
+}
+#rCharts .dynScale140 .s100{top:-4px;transform:none}
+#rCharts .dynScale140 .s75{top:25%}
+#rCharts .dynScale140 .s50{top:50%}
+#rCharts .dynScale140 .s25{top:75%}
+#rCharts .dynScale140 .s0{bottom:-2px;transform:none}
+#rCharts .dynUnit140{
+  position:absolute;
+  left:-40px;
+  top:-20px;
+  font-size:9px;
+  font-weight:800;
+  color:#748696;
+}
+@media(max-width:760px){
+ #rCharts .dayVchart{
+   margin-left:38px!important;
+   width:calc(100% - 38px)!important;
+ }
+ #rCharts .dynScale140{left:-38px;width:33px;font-size:9px}
+ #rCharts .dynUnit140{left:-36px;font-size:8px}
+}
+
+
+
+/* v144 — оформленная левая шкала динамики, desktop + mobile */
+#rCharts .dayVchart::before{
+  content:"";
+  position:absolute!important;
+  left:-7px!important;
+  top:0!important;
+  bottom:0!important;
+  width:1px!important;
+  background:#9eb0bd!important;
+  z-index:2!important;
+  pointer-events:none!important;
+}
+#rCharts .dynScale140{
+  left:-43px!important;
+  width:36px!important;
+  color:#425d70!important;
+  font-size:10px!important;
+  font-weight:800!important;
+}
+#rCharts .dynScale140 span{
+  right:5px!important;
+  padding-right:3px!important;
+}
+#rCharts .dynScale140 span::after{
+  content:"";
+  position:absolute;
+  left:calc(100% + 3px);
+  top:50%;
+  width:8px;
+  height:1px;
+  background:#9eb0bd;
+}
+#rCharts .dynUnit140{
+  left:-41px!important;
+  top:-21px!important;
+  color:#526b7c!important;
+  font-size:9px!important;
+  font-weight:900!important;
+  text-transform:uppercase!important;
+  letter-spacing:.25px!important;
+}
+@media(max-width:760px){
+ #rCharts .dayVchart::before{left:-6px!important}
+ #rCharts .dynScale140{
+   left:-39px!important;
+   width:32px!important;
+   font-size:9px!important;
+   font-weight:900!important;
+ }
+ #rCharts .dynScale140 span{right:4px!important}
+ #rCharts .dynScale140 span::after{width:7px!important}
+ #rCharts .dynUnit140{
+   left:-37px!important;
+   top:-19px!important;
+   font-size:8px!important;
+ }
+}
+
+
+
+/* v146 — более читаемые карточки выполненных работ и накладных ТОЛЬКО на мобильном */
+@media(max-width:760px){
+  /* Общая карточка */
+  #rWorks .reportWorkDay,
+  #rInvoices details.reportInvoice{
+    margin:10px 0!important;
+    border:1px solid #cbd9e3!important;
+    border-radius:12px!important;
+    background:#fff!important;
+    box-shadow:0 2px 8px rgba(31,67,94,.08)!important;
+    overflow:hidden!important;
+  }
+
+  /* Шапка карточки */
+  #rWorks .reportWorkDay>summary,
+  #rInvoices details.reportInvoice>summary{
+    padding:12px 13px!important;
+    background:#edf5fa!important;
+    border-bottom:1px solid #d6e3ec!important;
+    font-size:13px!important;
+    font-weight:900!important;
+    line-height:1.35!important;
+    color:#173d58!important;
+  }
+
+  /* Сводные строки в шапке */
+  #rWorks .rwLine,
+  #rInvoices .riMeta{
+    margin-top:5px!important;
+    padding-top:5px!important;
+    border-top:1px dashed #c8d7e1!important;
+    font-size:11px!important;
+    line-height:1.45!important;
+    color:#516a7b!important;
+  }
+
+  /* Таблицы превращаем в аккуратные карточки позиций */
+  #rWorks .rwDetail table,
+  #rInvoices details.reportInvoice table{
+    display:block!important;
+    width:auto!important;
+    margin:8px!important;
+    border:0!important;
+    background:transparent!important;
+  }
+  #rWorks .rwDetail thead,
+  #rInvoices details.reportInvoice thead{display:none!important}
+  #rWorks .rwDetail tbody,
+  #rInvoices details.reportInvoice tbody{display:block!important}
+
+  #rWorks .rwDetail tr,
+  #rInvoices details.reportInvoice tbody tr{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:0!important;
+    margin:8px 0!important;
+    padding:0!important;
+    border:1px solid #d7e1e8!important;
+    border-radius:10px!important;
+    background:#fff!important;
+    overflow:hidden!important;
+    box-shadow:none!important;
+  }
+
+  #rWorks .rwDetail td,
+  #rInvoices details.reportInvoice tbody td{
+    display:block!important;
+    min-width:0!important;
+    padding:8px 9px!important;
+    border:0!important;
+    border-bottom:1px solid #edf1f4!important;
+    font-size:12px!important;
+    line-height:1.3!important;
+    text-align:left!important;
+    color:#18384f!important;
+    background:#fff!important;
+  }
+
+  /* подпись поля сверху, значение снизу */
+  #rWorks .rwDetail td:before,
+  #rInvoices details.reportInvoice tbody td:before{
+    display:block!important;
+    margin:0 0 3px!important;
+    font-size:8px!important;
+    line-height:1.15!important;
+    font-weight:800!important;
+    letter-spacing:.25px!important;
+    text-transform:uppercase!important;
+    color:#7b8e9b!important;
+  }
+
+  /* Вид работ и шифр/позиция — на всю ширину */
+  #rWorks .rwDetail td:nth-child(1),
+  #rWorks .rwDetail td:nth-child(2),
+  #rInvoices details.reportInvoice tbody td:nth-child(1),
+  #rInvoices details.reportInvoice tbody td:nth-child(2){
+    grid-column:1/-1!important;
+    background:#f8fbfd!important;
+  }
+
+  /* Итог — отдельная заметная нижняя строка */
+  #rWorks .rwDetail td:last-child,
+  #rInvoices details.reportInvoice tbody td:last-child{
+    grid-column:1/-1!important;
+    background:#fff8dc!important;
+    color:#18384f!important;
+    font-size:14px!important;
+    font-weight:900!important;
+    border-bottom:0!important;
+  }
+
+  /* Числа */
+  #rWorks .rwDetail td:nth-last-child(-n+4),
+  #rInvoices details.reportInvoice tbody td:nth-last-child(-n+4){
+    font-variant-numeric:tabular-nums!important;
+    font-weight:800!important;
+  }
+
+  /* Фото не трогаем */
+  #rWorks .reportWorkWrap{margin-bottom:10px!important}
+}
+
+
+
+/* v148 — компактная шкала без наложений */
+#rCharts .chartCard.dayChart{position:relative!important}
+#rCharts .scale148{
+ position:absolute!important;left:5px!important;top:72px!important;bottom:46px!important;
+ width:32px!important;z-index:8!important;pointer-events:none!important;
+ border-right:1px solid #b8c5ce!important;color:#607786!important;
+ font-size:9px!important;font-weight:800!important;line-height:1!important;
+}
+#rCharts .scale148 span{position:absolute!important;right:6px!important;white-space:nowrap!important}
+#rCharts .scale148 .s4{top:0;transform:translateY(-50%)}
+#rCharts .scale148 .s3{top:25%;transform:translateY(-50%)}
+#rCharts .scale148 .s2{top:50%;transform:translateY(-50%)}
+#rCharts .scale148 .s1{top:75%;transform:translateY(-50%)}
+#rCharts .scale148 .s0{bottom:0;transform:translateY(50%)}
+#rCharts .scale148 span:after{
+ content:"";position:absolute;left:calc(100% + 4px);top:50%;width:4px;height:1px;background:#b8c5ce
+}
+#rCharts .scale148 b{
+ position:absolute;left:1px;top:-18px;font-size:7px;font-weight:800;color:#8797a2;
+ text-transform:uppercase;letter-spacing:.2px
+}
+#rCharts .dayVchart{margin-left:38px!important;width:calc(100% - 38px)!important}
+@media(max-width:760px){
+ #rCharts .scale148{left:3px!important;top:70px!important;bottom:46px!important;width:29px!important;font-size:8px!important}
+ #rCharts .dayVchart{margin-left:34px!important;width:calc(100% - 34px)!important}
+}
+
+
+
+/* v155 — загрузка чертежа и ведомости */
+.schemeUpload155{display:grid;gap:9px}
+.schemeUpload155 label{display:block;border:1px solid #bfd0dc;background:#fff;border-radius:9px;padding:10px}
+.schemeUpload155 label b{display:block;color:#27485e;font-size:12px}.schemeUpload155 label span{display:block;color:#758894;font-size:9px;margin:2px 0 7px}
+.schemeUpload155 input[type=file]{width:100%;font-size:10px}
+.schemeInfo155{font-size:10px;padding:7px 9px;border-radius:7px;background:#eef5f9;color:#496675}
+.schemeInfo155.ok{background:#e8f6ed;color:#19723a;font-weight:800}
+.schemeNote155{font-size:9px;color:#71838e;line-height:1.35}
+.schemeKpi155{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:9px}
+.schemeKpi155>div{border:1px solid #d4dfe6;border-radius:8px;padding:7px 9px;background:#f8fafb}
+.schemeKpi155 small{display:block;color:#6f818c;font-size:8px}.schemeKpi155 b{font-size:16px;color:#23485f}
+.schemeDrawingView155{border:1px solid #ccd9e1;border-radius:9px;overflow:hidden;background:#f3f6f8;margin-bottom:8px}
+.schemeDrawingView155 img{display:block;width:100%;height:auto}
+.schemeDrawingView155 embed{display:block;width:100%;height:560px;border:0}
+.schemeFilter155{display:flex;gap:5px;margin:7px 0}.schemeFilter155 button{border:1px solid #b9cbd6;background:#fff;border-radius:14px;padding:5px 9px;font-size:9px;cursor:pointer}
+.schemeFilter155 button.on{background:#244f69;color:#fff;border-color:#244f69}
+.schemeBomView155{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.schemePos155{border:1px solid #d4dee4;border-left:4px solid #c4cdd2;border-radius:7px;padding:6px 7px;background:#fff}
+.schemePos155.done{border-left-color:#1c9b4a;background:#f0faf3}.schemePos155 b{display:block;font-size:10px}.schemePos155 small{font-size:8px;color:#71818a}
+@media(max-width:760px){
+ .schemeKpi155{gap:4px}.schemeKpi155>div{padding:6px}.schemeKpi155 b{font-size:14px}
+ .schemeDrawingView155 embed{height:430px}
+ .schemeBomView155{grid-template-columns:repeat(2,1fr)}
+ .schemeFilter155{overflow:auto}
+}
+@media print{.schemeFilter155{display:none!important}.schemeDrawingView155 embed{height:420px}}
+
+
+
+.schemeHelp156{border:1px dashed #9fb8c8;background:#fffdf3;border-radius:9px;padding:9px 10px;font-size:9px;line-height:1.4;color:#526b79}
+.schemeHelp156>b{display:block;color:#27485e;font-size:10px;margin-bottom:4px}
+.schemeHelp156 strong{color:#1d597b}
+.schemeHelp156 small{display:block;margin-top:6px;color:#71838e}
+.schemeExample156{display:grid;grid-template-columns:1fr 1fr;max-width:260px;margin-top:7px;border:1px solid #d7e0e5;border-radius:6px;overflow:hidden}
+.schemeExample156 span{padding:4px 7px;border-bottom:1px solid #e4eaee;background:#fff}
+.schemeExample156 span:nth-child(-n+2){font-weight:800;background:#eaf3f8}
+.schemeDrawingView155 iframe{display:block;width:100%;height:620px;border:0;background:#fff}
+.schemePdfFallback156{padding:10px;font-size:9px;color:#657985;background:#fff8dc}
+@media(max-width:760px){.schemeDrawingView155 iframe{height:480px}.schemeHelp156{font-size:10px}}
+@media print{.schemeDrawingView155 iframe{height:420px}}
+
+
+
+.axisSetup167{border:1px solid #c9d9e2;background:#f7fafc;border-radius:9px;padding:10px}
+.axisSetup167>b{display:block;color:#294d63;font-size:11px}.axisSetup167>span{display:block;color:#687e89;font-size:9px;margin:3px 0 8px}
+.axisInputs167{display:grid;grid-template-columns:1fr 1fr;gap:7px}.axisInputs167 label{font-size:8px;color:#5b707c}.axisInputs167 input{margin-top:3px;width:100%;box-sizing:border-box}
+.axisTop167{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:7px}
+.axisTop167 b{display:block;font-size:14px;color:#1e3d55}.axisTop167 span{display:block;font-size:9px;color:#70838e;margin-top:2px}
+.axisLegend167{font-size:8px;color:#607682;display:flex;align-items:center;gap:4px}.axisLegend167 i{width:12px;height:12px;background:#ff7655;border-radius:2px;display:inline-block}
+.axisView167{background:#122342!important;border:1px solid #2c4165!important;border-radius:8px!important;overflow:auto!important;max-height:760px!important}
+.axisGrid167{display:grid;position:relative;min-width:max-content;padding:14px 16px 18px 10px;color:#aebbd0}
+.axisCell167{width:46px;height:46px;box-sizing:border-box;border-right:1px solid #263b60;border-bottom:1px solid #263b60;position:relative}
+.axisHead167,.axisSide167{display:flex;align-items:center;justify-content:center;font:700 11px Arial;color:#b8c3d6}
+.axisCorner167{width:38px;height:32px}.axisHead167{height:32px;width:46px}.axisSide167{width:38px;height:46px}
+.axisPoint167{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:24px;height:24px;border:0;border-radius:2px;background:#ff7655;box-shadow:0 0 0 1px rgba(255,255,255,.18);cursor:pointer;color:#fff;font-size:0}
+.axisPoint167:hover{transform:translate(-50%,-50%) scale(1.12)}
+.axisPoint167.multi:after{content:attr(data-count);position:absolute;right:-7px;top:-7px;min-width:15px;height:15px;padding:0 2px;border-radius:8px;background:#fff;color:#b84932;font:800 9px/15px Arial}
+.axisTip167{margin-top:7px;padding:8px 10px;border-left:4px solid #ff7655;border-radius:6px;background:#f4f7f9;color:#4c6472;font-size:9px;line-height:1.4}
+.axisMapTitle167{margin-top:12px;padding-top:9px;border-top:1px solid #dbe4e9}.axisMapTitle167 b{display:block;font-size:10px;color:#294d63}.axisMapTitle167 span{display:block;font-size:8px;color:#71838c;margin-top:2px}
+.axisMap167{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:5px;margin-top:7px}
+.axisMapRow167{display:grid;grid-template-columns:1fr 54px 54px;gap:4px;align-items:center;border:1px solid #d8e2e7;border-radius:7px;padding:5px;background:#fff;font-size:8px}.axisMapRow167 b{font-size:9px;color:#345466}.axisMapRow167 select{font-size:8px;padding:4px 2px}
+@media(max-width:760px){
+ .axisInputs167{grid-template-columns:1fr}.axisTop167{align-items:flex-start}.axisTop167 b{font-size:16px}
+ .axisView167{max-height:none!important;border-radius:0!important}.axisGrid167{padding:10px 8px 14px 4px}
+ .axisCell167{width:42px;height:42px}.axisHead167{width:42px}.axisSide167{height:42px;width:34px}.axisCorner167{width:34px}
+ .axisPoint167{width:23px;height:23px}.axisMap167{grid-template-columns:1fr 1fr}.axisMapRow167{grid-template-columns:1fr 48px 48px}
+}
+@media print{.axisView167{overflow:visible!important;max-height:none!important}.axisMapTitle167,.axisMap167,.axisTip167{display:none!important}}
+
+
+
+.projectSchedule171{border:1px solid #c8d9e3;background:#f7fafc;border-radius:10px;padding:10px}
+.projectSchedule171>b{display:block;color:#294d63;font-size:11px}.projectSchedule171>span{display:block;color:#687e89;font-size:9px;margin:3px 0 8px}
+.projectPick171{display:grid;grid-template-columns:1fr 1fr;gap:7px}.projectPick171 label,.scheduleFile171{font-size:8px;color:#5d727e}
+.projectPick171 select,.scheduleFile171 input{width:100%;box-sizing:border-box;margin-top:3px}.scheduleFile171{display:block;margin-top:7px}
+.schemeExample171{display:grid;grid-template-columns:repeat(6,auto);gap:3px;margin-top:6px;font-size:7px;overflow:auto}
+.schemeExample171 span{padding:3px 4px;background:#fff;border:1px solid #dce5ea;white-space:nowrap}
+.loadedProjects171{display:flex;gap:4px;flex-wrap:wrap;margin-top:7px}.loadedProjects171 span{padding:4px 7px;border-radius:12px;background:#e9f5ec;color:#24703e;font-size:8px;border:1px solid #b9dbc2}
+.projectTabs171{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}.projectTabs171 button{border:1px solid #b9cbd6;background:#fff;color:#395a6c;border-radius:15px;padding:5px 9px;font-size:8px;cursor:pointer}.projectTabs171 button.on{background:#244f69;color:#fff;border-color:#244f69}
+.axisSvg171{display:block;min-width:760px;width:100%;height:auto;background:#122342}.axisView167{padding:0!important}
+.axisBeam171{stroke:#ff9d57;stroke-width:7;stroke-linecap:round}.axisBrace171{stroke:#f1c232;stroke-width:5;stroke-linecap:round}.axisMember171{cursor:pointer}.axisMemberLabel171{font:800 9px Arial;fill:#fff;paint-order:stroke;stroke:#18304f;stroke-width:3px;stroke-linejoin:round}
+@media(max-width:760px){.projectPick171{grid-template-columns:1fr}.projectSchedule171>span{font-size:10px}.projectTabs171 button{font-size:9px}.axisSvg171{min-width:700px}}
+
+
+#schemeBomView155,.schemeFilters155{display:none!important}
+
+
+#works .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+#works .workAxis172,#works .workLevel172{font-weight:700}
+@media(max-width:760px){#works .g3{grid-template-columns:1fr 1fr!important}}
+
+
+
+#boot243{position:fixed;inset:0;z-index:2147483647;background:#eef3f7;display:flex;align-items:center;justify-content:center;font-family:Arial,sans-serif}
+#boot243 .b243{width:min(420px,86vw);text-align:center;color:#103b64}
+#boot243 .t243{font-size:19px;font-weight:800;margin-bottom:8px}
+#boot243 .s243{font-size:12px;color:#667788;margin-bottom:14px}
+#boot243 .l243{height:4px;background:#dce5ec;overflow:hidden}
+#boot243 .l243:after{content:"";display:block;width:38%;height:100%;background:#f4b41a;animation:load243 1s ease-in-out infinite alternate}
+@keyframes load243{from{transform:translateX(-15%)}to{transform:translateX(180%)}}
+body:not(.ready243)>.app{visibility:hidden!important}
+body.ready243 #boot243{display:none!important}
+
+
+${styles}
+
+
+html,body{margin:0;padding:0;background:#f4f7f9}
+.cleanLayout254{display:grid;grid-template-columns:238px minmax(0,1fr);min-height:100vh}
+.cleanNav254{background:#0d3556;min-height:100vh;position:sticky;top:0;align-self:start;overflow:hidden}
+.cleanNav254 .cleanButtons254{display:flex;flex-direction:column}
+.cleanNav254 button{display:flex;width:100%;min-height:41px;padding:10px 14px;border:0;border-top:1px solid rgba(255,255,255,.09);border-radius:0;background:transparent;color:#fff;text-align:left;align-items:center;font:700 12px Arial,sans-serif;cursor:pointer}
+.cleanNav254 button.active{background:#174b73;border-left:4px solid #f4b41a}
+.cleanMain254,.cleanMain254 .report{width:100%;max-width:none;margin:0}
+.cleanMain254 .report{padding:0!important}
+.cleanMain254 .panel,.cleanMain254 .actions,.cleanMain254 .ra,.cleanMain254 .saveStatus{display:none!important}
+@media(max-width:900px){
+ .cleanLayout254{grid-template-columns:1fr}
+ .cleanNav254{min-height:0;position:relative}
+ .cleanNav254 .cleanButtons254{flex-direction:row;overflow-x:auto}
+ .cleanNav254 button{width:auto;min-width:max-content}
+}
+
+
+
+/* v173 — ведомость хранится внутри каждой задачи */
+#schemeSec155{display:none!important}
+.taskBom173{margin-top:12px;padding:12px;border:1px solid #d9e2ef;border-radius:12px;background:#f8fbff}
+.taskBomTop173{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.taskBomBtn173{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.taskBomBtn173 input{display:none}
+.taskBomHint173{margin-top:8px;font-size:12px;line-height:1.45;color:#5d6b7d}
+.taskBomStatus173{margin-top:8px;font-size:12px;font-weight:700}
+.taskBomStatus173.ok{color:#16834a}
+.taskLimits173{margin-top:12px;padding-top:12px;border-top:1px dashed #cad5e4}
+.taskLimits173 .g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.workAuto173{background:#f4f7fb!important;font-weight:700}
+.remain173{font-size:12px;margin-top:5px;color:#59677a}
+.remain173 b{color:#173a69}
+.workMarkSel173 option:disabled{color:#9aa5b3}
+@media(max-width:760px){
+ .taskLimits173 .g4{grid-template-columns:1fr 1fr}
+}
+
+
+
+/* Только ведомость. Никаких схем, осей и отметок. */
+#schemeSec155,.taskLimits173{display:none!important}
+.workAxis172,.workLevel172{display:none!important}
+.workItem173 .g2:has(.workAxis172),.workItem173 .g2:has(.workLevel172){display:none!important}
+
+#schemeReport155{display:block!important;height:auto!important;max-height:none!important;overflow:visible!important}
+#schemeReport155 .schemeStats155{margin-bottom:8px!important}
+#schemeDrawingView155{display:none!important}
+#schemeBomView155{
+ display:grid!important;
+ grid-template-columns:repeat(4,minmax(0,1fr))!important;
+ gap:6px!important;
+ height:auto!important;max-height:none!important;overflow:visible!important;
+}
+#schemeReport155 .schemeFilter155{
+ display:flex!important;gap:5px!important;margin:7px 0 9px!important;overflow:auto!important
+}
+#schemeReport155 .schemeFilter155 button{
+ border:1px solid #b9cbd6!important;background:#fff!important;color:#244f69!important;
+ border-radius:14px!important;padding:5px 10px!important;font-size:9px!important;cursor:pointer!important;white-space:nowrap!important
+}
+#schemeReport155 .schemeFilter155 button.on{background:#244f69!important;color:#fff!important;border-color:#244f69!important}
+.bomCard182{
+ border:1px solid #d6dee3;border-left:5px solid #c5cfd4;border-radius:8px;
+ padding:7px 9px;background:#fff;min-height:61px;box-sizing:border-box
+}
+.bomCard182.done{border-left-color:#20a65a;background:#eef9f2}
+.bomCard182.partial{border-left-color:#e2aa22;background:#fff9e9}
+.bomCard182 b{display:block;font-size:11px;color:#172535;margin-bottom:3px}
+.bomName182{font-size:9px;font-weight:700;color:#536777;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:5px}
+.bomMeta182{font-size:8px;color:#71818a}
+.bomMore182{
+ grid-column:1/-1;width:100%;margin:3px 0 0;padding:8px 12px;border:1px solid #1769aa;border-radius:8px;
+ background:#f4f8fc;color:#1769aa;font-weight:700;font-size:11px;cursor:pointer;text-align:center
+}
+@media(max-width:760px){
+ #schemeBomView155{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #schemeReport155 .schemeFilter155 button{font-size:11px!important;padding:7px 11px!important}
+ .bomMore182{min-height:42px;font-size:13px}
+}
+@media print{
+ #schemeReport155 .schemeFilter155,.bomMore182{display:none!important}
+ .bomHidden182{display:block!important}
+}
+
+
+
+/* 1. В выполненных работах полностью убираем Ось и Отметку */
+.workAxis172,.workLevel172,
+label:has(>.workAxis172),label:has(>.workLevel172),
+div:has(>.workAxis172),div:has(>.workLevel172){display:none!important}
+
+/* 2. Старые тексты монтажной схемы больше не показываем */
+#schemeReport155 .schemeTitle155,
+#schemeReport155 .schemeHint155,
+#schemeReport155 .axisLegend167{display:none!important}
+
+/* 3. Календарь: если ширина позволяет — 3 месяца, иначе 1 */
+.calendarMonths183{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%}
+.calendarMonth183{min-width:0}
+.calendarMonth183 .calTitle{font-size:10px;font-weight:800;text-align:center;margin:0 0 5px;color:#173b57}
+.calendarMonth183 .calGrid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.calendarMonth183 .calDow{font-size:7px;text-align:center;color:#71808b;font-weight:700}
+.calendarMonth183 .calDay{font-size:8px;min-height:20px;border:1px solid #e0e6ea;border-radius:3px;display:flex;align-items:center;justify-content:center;background:#fff}
+.calendarMonth183 .calDay.empty{border-color:transparent;background:transparent}
+.calendarMonth183 .calDay.acted{background:#eaf7ef;border-color:#50b878;color:#176b3a;font-weight:800}
+@media(max-width:900px){.calendarMonths183{grid-template-columns:1fr}.calendarMonths183 .calendarMonth183:not(:first-child){display:none}}
+@media print{
+ .calendarMonths183{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .calendarMonths183 .calendarMonth183{display:block!important}
+}
+
+
+
+/* Окончательно скрываем все остатки старой монтажной схемы */
+#schemeReport155 .schemeTitle155,
+#schemeReport155 .schemeHint155,
+#schemeReport155 .axisTop167,
+#schemeReport155 .axisLegend167,
+#schemeReport155 #axisCount167{display:none!important}
+
+
+
+/* Убираем остаточный динамический подзаголовок старой схемы */
+#schemeReport155 #axisCount167,
+#schemeReport155 .axisCount167,
+#schemeReport155 .schemeTaskMeta155,
+#schemeReport155 .schemeProjectMeta155{display:none!important}
+
+
+
+/* v187: исходные сроки слева не удаляем и не переписываем */
+
+
+
+:root{--nav188:#0c2c49;--nav2188:#123e63;--blue188:#1769aa;--bg188:#eef3f7}
+body{background:var(--bg188)!important}
+.layout{display:grid!important;grid-template-columns:190px minmax(0,1fr)!important;gap:12px!important;align-items:start}
+.nav188{position:sticky;top:8px;height:calc(100vh - 18px);background:linear-gradient(180deg,var(--nav188),#0a253d);border-radius:12px;color:#fff;padding:12px 8px;box-sizing:border-box;box-shadow:0 8px 24px #1234;z-index:20}
+.navBrand188{padding:7px 9px 14px;border-bottom:1px solid #ffffff1c;margin-bottom:9px}
+.navBrand188 b{display:block;font-size:14px}.navBrand188 span{font-size:9px;color:#bcd0df}
+.nav188 button{width:100%;display:flex;align-items:center;gap:9px;border:0;background:transparent;color:#dce9f3;padding:10px 10px;border-radius:7px;text-align:left;font-size:11px;cursor:pointer;margin:2px 0}
+.nav188 button:hover{background:#ffffff0e}.nav188 button.active{background:#1769aa;color:#fff;font-weight:800}
+.nav188 .ico188{width:18px;text-align:center;font-size:14px}.workspace188{min-width:0}
+.panel{display:none!important;max-height:none!important;overflow:visible!important;border-radius:10px!important}
+.preview{display:block;min-width:0!important;overflow:visible!important}
+.layout.mode-manage188 .panel{display:block!important}
+.layout.mode-manage188 .preview{display:none!important}
+.layout.mode-manage188 .workspace188{background:#fff;border-radius:10px}
+.viewTitle188{display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:10px;padding:12px 16px;margin-bottom:10px;border:1px solid #dfe7ed}
+.viewTitle188 b{font-size:16px;color:#142536}.viewTitle188 span{font-size:10px;color:#71808c}
+.report{min-height:0!important}
+.report .rsec.v188hidden{display:none!important}
+@media(max-width:760px){
+ .layout{grid-template-columns:1fr!important}
+ .nav188{position:relative;top:auto;height:auto;display:flex;overflow-x:auto;border-radius:9px;padding:6px}
+ .navBrand188{display:none}.nav188 button{min-width:max-content;width:auto;padding:8px 10px}.nav188 .ico188{display:none}
+ .workspace188{width:100%}.viewTitle188{margin-top:2px}
+}
+@media print{
+ .nav188,.viewTitle188,.panel{display:none!important}
+ .layout{display:block!important}.preview{display:block!important}
+}
+
+
+
+/* Финальная доводка оболочки */
+body{margin:0!important;background:#eef3f7!important}
+.topbar188{height:58px;background:linear-gradient(100deg,#0c2c49,#173f62);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 22px;box-sizing:border-box;box-shadow:0 2px 10px #09233a35;position:sticky;top:0;z-index:40}
+.topBrand188{display:flex;align-items:center;gap:11px}.topLogo188{width:34px;height:34px;border-radius:8px;background:#0f5f83;display:grid;place-items:center;font-size:18px;font-weight:900}
+.topBrand188 b{display:block;font-size:15px}.topBrand188 small{display:block;font-size:9px;color:#c6d8e5;margin-top:2px}
+.topMeta188{text-align:right;font-size:10px;color:#e3edf4;line-height:1.45}
+.layout{max-width:none!important;margin:0!important;padding:12px!important;min-height:calc(100vh - 58px);box-sizing:border-box}
+.nav188{top:70px!important;height:calc(100vh - 82px)!important;border-radius:9px!important;box-shadow:none!important}
+.navBrand188{display:none!important}
+.workspace188{background:transparent!important}
+.viewTitle188{min-height:51px;box-sizing:border-box;padding:10px 15px!important;box-shadow:0 2px 8px #20384a0b}
+.viewTitle188 b{font-size:17px!important}
+.viewTitle188 span{background:#eaf4fb;color:#1769aa!important;border-radius:20px;padding:5px 9px;font-weight:700}
+.preview,.panel{box-shadow:0 2px 10px #20384a0c}
+.layout.mode-manage188 .panel{padding:14px!important;background:#fff!important}
+.layout.mode-manage188 .viewTitle188 span:after{content:"Ввод и редактирование данных"}
+.layout.mode-manage188 .viewTitle188 span{font-size:0}.layout.mode-manage188 .viewTitle188 span:after{font-size:10px}
+.nav188 button{transition:background .12s ease,transform .12s ease}
+.nav188 button:active{transform:translateX(2px)}
+.nav188 button.active{box-shadow:inset 3px 0 0 #55c8ff;background:#1769aa!important}
+.report .rsec{border-radius:9px!important}
+.v189Empty{background:#fff;border:1px dashed #cbd8e1;border-radius:9px;padding:30px;text-align:center;color:#7b8c98;font-size:12px}
+
+/* Раздельный показ блока людей/техники, если внутри есть самостоятельные колонки */
+body.v189People .peopleMech .mechCol,body.v189People .peopleMech .machines,
+body.v189Machines .peopleMech .peopleCol,body.v189Machines .peopleMech .responsibles,
+body.v189Machines .peopleMech .workers{display:none!important}
+
+@media(max-width:760px){
+ .topbar188{height:52px;padding:0 12px;position:relative}.topMeta188{display:none}
+ .layout{padding:7px!important;min-height:0}
+ .nav188{top:auto!important;height:auto!important;position:sticky!important;z-index:30!important}
+ .viewTitle188{min-height:45px;padding:8px 11px!important}.viewTitle188 b{font-size:15px!important}
+}
+@media print{
+ .topbar188,.nav188,.viewTitle188{display:none!important}
+ body{background:#fff!important}.layout{padding:0!important}
+}
+
+
+
+/* В режиме управления справа показывается только выбранный раздел ввода */
+.layout.mode-manage188 .panel{display:block!important;background:transparent!important;padding:0!important;box-shadow:none!important}
+.layout.mode-manage188 .panel>.sec{display:none!important}
+.layout.mode-manage188 .panel>.sec.manageActive190{display:block!important;background:#fff!important;border-radius:10px!important;padding:14px!important;box-sizing:border-box;box-shadow:0 2px 10px #20384a0c}
+.layout.mode-manage188 .panel>.sec.manageActive190 .secBody{display:block!important}
+.layout.mode-manage188 .panel>.sec.manageActive190 .secHead>button[onclick*="toggleSection"]{display:none!important}
+.manageSub190{display:none;padding:4px 0 7px 25px}
+.nav188.manageOpen190 .manageSub190{display:block}
+.manageSub190 button{font-size:10px!important;padding:7px 9px!important;color:#c7d8e5!important}
+.manageSub190 button.active{background:#0f568b!important;color:#fff!important}
+.manageArrow190{margin-left:auto;font-size:9px;transition:.15s}
+.nav188.manageOpen190 [data-view="manage"] .manageArrow190{transform:rotate(90deg)}
+@media(max-width:760px){
+ .manageSub190{display:none!important}
+ .nav188.manageOpen190 .manageSub190{display:flex!important;padding:0;gap:2px}
+ .manageSub190 button{min-width:max-content!important}
+}
+
+
+
+/* Старые верхние шапки больше не участвуют в интерфейсе */
+body>.top,.topbar188{display:none!important}
+.layout{width:calc(100% - 24px)!important;max-width:none!important;margin:12px!important;padding:0!important;box-sizing:border-box!important;min-height:calc(100vh - 24px)!important}
+.nav188{top:12px!important;height:calc(100vh - 24px)!important}
+.viewTitle188 span{display:none!important}
+/* Старая обложка внутри отчёта */
+.report>.rh,.report>.yl{display:none!important}
+/* На экране управления отчет не дублируем */
+.navTools198{border-top:1px solid #ffffff1c;margin-top:8px;padding-top:8px}
+.navTools198 button{color:#fff!important}
+@media(max-width:760px){
+ .layout{width:calc(100% - 14px)!important;margin:7px!important}
+ .nav188{top:auto!important;height:auto!important}
+ .navTools198{display:flex;border-top:0;margin:0;padding:0}
+}
+@media print{
+ .nav188,.viewTitle188,.panel{display:none!important}
+ .layout{width:100%!important;margin:0!important}
+ .preview{display:block!important}
+}
+
+
+
+/* Плоский компактный дизайн — без лишних отступов и скруглений */
+*{box-sizing:border-box}
+body{background:#eef3f7!important}
+.layout{gap:0!important;margin:0!important;width:100%!important;min-height:100vh!important}
+.nav188{
+ border-radius:0!important;box-shadow:none!important;top:0!important;height:100vh!important;
+ padding:0!important;background:#0c3150!important
+}
+.nav188 button{border-radius:0!important;margin:0!important;padding:10px 12px!important}
+.nav188 button.active{border-radius:0!important;background:#1676b8!important;box-shadow:inset 3px 0 0 #58d3ff!important}
+.manageSub190{padding-left:20px!important}
+.manageSub190 button{padding:7px 10px!important}
+.workspace188{border-radius:0!important;background:#fff!important}
+.viewTitle188{
+ margin:0!important;border:0!important;border-bottom:4px solid #f2b51d!important;
+ border-radius:0!important;box-shadow:none!important;padding:12px 16px!important;background:#fff!important
+}
+.preview,.panel{border-radius:0!important;box-shadow:none!important}
+.report{padding:14px 18px!important;border-radius:0!important;box-shadow:none!important}
+.report .rsec{
+ border-radius:0!important;box-shadow:none!important;margin:0 0 12px!important;padding-top:0!important
+}
+.report table{border-radius:0!important}
+.report th,.report td{padding-top:5px!important;padding-bottom:5px!important}
+.report h2,.report h3{margin-top:8px!important;margin-bottom:6px!important}
+.report .kpi,.report .stat,.report .card,
+#schemeReport155 .schemeStats155>*,.statusCard175,.bomCard182{
+ border-radius:0!important;box-shadow:none!important
+}
+button,input,select,textarea{border-radius:2px!important}
+.navTools198{margin-top:6px!important;padding-top:6px!important}
+@media(max-width:760px){
+ .layout{display:block!important}
+ .nav188{height:auto!important;position:relative!important}
+ .report{padding:9px!important}
+}
+@media print{
+ .layout{display:block!important}.nav188,.viewTitle188,.panel{display:none!important}
+ .report{padding:0!important}
+}
+
+
+
+aside.nav188 .navBrand207{
+ display:block!important;visibility:visible!important;opacity:1!important;
+ width:100%!important;height:auto!important;min-height:108px!important;
+ margin:0!important;padding:0!important;background:#fff!important;
+ border:0!important;border-radius:0!important;overflow:hidden!important;
+ flex:none!important;
+}
+aside.nav188 .navBrand207 img{
+ display:block!important;visibility:visible!important;opacity:1!important;
+ width:100%!important;height:108px!important;max-width:none!important;max-height:none!important;
+ margin:0!important;padding:0!important;border:0!important;border-radius:0!important;
+ object-fit:contain!important;background:#fff!important;
+}
+
+
+
+/* Кнопки/действия */
+.actions,.ra{
+ padding:10px!important;
+ box-sizing:border-box!important;
+}
+
+/* Статус сохранения — по центру по вертикали */
+.saveStatus{
+ display:flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ align-self:stretch!important;
+ min-height:40px!important;
+ margin:0!important;
+ padding:0 10px!important;
+ line-height:1.2!important;
+ text-align:center!important;
+}
+
+/* Лёгкий фон отчёта, чтобы белый блок логотипа визуально отделялся */
+.report{
+ background:#f4f7f9!important;
+}
+
+/* Содержимое отчёта оставляем читаемым */
+.report table,
+.report .dateCard,
+.report .weatherCard,
+.report .statusCard175,
+.report .bomCard182{
+ background:#fff;
+}
+
+
+
+/* ===== Правый блок: новый плоский дизайн режима управления ===== */
+.layout.mode-manage188 .workspace188,
+.layout.mode-manage188 .panel{
+ background:#f4f7f9!important;
+ border:0!important;
+ border-radius:0!important;
+ box-shadow:none!important;
+}
+.layout.mode-manage188 .panel{
+ padding:14px 16px!important;
+ margin:0!important;
+}
+
+/* Каждая форма управления — строгая секция без карточного вида */
+.layout.mode-manage188 .panel>.sec{
+ background:#fff!important;
+ border:0!important;
+ border-radius:0!important;
+ box-shadow:none!important;
+ margin:0!important;
+ padding:0!important;
+ overflow:visible!important;
+}
+.layout.mode-manage188 .panel>.sec.manageActive190{
+ display:block!important;
+}
+
+/* Заголовок раздела */
+.layout.mode-manage188 .panel>.sec>.secHead,
+.layout.mode-manage188 .panel>.sec>.sectionHead,
+.layout.mode-manage188 .panel>.sec>summary{
+ background:#0f426b!important;
+ color:#fff!important;
+ border:0!important;
+ border-radius:0!important;
+ box-shadow:none!important;
+ margin:0!important;
+ padding:10px 14px!important;
+ min-height:42px!important;
+ font-weight:800!important;
+}
+.layout.mode-manage188 .panel>.sec>.secHead *,
+.layout.mode-manage188 .panel>.sec>.sectionHead *,
+.layout.mode-manage188 .panel>.sec>summary *{color:inherit!important}
+
+/* Тело секции */
+.layout.mode-manage188 .panel>.sec>.secBody{
+ padding:14px!important;
+ margin:0!important;
+ border:1px solid #d9e1e7!important;
+ border-top:0!important;
+ border-radius:0!important;
+ background:#fff!important;
+}
+
+/* Внутренние карточки/строки */
+.layout.mode-manage188 .sec .card,
+.layout.mode-manage188 .sec .item,
+.layout.mode-manage188 .sec .rowCard,
+.layout.mode-manage188 .sec .workCard,
+.layout.mode-manage188 .sec .taskCard,
+.layout.mode-manage188 .sec .invoiceCard,
+.layout.mode-manage188 .sec .workerCard,
+.layout.mode-manage188 .sec .equipmentCard,
+.layout.mode-manage188 .sec .responsibleCard{
+ border-radius:0!important;
+ box-shadow:none!important;
+ border:1px solid #dce3e8!important;
+ background:#fff!important;
+}
+
+/* Поля ввода — строгие, компактные */
+.layout.mode-manage188 input,
+.layout.mode-manage188 select,
+.layout.mode-manage188 textarea{
+ border-radius:0!important;
+ box-shadow:none!important;
+ border:1px solid #bfcbd4!important;
+ background:#fff!important;
+ min-height:36px!important;
+}
+.layout.mode-manage188 input:focus,
+.layout.mode-manage188 select:focus,
+.layout.mode-manage188 textarea:focus{
+ outline:none!important;
+ border-color:#1476b8!important;
+ box-shadow:inset 3px 0 0 #1476b8!important;
+}
+
+/* Кнопки */
+.layout.mode-manage188 .panel button{
+ border-radius:0!important;
+ box-shadow:none!important;
+ min-height:36px!important;
+}
+.layout.mode-manage188 .panel button.primary,
+.layout.mode-manage188 .panel .btn.primary{
+ background:#0f426b!important;
+ color:#fff!important;
+ border-color:#0f426b!important;
+}
+.layout.mode-manage188 .panel button.add,
+.layout.mode-manage188 .panel .addBtn{
+ background:#f2b51d!important;
+ color:#102f49!important;
+ border-color:#f2b51d!important;
+ font-weight:800!important;
+}
+
+/* Таблицы управления */
+.layout.mode-manage188 .panel table{
+ width:100%!important;
+ border-collapse:collapse!important;
+ border-radius:0!important;
+ box-shadow:none!important;
+ background:#fff!important;
+}
+.layout.mode-manage188 .panel th{
+ background:#0f426b!important;
+ color:#fff!important;
+ border:1px solid #315d7d!important;
+ padding:7px 8px!important;
+}
+.layout.mode-manage188 .panel td{
+ border:1px solid #dce3e8!important;
+ padding:7px 8px!important;
+}
+
+/* Убираем декоративные скругления у всего содержимого формы */
+.layout.mode-manage188 .panel .pill,
+.layout.mode-manage188 .panel .badge,
+.layout.mode-manage188 .panel .chip{
+ border-radius:2px!important;
+}
+.layout.mode-manage188 .panel fieldset{
+ border-radius:0!important;
+ box-shadow:none!important;
+}
+
+/* Более аккуратная сетка и интервалы */
+.layout.mode-manage188 .panel label{
+ font-weight:700!important;
+ color:#24465f!important;
+}
+.layout.mode-manage188 .panel .grid,
+.layout.mode-manage188 .panel .formGrid{
+ gap:10px!important;
+}
+.layout.mode-manage188 .panel hr{
+ border:0!important;
+ border-top:1px solid #dce3e8!important;
+ margin:12px 0!important;
+}
+
+@media(max-width:760px){
+ .layout.mode-manage188 .panel{padding:8px!important}
+ .layout.mode-manage188 .panel>.sec>.secBody{padding:10px!important}
+}
+
+
+
+/* Левый блок больше не имеет собственного вертикального скролла.
+   Прокручивается вся страница, а меню и логотип остаются единым блоком. */
+.nav188{
+ height:auto!important;
+ min-height:100vh!important;
+ max-height:none!important;
+ overflow-y:visible!important;
+ overflow-x:hidden!important;
+ position:sticky!important;
+ top:0!important;
+ align-self:start!important;
+}
+
+/* В режиме управления высота рабочей части не меньше высоты раскрытого меню */
+.layout.mode-manage188{
+ align-items:stretch!important;
+}
+.layout.mode-manage188 .workspace188{
+ min-height:100vh!important;
+ height:auto!important;
+}
+.layout.mode-manage188 .panel{
+ min-height:100%!important;
+}
+
+/* Убираем возможный внутренний скролл у правого блока управления */
+.layout.mode-manage188 .workspace188,
+.layout.mode-manage188 .panel,
+.layout.mode-manage188 .panel>.sec,
+.layout.mode-manage188 .panel>.sec>.secBody{
+ max-height:none!important;
+ overflow:visible!important;
+}
+
+/* На узких экранах всё идёт обычным потоком */
+@media(max-width:760px){
+ .nav188{
+   position:relative!important;
+   top:auto!important;
+   min-height:0!important;
+   overflow:visible!important;
+ }
+}
+
+
+
+.report #schemeReport155.v188hidden{display:none!important}
+
+
+
+body.v189People .peopleMech .machinesBlock{display:none!important}
+body.v189People .peopleMech .peopleGrid{display:grid!important}
+
+body.v189Machines .peopleMech .peopleGrid{display:none!important}
+body.v189Machines .peopleMech .machinesBlock{display:block!important}
+
+/* В общем Отчёте оба блока видимы */
+body:not(.v189People):not(.v189Machines) .peopleMech .peopleGrid{display:grid}
+body:not(.v189People):not(.v189Machines) .peopleMech .machinesBlock{display:block}
+
+
+
+/* Воздух между информацией об объекте/заказчике и следующим разделом */
+.report .rsec + .rsec{
+ margin-top:18px!important;
+}
+
+/* Все заголовки разделов отделяем от предыдущего содержимого */
+.report .rsec>h2,
+.report .rsec>h3,
+.report .rsec>.rtitle,
+.report .rsec>.sectionTitle{
+ margin-top:14px!important;
+}
+
+/* Первый заголовок внутри секции не получает двойной отступ */
+.report .rsec>h2:first-child,
+.report .rsec>h3:first-child,
+.report .rsec>.rtitle:first-child,
+.report .rsec>.sectionTitle:first-child{
+ margin-top:0!important;
+}
+
+
+
+.clientLine{margin-bottom:15px!important}
+
+
+
+/* Фото больше не загружаются в выполненных работах */
+#works .photoEditor{display:none!important}
+
+/* Фото теперь относятся ко всему отчёту и находятся в Дате отчёта и погоде */
+.reportPhotoEditor223{margin-top:14px;padding-top:12px;border-top:1px solid #d7e0e7}
+.reportPhotoHead223{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.reportPhotoThumbs223{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-bottom:8px}
+.reportPhotoThumb223{position:relative;aspect-ratio:4/3;border:1px solid #d7e0e7;background:#f4f7f9}
+.reportPhotoThumb223 img{width:100%;height:100%;display:block;object-fit:cover;border-radius:0}
+.reportPhotoRemove223{position:absolute;right:3px;top:3px;width:25px;height:25px;border:0!important;border-radius:0!important;background:#a92727!important;color:#fff!important;padding:0!important;cursor:pointer}
+.reportPhotoAdd223{display:inline-flex!important;align-items:center;justify-content:center;border-radius:0!important;padding:8px 12px!important;cursor:pointer}
+#rReportInfo .reportPhotos{margin-top:14px}
+@media(max-width:760px){.reportPhotoThumbs223{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+
+
+/* Стабильная сетка фото именно в блоке Дата отчёта и погода */
+#rReportInfo .reportPhotos{
+ display:grid!important;
+ grid-template-columns:repeat(4,minmax(0,1fr))!important;
+ grid-auto-rows:auto!important;
+ grid-auto-flow:row!important;
+ gap:8px!important;
+ margin:14px 0 0!important;
+ padding:0!important;
+ background:transparent!important;
+ border:0!important;
+ border-radius:0!important;
+ box-shadow:none!important;
+}
+#rReportInfo .reportPhotos img,
+#rReportInfo .reportPhotos img:nth-child(n){
+ display:block!important;
+ grid-column:auto!important;
+ grid-row:auto!important;
+ width:100%!important;
+ height:auto!important;
+ aspect-ratio:4/3!important;
+ object-fit:cover!important;
+ margin:0!important;
+ border:1px solid #d5dde7!important;
+ border-radius:0!important;
+ box-shadow:none!important;
+}
+@media(max-width:760px){
+ #rReportInfo .reportPhotos{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+ #rReportInfo .reportPhotos img,
+ #rReportInfo .reportPhotos img:nth-child(n){display:block!important;grid-column:auto!important;grid-row:auto!important;aspect-ratio:4/3!important}
+}
+
+
+
+#rReportInfo .photoReportTitle226{
+ font-family:inherit!important;
+ font-size:16px!important;
+ font-weight:700!important;
+ letter-spacing:0!important;
+ line-height:1.25!important;
+}
+
+
+
+aside.nav188 .manageSub190 button,
+aside.nav188 .manageSub190 .navItem,
+aside.nav188 .manageSub190 [role="button"]{
+  font-size:11px!important;font-weight:700!important;line-height:1.25!important;
+  padding:8px 10px!important;min-height:34px!important;text-align:left!important;
+  white-space:normal!important;letter-spacing:0!important
+}
+aside.nav188 .manageSub190{gap:2px!important}
+@media(max-width:760px){
+ aside.nav188 .manageSub190 button,
+ aside.nav188 .manageSub190 .navItem,
+ aside.nav188 .manageSub190 [role="button"]{font-size:12px!important;min-height:36px!important}
+}
+
+
+
+body:not(.ready243){overflow:hidden!important}
+body:not(.ready243) #boot243{display:flex!important}
+#boot243{background:#eef3f7!important}
+#boot243 .b243{background:#fff;padding:28px 30px;border-top:4px solid #103b64}
+#boot243 .t243{margin-top:2px}
+
+
+
+@media(max-width:760px){
+ .reportWorkDay table td:nth-child(4):before{content:"Ось"!important}
+ .reportWorkDay table td:nth-child(5):before{content:"Отметка"!important}
+ .reportWorkDay table td:nth-child(6):before{content:"Кол-во"!important}
+ .reportWorkDay table td:nth-child(7):before{content:"Ед. изм."!important}
+ .reportWorkDay table td:nth-child(8):before{content:"Объём ед."!important}
+ .reportWorkDay table td:nth-child(9):before{content:"Итого"!important}
+}
