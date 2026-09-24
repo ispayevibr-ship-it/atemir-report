@@ -1,22 +1,24 @@
 const {app,BrowserWindow,dialog,ipcMain}=require("electron");const fs=require("fs");const {autoUpdater}=require("electron-updater");const path=require("path");ipcMain.handle("report:html",async(_e,arg={})=>{let file=await dialog.showSaveDialog(win,{title:"Выгрузить отчёт HTML",defaultPath:arg.filename||"А-Темир_Строй_отчет.html",filters:[{name:"HTML",extensions:["html"]}]});if(file.canceled||!file.filePath)return {canceled:true};fs.writeFileSync(file.filePath,String(arg.html||""),"utf8");return {ok:true,path:file.filePath}});
 ipcMain.handle("report:pdf",async(_e,arg={})=>{let file=await dialog.showSaveDialog(win,{title:"Сохранить PDF",defaultPath:arg.filename||"А-Темир_Строй_отчет.pdf",filters:[{name:"PDF",extensions:["pdf"]}]});if(file.canceled||!file.filePath)return {canceled:true};let w=new BrowserWindow({show:false,webPreferences:{contextIsolation:true,nodeIntegration:false}}),tmp="";try{if(arg.html){tmp=path.join(app.getPath("temp"),"atemir-export-"+Date.now()+".html");fs.writeFileSync(tmp,String(arg.html),"utf8");await w.loadFile(tmp)}else await w.loadFile(path.join(__dirname,"src","legacy-report.html"));await new Promise(r=>setTimeout(r,700));let buf=await w.webContents.printToPDF({printBackground:true,pageSize:"A4",margins:{top:0.25,bottom:0.25,left:0.2,right:0.2}});fs.writeFileSync(file.filePath,buf);return {ok:true,path:file.filePath}}finally{if(tmp)try{fs.unlinkSync(tmp)}catch{}if(!w.isDestroyed())w.destroy()}});
 
-let win;function create(){win=new BrowserWindow({width:1500,height:930,minWidth:900,minHeight:650,autoHideMenuBar:true,backgroundColor:"#eef3f7",webPreferences:{preload:path.join(__dirname,"preload.js"),contextIsolation:true,nodeIntegration:false}});win.loadFile(path.join(__dirname,"src","index.html"))}function updates(){if(!app.isPackaged)return;autoUpdater.autoDownload=false;autoUpdater.autoInstallOnAppQuit=true;autoUpdater.on("update-available",async i=>{const r=await dialog.showMessageBox(win,{type:"info",title:"Доступно обновление",message:"Доступна новая версия "+i.version,detail:"Скачать обновление программы «А-Темир Строй Отчёт»?",buttons:["Скачать и установить","Позже"],defaultId:0,cancelId:1});if(r.response===0)autoUpdater.downloadUpdate()});autoUpdater.on("download-progress",p=>{
-    if(!win||win.isDestroyed())return;
-    const got=(p.transferred/1024/1024).toFixed(1);
-    const total=(p.total/1024/1024).toFixed(1);
-    const pct=Math.max(0,Math.min(100,Math.round(p.percent||0)));
-    win.setProgressBar(pct/100);
-    win.setTitle("А-Темир Строй Отчёт — обновление "+pct+"%");
-    if(!win.__updateProgressShown){
-      win.__updateProgressShown=true;
-      win.webContents.executeJavaScript(`
-        (()=>{let x=document.getElementById("appUpdateProgress");if(!x){x=document.createElement("div");x.id="appUpdateProgress";x.style.cssText="position:fixed;inset:0;z-index:2147483647;background:rgba(8,43,75,.82);display:flex;align-items:center;justify-content:center;font-family:Arial";x.innerHTML='<div style="width:min(440px,86vw);background:white;border-radius:12px;padding:22px;color:#103b64;box-shadow:0 15px 45px #0004"><b style="font-size:18px">Скачиваем обновление</b><div id="appUpdateText" style="margin:10px 0;color:#667788">Подготовка...</div><div style="height:10px;background:#e3eaf0;border-radius:10px;overflow:hidden"><div id="appUpdateBar" style="height:100%;width:0;background:#f4b41a;transition:width .2s"></div></div></div>';document.body.appendChild(x)}})()
-      `).catch(()=>{});
-    }
-    win.webContents.executeJavaScript(`
-      (()=>{let b=document.getElementById("appUpdateBar"),t=document.getElementById("appUpdateText");if(b)b.style.width="${pct}%";if(t)t.textContent="${got} МБ из ${total} МБ — ${pct}%";})()
-    `).catch(()=>{});
-  });
-  autoUpdater.on("update-downloaded",async i=>{
-    if(win&&!win.isDestroyed()){win.setProgressBar(-1);win.setTitle("А-Темир Строй Отчёт");}const r=await dialog.showMessageBox(win,{type:"info",title:"Обновление готово",message:"Версия "+i.version+" загружена.",detail:"Перезапустить программу и установить обновление сейчас?",buttons:["Перезапустить","При следующем выходе"],defaultId:0,cancelId:1});if(r.response===0)autoUpdater.quitAndInstall(false,true)});autoUpdater.on("error",e=>console.error("Auto update:",e.message));setTimeout(()=>autoUpdater.checkForUpdates().catch(e=>console.error("Update check:",e.message)),4000)}app.whenReady().then(()=>{create();updates()});app.on("window-all-closed",()=>{if(process.platform!=="darwin")app.quit()});app.on("activate",()=>{if(BrowserWindow.getAllWindows().length===0)create()});
+let win;
+function sendUpdate(state,data={}){if(win&&!win.isDestroyed())win.webContents.send("app:update",{state,...data})}
+function create(){win=new BrowserWindow({width:1500,height:930,minWidth:900,minHeight:650,autoHideMenuBar:true,backgroundColor:"#eef3f7",webPreferences:{preload:path.join(__dirname,"preload.js"),contextIsolation:true,nodeIntegration:false}});win.loadFile(path.join(__dirname,"src","index.html"))}
+ipcMain.on("app:update-install",()=>autoUpdater.quitAndInstall(false,true));
+function updates(){
+ if(!app.isPackaged)return;
+ autoUpdater.autoDownload=true;
+ autoUpdater.autoInstallOnAppQuit=true;
+ autoUpdater.on("checking-for-update",()=>sendUpdate("checking"));
+ autoUpdater.on("update-available",i=>sendUpdate("available",{version:i.version}));
+ autoUpdater.on("update-not-available",()=>sendUpdate("none"));
+ autoUpdater.on("download-progress",p=>{
+  const got=(p.transferred/1024/1024).toFixed(1),total=(p.total/1024/1024).toFixed(1),percent=Math.max(0,Math.min(100,Math.round(p.percent||0)));
+  if(win&&!win.isDestroyed()){win.setProgressBar(percent/100);win.setTitle("А-Темир Строй Отчёт — обновление "+percent+"%")}
+  sendUpdate("downloading",{percent,got,total});
+ });
+ autoUpdater.on("update-downloaded",i=>{if(win&&!win.isDestroyed()){win.setProgressBar(-1);win.setTitle("А-Темир Строй Отчёт")}sendUpdate("ready",{version:i.version})});
+ autoUpdater.on("error",e=>{console.error("Auto update:",e.message);sendUpdate("error",{message:e.message})});
+ setTimeout(()=>autoUpdater.checkForUpdates().catch(e=>console.error("Update check:",e.message)),2500);
+}
+app.whenReady().then(()=>{create();updates()});app.on("window-all-closed",()=>{if(process.platform!=="darwin")app.quit()});app.on("activate",()=>{if(BrowserWindow.getAllWindows().length===0)create()});
