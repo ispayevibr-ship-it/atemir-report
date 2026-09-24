@@ -19,3 +19,6 @@
 
 /* v1.5.0 — v254 mounting scheme */
 .schemeUpload155{display:grid;gap:9px;margin-bottom:12px}.schemeUpload155 label{display:block;border:1px solid #bfd0dc;background:#fff;border-radius:9px;padding:10px}.schemeUpload155 label b{display:block}.schemeUpload155 label span{display:block;color:#758894;font-size:12px;margin:3px 0 7px}.schemeUpload155 input[type=file]{width:100%}.schemegrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.schememark{border-left:4px solid #c4cdd2}.schememark.done{border-left-color:#1c9b4a}.schememark.partial{border-left-color:#d39a24}@media(max-width:760px){.schemegrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* v1.9.0 — v254 report photos + deadline plan/fact */
+.reportPhotoEditor223{margin-top:14px;padding-top:12px;border-top:1px solid #d7e0e7}.reportPhotoEditor223 small{display:block;margin-top:7px;color:#667}.reportPhotoEditor223 .photothumb img{cursor:pointer}.deadlineLag{margin-top:18px}.lagCard{border:1px solid #d5dde7;border-radius:8px;padding:12px;margin:9px 0;background:#fff}.lagText{font-size:12px;color:#627483;margin:6px 0}.lagLine{height:10px;background:#e9eef2;border-radius:8px;overflow:hidden}.lagFill{height:100%;background:#4b8b67}.lagFill.behind{background:#b84b4b}.behindText{color:#a23535;font-weight:700;margin-top:6px}.okText{color:#277248;font-weight:700;margin-top:6px}
