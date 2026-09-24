@@ -1,6 +1,6 @@
 {
   "name": "atemir-report",
-  "version": "4.0.2",
+  "version": "4.1.0",
   "description": "Отчётность по объектам ТОО А-Темир Строй",
   "main": "main.js",
   "scripts": {
@@ -34,6 +34,7 @@
     ],
     "win": {
       "target": "nsis",
+      "icon": "build/icon.ico",
       "artifactName": "A-Temir-Stroy-Report-Setup-${version}.${ext}"
     },
     "nsis": {
@@ -41,7 +42,8 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "runAfterFinish": true
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false
     }
   }
 }

@@ -4,10 +4,11 @@ ipcMain.handle("report:pdf",async(_e,arg={})=>{let file=await dialog.showSaveDia
 let win;
 function sendUpdate(state,data={}){if(win&&!win.isDestroyed())win.webContents.send("app:update",{state,...data})}
 function create(){ipcMain.removeHandler("app:version");ipcMain.handle("app:version",()=>app.getVersion());win=new BrowserWindow({width:1500,height:930,minWidth:900,minHeight:650,autoHideMenuBar:true,backgroundColor:"#eef3f7",webPreferences:{preload:path.join(__dirname,"preload.js"),contextIsolation:true,nodeIntegration:false}});win.loadFile(path.join(__dirname,"src","index.html"))}
+ipcMain.on("app:update-download",()=>autoUpdater.downloadUpdate().catch(e=>sendUpdate("error",{message:e.message})));
 ipcMain.on("app:update-install",()=>autoUpdater.quitAndInstall(false,true));
 function updates(){
  if(!app.isPackaged)return;
- autoUpdater.autoDownload=true;
+ autoUpdater.autoDownload=false;
  autoUpdater.autoInstallOnAppQuit=true;
  autoUpdater.on("checking-for-update",()=>sendUpdate("checking"));
  autoUpdater.on("update-available",i=>sendUpdate("available",{version:i.version}));
