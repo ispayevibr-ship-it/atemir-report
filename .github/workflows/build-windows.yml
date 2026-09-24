@@ -27,7 +27,7 @@ jobs:
         shell: pwsh
         run: |
           $html = Get-Content src/index.html -Raw
-          $scripts = [regex]::Matches($html, '<script(?:\\s[^>]*)?>([\\s\\S]*?)</script>', 'IgnoreCase')
+          $scripts = [regex]::Matches($html, '<script(?:\s[^>]*)?>([\s\S]*?)</script>', 'IgnoreCase')
           if ($scripts.Count -eq 0) { throw "No inline scripts found in src/index.html" }
           $i = 0
           foreach ($script in $scripts) {
