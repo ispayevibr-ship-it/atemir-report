@@ -23,6 +23,20 @@ jobs:
           node --check preload.js
           node --check src/app.js
           node --check src/report-app.js
+      - name: Check inline JavaScript in index.html
+        shell: pwsh
+        run: |
+          $html = Get-Content src/index.html -Raw
+          $scripts = [regex]::Matches($html, '<script(?:\\s[^>]*)?>([\\s\\S]*?)</script>', 'IgnoreCase')
+          if ($scripts.Count -eq 0) { throw "No inline scripts found in src/index.html" }
+          $i = 0
+          foreach ($script in $scripts) {
+            $i++
+            $path = Join-Path $env:RUNNER_TEMP ("index-inline-" + $i + ".js")
+            Set-Content -Path $path -Value $script.Groups[1].Value -Encoding UTF8
+            node --check $path
+            if ($LASTEXITCODE -ne 0) { throw "Syntax error in src/index.html inline script #$i" }
+          }
       - name: Install dependencies
         run: npm install
       - name: Build Windows installer
