@@ -34,3 +34,14 @@
 
 /* v2.6 final audit */
 @media print{.workphotos,.photogrid{break-inside:avoid}.card{break-inside:avoid}}
+
+/* v3.3 usability */
+.multiCalendar{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.monthCard{background:#fff;border:1px solid #dbe4ea;border-radius:9px;padding:12px}
+.monthTitle{font-weight:800;margin-bottom:9px;text-transform:capitalize}
+.workCalendar{display:grid;grid-template-columns:repeat(7,minmax(28px,1fr));gap:5px}
+.calDay{min-height:34px;display:grid;place-items:center;background:#edf2f5;border-radius:6px;font-size:12px}
+.calDay.work{background:#d9ebf7;color:#174b73}.calDay.acted{background:#ffe7ae;color:#7b5b00}.calDay.both{background:#cfe8d6;color:#17613a;border:2px solid #e6b33a}
+.bomUploadRow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid #e5ebef}.bomUploadRow:first-of-type{border-top:0}.bomUploadRow label{margin:0}.bomUploadRow input{display:none}
+.progressGraphs{margin-top:18px;display:grid;gap:10px}.progressGraph{display:grid;grid-template-columns:minmax(180px,1fr) minmax(180px,2fr) 70px;gap:12px;align-items:center}.progressGraph>div:first-child{display:flex;flex-direction:column;gap:3px}.progressGraph span{font-size:11px;color:#718692}.progressTrack{height:13px;background:#e4ebef;border-radius:10px;overflow:hidden}.progressTrack i{display:block;height:100%;background:#6e93aa;border-radius:10px}.progressGraph strong{text-align:right}
+@media(max-width:760px){.progressGraph{grid-template-columns:1fr}.progressGraph strong{text-align:left}.bomUploadRow{align-items:flex-start;flex-direction:column}}
