@@ -34,7 +34,6 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "build/icon.ico",
       "artifactName": "A-Temir-Stroy-Report-Setup-${version}.${ext}"
     },
     "nsis": {
