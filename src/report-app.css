@@ -14,7 +14,7 @@
 .workphotos{margin-top:14px;padding-top:12px;border-top:1px solid #d5dde7}.workphotos .photoload{margin-top:10px}.workphotos small{display:block;margin-top:7px;color:#667}
 
 /* v1.2.0 — v254: photos belong to the whole report */
-#view .workphotos{display:none!important}
+
 .photoLightbox{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:30px}.photoLightbox img{max-width:94vw;max-height:90vh;object-fit:contain}.photoClose{position:absolute;right:22px;top:18px;width:42px;height:42px;border:0;border-radius:50%;font-size:30px;line-height:38px;cursor:pointer}
 
 /* v1.5.0 — v254 mounting scheme */
@@ -25,3 +25,6 @@
 
 /* v2.0.0 — source-aligned progress and dynamics */
 .progressTable{overflow:auto}.progressTable table{width:100%;border-collapse:collapse}.progressTable th,.progressTable td{padding:8px;border-bottom:1px solid #dce4e9;text-align:left}.chartCard .dyn{margin-top:10px}.chartCard .dyn>div{min-width:42px}.chartCard .dyn i{width:22px}
+
+/* v2.1.0 */
+.workphotos{display:block!important}.workphotos .photogrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:8px}.workphotos .photothumb{position:relative}.workphotos .photothumb img{width:100%;height:110px;object-fit:cover;border-radius:8px}.workphotos .photothumb button{position:absolute;right:5px;top:5px;border:0;border-radius:50%;width:26px;height:26px;cursor:pointer}
