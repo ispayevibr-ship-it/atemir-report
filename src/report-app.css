@@ -49,3 +49,11 @@
 /* v4 report structure */
 .recentReport{width:100%;display:grid;grid-template-columns:110px 1fr auto;gap:12px;align-items:center;text-align:left;border:1px solid #dbe4ea;background:#fff;border-radius:9px;padding:11px 13px;margin:7px 0;cursor:pointer}.recentReport:hover{background:#f5f9fc}.recentReport span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.recentReport small{color:#718692}.reportSaved,.workSaved{border-left:4px solid #5e8ba8}.reportSaveBar{position:sticky;bottom:8px;background:rgba(245,248,250,.94);padding:10px;border-radius:10px}.bomLoadState{min-width:120px;color:#567384;font-weight:700}
 @media(max-width:760px){.recentReport{grid-template-columns:1fr}.recentReport span{white-space:normal}}
+
+/* v4.5 object summary */
+.summaryPhotos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.summaryPhoto{position:relative;aspect-ratio:4/3;border:0;border-radius:9px;overflow:hidden;padding:0;cursor:pointer;background:#e8eef2}
+.summaryPhoto img{width:100%;height:100%;object-fit:cover;display:block}
+.summaryPhoto span{position:absolute;left:0;right:0;bottom:0;padding:7px 8px;background:rgba(10,31,47,.72);color:#fff;font-size:10px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.summaryLight{text-align:center;color:#fff}.summaryLight img{display:block;margin:auto}.summaryLight p{margin:10px 0}.summaryLight .primary{margin:auto}
+@media(max-width:760px){.summaryPhotos{grid-template-columns:repeat(2,minmax(0,1fr))}}
