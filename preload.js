@@ -1,1 +1,1 @@
-// А-Темир Строй: отдельный preload API не требуется.
+const {contextBridge,ipcRenderer}=require("electron");contextBridge.exposeInMainWorld("atemirDesktop",{savePdf:(arg)=>ipcRenderer.invoke("report:pdf",arg)});

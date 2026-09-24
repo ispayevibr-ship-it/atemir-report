@@ -107,7 +107,7 @@ async function prepareLegacyExport(print){
  localStorage.setItem("atemir_v9",JSON.stringify({...d,reportPhotos:d.reportPhotos||[]}));
  localStorage.setItem("atemir_scheme155",JSON.stringify(schemeState));
  let url="legacy-report.html?object="+encodeURIComponent(id)+(print?"&print=1":"");
- if(print){window.open(url,"_blank");return}
+ if(print){if(window.atemirDesktop&&window.atemirDesktop.savePdf){let fn="А-Темир_Строй_отчет_"+(d.reportDate||new Date().toISOString().slice(0,10))+".pdf";try{let r=await window.atemirDesktop.savePdf({objectId:id,filename:fn});if(r&&r.ok)alert("PDF сохранён:\n"+r.path)}catch(e){alert("Не удалось сохранить PDF: "+(e?.message||e))}return}window.open(url,"_blank");return}
  try{
   let src=await fetch("legacy-report.html").then(r=>r.text()),
       payload=JSON.stringify({...d,reportPhotos:d.reportPhotos||[]}).replace(/</g,"\\u003c"),
