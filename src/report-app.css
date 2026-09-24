@@ -31,3 +31,6 @@
 
 /* v2.3.0 — each completed work can own 12 photos */
 .workphotos{margin-top:12px;padding-top:10px;border-top:1px solid #dce4e9}
+
+/* v2.6 final audit */
+@media print{.workphotos,.photogrid{break-inside:avoid}.card{break-inside:avoid}}
