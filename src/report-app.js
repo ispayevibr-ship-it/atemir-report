@@ -102,7 +102,21 @@ function bind(){
  document.querySelectorAll("[data-bom]").forEach(inp=>inp.onchange=async()=>{let f=inp.files&&inp.files[0];if(!f)return;let bom;if(/\\.xlsx$/i.test(f.name))bom=await parseXlsx(f);else{let text=await f.text(),lines=text.split(/\\r?\\n/).filter(x=>x.trim()),sep=(lines[0]||"").includes(";")?";":(lines[0]||"").includes("\\t")?"\\t":",";bom=rowsToBom(lines.map(x=>x.split(sep).map(v=>v.trim().replace(/^"|"$/g,""))))}let t=d.tasks[+inp.dataset.bom];t.bom=bom;t.bomName=f.name;save();render()});
 
 }
-function legacy(print){localStorage.setItem("atemir_v9",JSON.stringify(d));location.href="legacy-report.html?object="+encodeURIComponent(id)+(print?"&print=1":"")}
+function exportName(){return "А-Темир_Строй_отчет_"+(d.reportDate||new Date().toISOString().slice(0,10))+".html"}
+async function prepareLegacyExport(print){
+ localStorage.setItem("atemir_v9",JSON.stringify({...d,reportPhotos:d.reportPhotos||[]}));
+ localStorage.setItem("atemir_scheme155",JSON.stringify(schemeState));
+ let url="legacy-report.html?object="+encodeURIComponent(id)+(print?"&print=1":"");
+ if(print){window.open(url,"_blank");return}
+ try{
+  let src=await fetch("legacy-report.html").then(r=>r.text()),
+      payload=JSON.stringify({...d,reportPhotos:d.reportPhotos||[]}).replace(/</g,"\\u003c"),
+      scheme=JSON.stringify(schemeState).replace(/</g,"\\u003c"),
+      inject='<script>try{localStorage.setItem("atemir_v9",JSON.stringify('+payload+'));localStorage.setItem("atemir_scheme155",JSON.stringify('+scheme+'))}catch(e){}<\\/script>';
+  src=src.replace(/<body([^>]*)>/i,'<body$1>'+inject);
+  let blob=new Blob([src],{type:"text/html;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=exportName();document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},700)
+ }catch(e){alert("Не удалось выгрузить HTML: "+(e?.message||e))}
+}
 $("#clearReport").onclick=async()=>{if(!confirm("Очистить отчёт этого объекта?"))return;d=blank();localStorage.removeItem(key);localStorage.removeItem(schemeKey);schemeState={drawingName:"",drawingType:"",drawingData:"",bomName:"",bom:[],filter:"all"};try{let db=await photoDb(),tx=db.transaction("photos","readwrite");tx.objectStore("photos").delete("object_"+id)}catch{}active="home";render();save()};
-$("#htmlExport").onclick=()=>legacy(false);$("#pdfExport").onclick=()=>legacy(true);render();loadPhotos();
+$("#htmlExport").onclick=()=>prepareLegacyExport(false);$("#pdfExport").onclick=()=>prepareLegacyExport(true);render();loadPhotos();
 })();
