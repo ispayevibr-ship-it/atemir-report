@@ -71,3 +71,6 @@
 
 /* v5.6 sidebar polish */
 aside{box-shadow:3px 0 14px #082b4b18}.brand{letter-spacing:.3px}.back{display:flex;align-items:center;justify-content:center;min-height:40px}.exports:before{content:"Выгрузка отчёта";font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:#9fb6c7;margin-bottom:2px}.exports button{transition:.15s}.exports button:hover{transform:translateY(-1px);background:#f5f8fa}nav button{transition:.15s}nav button:hover{background:#ffffff10}.exports #clearReport{background:#173f5f;color:#fff;border:1px solid #ffffff20}.exports #htmlExport,.exports #pdfExport{background:#f7fafc}@media(max-width:850px){.back{margin:8px 12px}.exports:before{grid-column:1/-1}}
+
+/* v5.12 calendar legend */
+.calendarLegend512{display:flex;gap:16px;flex-wrap:wrap;margin:0 0 12px;font-size:12px;color:#607786}.calendarLegend512 span{display:flex;align-items:center;gap:6px}.calendarLegend512 i{width:13px;height:13px;border-radius:4px;display:inline-block;border:1px solid #cad7df}.lgWork512{background:#dff3e7!important;border-color:#71b78a!important}.lgAct512{background:#fde3e3!important;border-color:#d77b7b!important}.lgBoth512{background:linear-gradient(135deg,#dff3e7 0 50%,#fde3e3 50% 100%)!important;border-color:#9daeb9!important}
