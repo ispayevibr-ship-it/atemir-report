@@ -22,3 +22,6 @@
 
 /* v1.9.0 — v254 report photos + deadline plan/fact */
 .reportPhotoEditor223{margin-top:14px;padding-top:12px;border-top:1px solid #d7e0e7}.reportPhotoEditor223 small{display:block;margin-top:7px;color:#667}.reportPhotoEditor223 .photothumb img{cursor:pointer}.deadlineLag{margin-top:18px}.lagCard{border:1px solid #d5dde7;border-radius:8px;padding:12px;margin:9px 0;background:#fff}.lagText{font-size:12px;color:#627483;margin:6px 0}.lagLine{height:10px;background:#e9eef2;border-radius:8px;overflow:hidden}.lagFill{height:100%;background:#4b8b67}.lagFill.behind{background:#b84b4b}.behindText{color:#a23535;font-weight:700;margin-top:6px}.okText{color:#277248;font-weight:700;margin-top:6px}
+
+/* v2.0.0 — source-aligned progress and dynamics */
+.progressTable{overflow:auto}.progressTable table{width:100%;border-collapse:collapse}.progressTable th,.progressTable td{padding:8px;border-bottom:1px solid #dce4e9;text-align:left}.chartCard .dyn{margin-top:10px}.chartCard .dyn>div{min-width:42px}.chartCard .dyn i{width:22px}
