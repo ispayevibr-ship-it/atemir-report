@@ -57,3 +57,10 @@
 .summaryPhoto span{position:absolute;left:0;right:0;bottom:0;padding:7px 8px;background:rgba(10,31,47,.72);color:#fff;font-size:10px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .summaryLight{text-align:center;color:#fff}.summaryLight img{display:block;margin:auto}.summaryLight p{margin:10px 0}.summaryLight .primary{margin:auto}
 @media(max-width:760px){.summaryPhotos{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* v4.6 structured daily report */
+.reportStructured{margin:14px 0;padding:14px;border:1px solid #dbe4ea;border-radius:10px;background:#f8fafb}
+.reportStructured h3{font-size:13px;margin:14px 0 7px}.reportStructured h3:first-child{margin-top:0}
+.minirow{display:grid;grid-template-columns:minmax(180px,2fr) minmax(100px,1fr) 42px;gap:8px;align-items:center;margin:7px 0}
+.minirow .danger{padding:8px 0}.reportNotes{margin:14px 0}.reportNotes textarea{width:100%;resize:vertical}
+@media(max-width:760px){.minirow{grid-template-columns:1fr 100px 42px}}
