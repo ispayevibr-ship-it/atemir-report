@@ -14,4 +14,44 @@ function render(){let el=document.getElementById("list");if(!objects.length){el.
 function compress(file){return new Promise((ok,no)=>{let im=new Image(),u=URL.createObjectURL(file);im.onload=()=>{let k=Math.min(1,1200/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL("image/jpeg",.84))};im.onerror=no;im.src=u})}
 function openModal(o){let edit=!!o,tempPhoto=o?.photo||"";document.body.insertAdjacentHTML("beforeend",'<div class="modal" id="modal"><div class="box"><h2>'+(edit?'Редактирование объекта':'Новый объект')+'</h2><label>Название объекта</label><input id="name" value="'+esc(o?.name||"")+'"><label>Заказчик</label><input id="client" value="'+esc(o?.client||"")+'"><label>Статус</label><select id="status"><option>В работе</option><option '+(o?.status==="Закончен"?"selected":"")+'>Закончен</option></select><label>Фото объекта</label><input id="photo" type="file" accept="image/*"><div class="photoPreview" id="preview">'+(tempPhoto?'<img src="'+tempPhoto+'">':'1 фото для обложки объекта')+'</div><div class="actions"><button class="btn white" id="cancel">Отмена</button><button class="btn yellow" id="saveObj">'+(edit?'Сохранить':'Создать объект')+'</button></div></div></div>');document.getElementById("cancel").onclick=()=>modal.remove();document.getElementById("photo").onchange=async e=>{let f=e.target.files[0];if(!f)return;tempPhoto=await compress(f);preview.innerHTML='<img src="'+tempPhoto+'">'};document.getElementById("saveObj").onclick=()=>{let name=document.getElementById("name").value.trim();if(!name)return alert("Укажите название объекта.");if(edit){o.name=name;o.client=client.value.trim();o.status=status.value;o.photo=tempPhoto}else objects.push({id:Date.now(),name,client:client.value.trim(),status:status.value,photo:tempPhoto});save();modal.remove();render()}}
 document.getElementById("add").onclick=()=>openModal(null);render();
-</script></body></html>
+</script>
+<script>
+(function(){
+ function e248(v){return String(v??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+ function n248(v){return Number(String(v??"").replace(",","."))||0}
+ function f248(v){return new Intl.NumberFormat("ru-RU",{maximumFractionDigits:2}).format(n248(v))}
+ function objectTotals248(o){
+   const reports=(o.reports||[]), works=reports.flatMap(r=>r.works||[]);
+   const project=(o.tasks||[]).reduce((s,x)=>s+n248(x.volume),0);
+   const done=works.reduce((s,x)=>s+n248(x.volume),0);
+   const last=reports.slice().sort((a,b)=>(a.date||"").localeCompare(b.date||"")).at(-1);
+   return {project,done,left:Math.max(0,project-done),pct:project?Math.min(100,done/project*100):0,
+     people:last?(last.workers||[]).reduce((s,x)=>s+n248(x.qty),0):0,
+     equipment:last?(last.equipment||[]).reduce((s,x)=>s+n248(x.qty),0):0,
+     reports:reports.length,last:last?.date||""};
+ }
+ function reportHTML248(){
+   const list=(typeof objects!=="undefined"&&Array.isArray(objects)?objects:[]);
+   const rows=list.map(o=>{const t=objectTotals248(o);return "<tr><td><b>"+e248(o.name)+"</b><br><small>"+e248(o.client||"—")+"</small></td><td>"+e248(o.status||"В работе")+"</td><td class='num'>"+f248(t.project)+"</td><td class='num'>"+f248(t.done)+"</td><td class='num'>"+f248(t.left)+"</td><td class='num'>"+f248(t.pct)+"%</td><td class='num'>"+f248(t.people)+"</td><td class='num'>"+f248(t.equipment)+"</td><td class='num'>"+t.reports+"</td><td>"+e248(t.last||"—")+"</td></tr>"}).join("");
+   const totals=list.map(objectTotals248);
+   const sum=k=>totals.reduce((s,x)=>s+n248(x[k]),0);
+   return "<!doctype html><html lang='ru'><head><meta charset='utf-8'><title>А-Темир Строй — сводный отчёт</title><style>body{font:14px Arial;margin:28px;color:#17202a}h1{color:#082b4b;margin:0 0 4px}.muted{color:#687785;margin-bottom:22px}.stats{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}.stat{border:1px solid #d9e0e6;border-radius:9px;padding:12px 16px;min-width:145px}.stat small{display:block;color:#687785}.stat b{font-size:20px;color:#082b4b}table{width:100%;border-collapse:collapse}th,td{border:1px solid #d9e0e6;padding:8px;text-align:left}th{background:#eef3f7;color:#082b4b}.num{text-align:right}small{color:#687785}@media print{body{margin:10mm}.noPrint{display:none}}</style></head><body><h1>ТОО «А-Темир Строй»</h1><div class='muted'>Сводный отчёт по всем объектам · сформирован "+new Date().toLocaleString("ru-RU")+"</div><div class='stats'><div class='stat'><small>Объектов</small><b>"+list.length+"</b></div><div class='stat'><small>Проектный объём</small><b>"+f248(sum("project"))+"</b></div><div class='stat'><small>Выполнено</small><b>"+f248(sum("done"))+"</b></div><div class='stat'><small>Людей сейчас</small><b>"+f248(sum("people"))+"</b></div><div class='stat'><small>Техники сейчас</small><b>"+f248(sum("equipment"))+"</b></div></div><table><thead><tr><th>Объект</th><th>Статус</th><th>Проект</th><th>Выполнено</th><th>Остаток</th><th>Готовность</th><th>Людей</th><th>Техники</th><th>Отчётов</th><th>Последний отчёт</th></tr></thead><tbody>"+(rows||"<tr><td colspan='10'>Объектов нет</td></tr>")+"</tbody></table></body></html>";
+ }
+ function download248(){
+   const blob=new Blob([reportHTML248()],{type:"text/html;charset=utf-8"});
+   const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="A-Temir-Stroy_Svodnyi-otchet_"+new Date().toISOString().slice(0,10)+".html";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+ }
+ function print248(){
+   const w=window.open("","_blank");if(!w){alert("Не удалось открыть окно печати.");return}
+   w.document.open();w.document.write(reportHTML248());w.document.close();setTimeout(()=>{w.focus();w.print()},250);
+ }
+ function inject248(){
+   const hero=document.querySelector(".hero"); if(!hero||document.getElementById("allExport248"))return;
+   const host=document.createElement("div");host.id="allExport248";host.className="actions";host.style.cssText="display:flex;gap:8px;flex-wrap:wrap";
+   host.innerHTML='<button class="btn white" type="button" id="allHtml248">Выгрузить HTML</button><button class="btn white" type="button" id="allPdf248">Печать / PDF</button>';
+   hero.appendChild(host);document.getElementById("allHtml248").onclick=download248;document.getElementById("allPdf248").onclick=print248;
+ }
+ const mo=new MutationObserver(()=>inject248());mo.observe(document.documentElement,{childList:true,subtree:true});setTimeout(inject248,0);
+})();
+</script>
+</body></html>
