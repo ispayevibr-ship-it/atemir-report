@@ -16,3 +16,6 @@
 /* v1.2.0 — v254: photos belong to the whole report */
 #view .workphotos{display:none!important}
 .photoLightbox{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:30px}.photoLightbox img{max-width:94vw;max-height:90vh;object-fit:contain}.photoClose{position:absolute;right:22px;top:18px;width:42px;height:42px;border:0;border-radius:50%;font-size:30px;line-height:38px;cursor:pointer}
+
+/* v1.5.0 — v254 mounting scheme */
+.schemeUpload155{display:grid;gap:9px;margin-bottom:12px}.schemeUpload155 label{display:block;border:1px solid #bfd0dc;background:#fff;border-radius:9px;padding:10px}.schemeUpload155 label b{display:block}.schemeUpload155 label span{display:block;color:#758894;font-size:12px;margin:3px 0 7px}.schemeUpload155 input[type=file]{width:100%}.schemegrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.schememark{border-left:4px solid #c4cdd2}.schememark.done{border-left-color:#1c9b4a}.schememark.partial{border-left-color:#d39a24}@media(max-width:760px){.schemegrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
