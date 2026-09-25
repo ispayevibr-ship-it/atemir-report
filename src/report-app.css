@@ -307,3 +307,16 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .deadlineProgress741{height:5px;background:#edf1f3;border-radius:8px;overflow:hidden;margin:7px 0 5px}
 .deadlineProgress741 i{display:block;height:100%;background:#27a66f;border-radius:8px}
 .deadlineItem741.late .deadlineProgress741 i,.deadlineItem741.critical .deadlineProgress741 i{background:#d85b5b}
+
+
+/* v6.25.12 compact deadline list */
+.deadlineList742{display:flex;flex-direction:column;gap:8px;max-height:340px;overflow:auto;padding-right:3px}
+.deadlineItem742{padding:9px 10px;border:1px solid #e1e7eb;border-radius:9px;background:#fff}
+.deadlineTitle742,.deadlineFoot742{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.deadlineTitle742 b{display:block;font-size:13px;color:#173b59}
+.deadlineTitle742 small,.deadlineFoot742 small{font-size:10px;color:#7a8995}
+.deadlineTitle742 strong{font-size:13px;color:#173b59}
+.deadlineBar742{height:5px;background:#edf1f3;border-radius:6px;overflow:hidden;margin:7px 0}
+.deadlineBar742 i{display:block;height:100%;background:#25a66f;border-radius:6px}
+.deadlineItem742.late .deadlineBar742 i{background:#d85b5b}
+.deadlineFoot742 span{font-size:11px;font-weight:700}
