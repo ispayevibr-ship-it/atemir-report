@@ -1,6 +1,6 @@
 {
   "name": "atemir-report",
-  "version": "5.84.0",
+  "version": "5.85.0",
   "description": "Отчётность по объектам ТОО А-Темир Строй",
   "main": "main.js",
   "scripts": {
