@@ -386,3 +386,24 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .recentReport722:nth-of-type(even) .recentReportBody722{background:#f7f9fb}
 .recentReport722:nth-of-type(even)>summary:hover{background:#edf3f7}
 .recentReport722:nth-of-type(odd)>summary:hover{background:#f8fafb}
+
+/* dashboard compact layout v6.25.22 */
+.recentReport722:first-of-type[open] .firstReportBrief747{display:none!important}
+.recentReport722:first-of-type:not([open]) .firstReportBrief747{display:flex!important}
+.scheduleFull747{width:100%}
+.calendarPhotos747{grid-template-columns:minmax(300px,.72fr) minmax(0,1.28fr)!important;align-items:stretch!important}
+.calendarPhotos747>div,.calendarPhotos747 .card{min-width:0;height:100%}
+.marksCompact747 .marksGroups736{gap:8px!important}
+.marksCompact747 .marksGroup736{padding:8px 10px!important;border-radius:9px!important}
+.marksCompact747 .marksGroupHead736{margin-bottom:7px!important;min-height:24px!important}
+.marksCompact747 .marksGroupHead736 b{font-size:13px!important}
+.marksCompact747 .marksGroupHead736 span{font-size:11px!important}
+.marksCompact747 .marksCards736{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:6px!important}
+.marksCompact747 .markCard736{padding:6px 8px!important;min-height:52px!important;border-left-width:3px!important}
+.marksCompact747 .markCardTop736>b{font-size:12px!important;margin-bottom:2px!important}
+.marksCompact747 .markCardTop736>span{font-size:10px!important;line-height:1.15!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.marksCompact747 .markCardTop736>small{font-size:9px!important;margin-top:4px!important}
+.marksCompact747 .marksMore736{margin-top:6px!important}
+.marksCompact747 .marksMore736 .white{padding:5px 8px!important;font-size:10px!important}
+@media(max-width:1250px){.marksCompact747 .marksCards736{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
+@media(max-width:900px){.calendarPhotos747{grid-template-columns:1fr!important}.marksCompact747 .marksCards736{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
