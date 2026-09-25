@@ -213,8 +213,12 @@ function planFactChart737(){
     const idx=months.findIndex(m=>m.getFullYear()===dm.getFullYear()&&m.getMonth()===dm.getMonth());
     if(idx>lastFactMonth)lastFactMonth=idx;
   });
-  const factPts=lastFactMonth>=0?pts.slice(0,lastFactMonth+1):[];
-  const chartPts=k=>(k==="fact"?factPts:pts);
+  const startMonthIndex=months.findIndex(m=>m.getFullYear()===start.getFullYear()&&m.getMonth()===start.getMonth());
+  const startMonthDays=Math.max(1,new Date(start.getFullYear(),start.getMonth()+1,0).getDate());
+  const startX=startMonthIndex<0?8:(months.length===1?8:8+(startMonthIndex+Math.max(0,(start.getDate()-1)/startMonthDays))*(84/(months.length-1)));
+  const planPts=[{x:startX,plan:0,fact:0},...pts.slice(Math.max(0,startMonthIndex)).filter(p=>p.x>startX)];
+  const factPts=lastFactMonth>=0?[{x:startX,plan:0,fact:0},...pts.slice(Math.max(0,startMonthIndex),lastFactMonth+1).filter(p=>p.x>startX)]:[];
+  const chartPts=k=>(k==="fact"?factPts:planPts);
   const poly=k=>chartPts(k).map(p=>p.x+","+(92-p[k]*.72)).join(" ");
   const dots=k=>chartPts(k).map(p=>'<circle cx="'+p.x+'" cy="'+(92-p[k]*.72)+'" r="1.15" vector-effect="non-scaling-stroke"></circle>').join("");
   const labels=pts.map(p=>'<span style="left:'+p.x+'%">'+p.label+'</span>').join("");
