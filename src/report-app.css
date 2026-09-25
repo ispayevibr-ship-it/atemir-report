@@ -285,3 +285,12 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .planFactFilter739 label{font-size:12px;font-weight:600;color:#526a7d;white-space:nowrap}
 .planFactFilter739 select{min-width:320px;max-width:560px;height:36px;border:1px solid #cfd9e0;border-radius:8px;background:#fff;padding:0 34px 0 10px;color:#173b59;font-weight:600}
 @media(max-width:760px){.planFactFilter739{align-items:stretch;flex-direction:column}.planFactFilter739 select{min-width:0;max-width:none;width:100%}}
+
+
+/* v6.25.8 plan/fact + deadlines row */
+.planDeadline740{grid-template-columns:minmax(0,1.65fr) minmax(300px,.85fr)!important;align-items:stretch!important}
+.planDeadline740>div,.planDeadline740>div>.card{min-width:0;height:100%}
+.planDeadline740 .chartArea737{height:235px!important}
+.planDeadline740 .chartArea737 svg{height:200px!important}
+.planDeadline740 .planFactFilter739 select{min-width:220px;max-width:430px}
+@media(max-width:1050px){.planDeadline740{grid-template-columns:1fr!important}}
