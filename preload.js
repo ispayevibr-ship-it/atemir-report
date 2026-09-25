@@ -10,7 +10,7 @@ function updaterUi(){versionBadge();
   box.style.display="block";
   if(x.state==="available"){title.textContent="Есть обновление до версии "+x.version;txt.textContent="Скачать обновление сейчас? Программу можно продолжать использовать.";track.style.display="none";btn.style.display="none";actions.style.display="flex"}
   if(x.state==="downloading"){actions.style.display="none";title.textContent="Скачиваем обновление";txt.textContent=x.got+" МБ из "+x.total+" МБ — "+x.percent+"%";track.style.display="block";bar.style.width=x.percent+"%";btn.style.display="none"}
-  if(x.state==="ready"){actions.style.display="none";title.textContent="Обновление "+x.version+" скачано";txt.textContent="Всё готово. Нажмите кнопку — программа установит обновление и сама перезапустится.";track.style.display="none";btn.style.display="block"}
+  if(x.state==="ready"){actions.style.display="none";title.textContent="Обновление "+x.version+" скачано";txt.textContent="Обновление скачано. Сейчас программа установит его автоматически.";track.style.display="block";bar.style.width="100%";btn.style.display="none"}
   if(x.state==="installing"){actions.style.display="none";title.textContent="Программа обновляется";txt.textContent="Пожалуйста, подождите. Программа установит обновление и автоматически перезапустится.";track.style.display="block";bar.style.width="100%";btn.style.display="none"}
   if(x.state==="error"){title.textContent="Не удалось проверить обновление";txt.textContent="Программа продолжит работать. Проверим снова при следующем запуске.";track.style.display="none";btn.style.display="none";setTimeout(()=>box.style.display="none",6000)}
  });
