@@ -113,3 +113,6 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 
 /* v6.16 sidebar logo fills its slot */
 .brand{background:#fff;min-height:118px;height:118px;padding:0}.brand img{width:100%;height:100%;max-height:none;object-fit:cover;object-position:center}.brand:not(:has(img)){background:#0d3556}
+
+/* v6.16.1: logo and company name are mutually exclusive */
+.brand.hasLogo716{padding:0!important;background:#fff!important;color:transparent!important;font-size:0!important;line-height:0!important}.brand.hasLogo716::before,.brand.hasLogo716::after{content:none!important;display:none!important}.brand.hasLogo716 img{display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;margin:0!important}.brand:not(.hasLogo716){padding:20px 18px!important;height:auto;min-height:76px;background:#0d3556;color:#fff;font-size:18px;line-height:1.25;justify-content:flex-start;text-align:left}
