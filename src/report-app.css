@@ -355,3 +355,20 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .deadlineDonutText744>small,.deadlineDonutText744>span{display:block;margin-top:3px;font-size:9px;line-height:1.25;color:#7c8994}
 .deadlineDonutText744>span{font-size:10px;font-weight:700}
 @media(max-width:1250px){.deadlineDonuts744{grid-template-columns:1fr}}
+
+
+/* v6.25.18 large deadline donuts */
+.planDeadline740{grid-template-columns:minmax(0,1.15fr) minmax(480px,1fr)!important}
+.deadlineDonuts745{display:grid;grid-template-columns:repeat(2,minmax(190px,1fr));gap:14px;padding:8px 14px 14px;max-height:500px;overflow:auto}
+.deadlineDonutCard745{display:flex;justify-content:center;align-items:center;min-width:0;padding:8px}
+.deadlineDonut745{--ring:#2b78bd;width:190px;height:190px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--ring) calc(var(--p)*1%),#e8eef2 0);position:relative;box-shadow:0 0 0 1px #e5eaee}
+.deadlineDonut745:after{content:"";position:absolute;inset:12px;border-radius:50%;background:#fff}
+.deadlineDonut745.late745{--ring:#d95b5b}.deadlineDonut745.done745{--ring:#27a66f}
+.deadlineInside745{position:relative;z-index:1;width:145px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px}
+.deadlineInside745>b{max-width:138px;font-size:12px;line-height:1.15;color:#173b59;overflow-wrap:normal;word-break:normal}
+.deadlineInside745>strong{font-size:21px;line-height:1.05;color:#173b59;margin:3px 0}
+.deadlineInside745>small{font-size:9px;line-height:1.2;color:#7c8994;max-width:140px}
+.deadlineInside745>span{font-size:10px;line-height:1.15;font-weight:700;max-width:140px}
+@media(max-width:1250px){.planDeadline740{grid-template-columns:1fr!important}.deadlineDonuts745{grid-template-columns:repeat(3,minmax(180px,1fr))}}
+@media(max-width:850px){.deadlineDonuts745{grid-template-columns:repeat(2,minmax(180px,1fr))}}
+@media(max-width:560px){.deadlineDonuts745{grid-template-columns:1fr}}
