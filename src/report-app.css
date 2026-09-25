@@ -102,3 +102,9 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .workCalendar{grid-auto-rows:42px;align-items:stretch}.calHead{height:24px;min-height:24px;align-self:center}.calDay{height:42px;min-height:42px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;padding:0}.calDay.empty{height:42px;min-height:42px}
 
 .bomGroupHead{display:flex;justify-content:space-between;align-items:center;margin:18px 0 8px;padding:10px 12px;background:#eaf3ff;border-left:4px solid #1677e8;border-radius:8px}.bomGroupHead span{color:#587083;font-size:13px}
+
+/* compact searchable mark picker */
+.markSuggest713{position:absolute;z-index:40;left:0;right:0;top:100%;max-height:250px;overflow:auto;background:#fff;border:1px solid #d8e0e6;border-radius:0 0 10px 10px;box-shadow:0 10px 24px rgba(0,0,0,.14)}
+.markSuggest713 button{width:100%;display:grid;grid-template-columns:minmax(70px,110px) 1fr;gap:12px;text-align:left;padding:9px 12px;border:0;border-bottom:1px solid #eef2f4;background:#fff;color:#17202a;cursor:pointer}
+.markSuggest713 button:hover{background:#f3f6f8}.markSuggest713 button span{color:#687785;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+[data-mark-search713]{position:relative}div:has(>[data-mark-search713]){position:relative}
