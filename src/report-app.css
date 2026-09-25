@@ -515,3 +515,15 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .marksTableRow751.done{background:#e5f5ea!important;box-shadow:inset 4px 0 0 #238443}
 .marksTableRow751.done b:first-child{text-decoration:underline;text-decoration-color:#238443;text-decoration-thickness:2px;text-underline-offset:3px}
 @media(max-width:900px){.schedule248{grid-template-columns:1fr;gap:8px}.scheduleNums248{text-align:left;padding-right:0}}
+
+/* keep deadline control inside card v6.25.41 */
+.deadlineRich750{grid-template-columns:minmax(225px,.78fr) minmax(0,1.22fr)!important;gap:14px!important;padding-left:8px;padding-right:8px;box-sizing:border-box}
+.deadlineSide756{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;min-width:0}
+.deadlineSide756>div{padding:9px 10px;overflow:hidden}
+.deadlineSide756 b{font-size:12px;overflow-wrap:anywhere}
+.deadlineAnalytics754{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;min-width:0}
+.deadlineAnalytics754>div{padding:8px;overflow:hidden}
+.deadlineAnalytics754 b{font-size:11px;overflow-wrap:anywhere}
+.deadlineDonut745{min-width:0}
+@media(max-width:1100px){.deadlineRich750{grid-template-columns:1fr!important}.deadlineSide756{grid-template-columns:repeat(2,minmax(0,1fr))}.deadlineAnalytics754{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.deadlineSide756,.deadlineAnalytics754{grid-template-columns:1fr}}
