@@ -534,3 +534,8 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .chartTypeLegend757 span{display:flex;align-items:center;gap:6px}
 .chartTypeLegend757 i{display:block;width:20px;border-top:2px solid #667781}
 .chartTypeLegend757 .supply757 i{border-top-style:dashed}
+
+/* center deadline selector v6.25.46 */
+.deadlineFilter746{margin-left:auto!important;margin-right:auto!important;justify-content:center!important;max-width:630px;width:calc(100% - 32px);box-sizing:border-box}
+.deadlineFilter746 label{flex:0 0 auto}
+.deadlineFilter746 select{min-width:0;flex:1 1 auto}
