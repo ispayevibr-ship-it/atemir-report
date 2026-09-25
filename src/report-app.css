@@ -157,3 +157,6 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 
 /* v6.23.2 grouped daily report totals */
 .recentWorkFull724 .recentWorkGrid724+.recentWorkGrid724{border-top:1px solid #edf1f4;padding-top:10px;margin-top:10px}.recentWorkTotal731{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:10px;padding:10px 12px;border-radius:9px;background:#f1f6f9;color:#173b59}.recentWorkTotal731 span{font-weight:800}.recentWorkTotal731 strong{white-space:nowrap}
+
+/* v6.23.4 readiness in one column */
+.readyCell732{display:flex;align-items:center;gap:10px;min-width:190px}.readyCell732 .readyBar730{flex:1;width:auto;min-width:120px}.readyCell732 b{min-width:34px;text-align:right;color:#173b59;font-size:13px}.progressTable td:last-child{min-width:200px}
