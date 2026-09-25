@@ -123,15 +123,17 @@ function deadlineAlerts528(){
     '<small>Срок '+esc(tasks.map(t=>t.date).sort().at(-1)||"")+'</small>'+
     '<small>'+qtyFmt723(fact,2)+' / '+qtyFmt723(volume,2)+' '+esc(unit)+'</small>'+
     '</div></div>'+
+    '<div class="deadlineSide756">'+
+      '<div><small>Срок работ</small><b>'+(startStr?esc(dateDmy756(startStr)):"—")+' → '+esc(dateDmy756(endStr))+'</b></div>'+
+      '<div><small>Прошло времени</small><b>'+elapsedDays+' из '+totalDays+' дней · '+planPct.toFixed(0)+'%</b></div>'+
+      '<div><small>Плановая готовность</small><b>'+planPct.toFixed(1)+'%</b></div>'+
+      '<div><small>Фактическая готовность</small><b>'+factPctRaw.toFixed(1)+'%</b></div>'+
+    '</div>'+
     '<div class="deadlineBottom752">'+
       (over>0?'<div class="deadlineNotice752 deadlineGood752"><small>Перевыполнено</small><b>+'+qtyFmt723(over,2)+' '+esc(unit)+'</b><span>Сверх проектного объёма</span></div>':'')+
       (left<0&&pct<100?'<div class="deadlineNotice752 deadlineBad752"><small>Просрочка</small><b>'+Math.abs(left)+' дн.</b><span>Осталось '+qtyFmt723(Math.max(0,volume-rawFact),2)+' '+esc(unit)+'</span></div>':'')+
     '</div>'+
     '<div class="deadlineAnalytics754">'+
-      '<div><small>Срок работ</small><b>'+(startStr?esc(dateDmy756(startStr)):"—")+' → '+esc(dateDmy756(endStr))+'</b></div>'+
-      '<div><small>Прошло времени</small><b>'+elapsedDays+' из '+totalDays+' дней · '+planPct.toFixed(0)+'%</b></div>'+
-      '<div><small>Плановая готовность</small><b>'+planPct.toFixed(1)+'%</b></div>'+
-      '<div><small>Фактическая готовность</small><b>'+factPctRaw.toFixed(1)+'%</b></div>'+
       '<div class="'+(deviation<0?'deadlineBad752':deviation>0?'deadlineGood752':'')+'"><small>Отклонение</small><b>'+(deviation>0?"+":"")+deviation.toFixed(1)+'%</b><span>'+(deviation<0?"Отставание":deviation>0?"Опережение":"По плану")+'</span></div>'+
       '<div><small>Осталось до срока</small><b>'+(left<0?"Срок прошёл":left+" дней")+'</b></div>'+
       '<div class="'+(forecastDelta>0?'deadlineBad752':forecastDate?'deadlineGood752':'')+'"><small>Прогноз завершения</small><b>'+fmtDate(forecastDate)+'</b><span>'+(forecastDate?(forecastDelta>0?"+"+forecastDelta+" дн. к сроку":forecastDelta<0?Math.abs(forecastDelta)+" дн. раньше срока":"В срок"):"Недостаточно данных")+'</span></div>'+
