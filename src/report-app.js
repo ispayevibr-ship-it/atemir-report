@@ -290,8 +290,8 @@ function render(){
  bind();
 }
 function bind(){
- document.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{active=b.dataset.v;render()});
- let editDeadlines537=document.querySelector("[data-edit-task-deadlines537]");if(editDeadlines537)editDeadlines537.onclick=()=>{active="tasks";render()};
+ document.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{active=b.dataset.v;window.scrollTo({top:0,left:0,behavior:"instant"});document.documentElement.scrollTop=0;document.body.scrollTop=0;render()});
+ let editDeadlines537=document.querySelector("[data-edit-task-deadlines537]");if(editDeadlines537)editDeadlines537.onclick=()=>{active="tasks";window.scrollTo({top:0,left:0,behavior:"instant"});document.documentElement.scrollTop=0;document.body.scrollTop=0;render()};
  document.querySelectorAll("[data-mark-search715]").forEach(inp=>{let [di,ii]=inp.dataset.markSearch715.split(":").map(Number),sel=document.querySelector('[data-mark-select715="'+di+':'+ii+'"]');if(!sel)return;let all=[...sel.options].map(o=>({value:o.value,text:o.textContent,cls:o.className}));inp.oninput=()=>{let q=inp.value.trim().toLowerCase(),cur=sel.value;sel.innerHTML=all.filter((o,i)=>i===0||!q||o.text.toLowerCase().includes(q)).map(o=>'<option value="'+esc(o.value)+'"'+(o.value===cur?' selected':'')+(o.cls?' class="'+esc(o.cls)+'"':'')+'>'+esc(o.text)+'</option>').join("")};});
  document.querySelectorAll("[data-field]").forEach(e=>e.oninput=()=>{let p=e.dataset.field.split("."),o=d;for(let i=0;i<p.length-1;i++)o=o[p[i]];o[p.at(-1)]=e.value;save()});
  document.querySelectorAll("[data-item]").forEach(e=>e.oninput=()=>{let [n,i,k]=e.dataset.item.split(":");d[n][+i][k]=e.value;save()});
