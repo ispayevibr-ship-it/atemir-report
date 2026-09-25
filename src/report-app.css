@@ -320,3 +320,22 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .deadlineBar742 i{display:block;height:100%;background:#25a66f;border-radius:6px}
 .deadlineItem742.late .deadlineBar742 i{background:#d85b5b}
 .deadlineFoot742 span{font-size:11px;font-weight:700}
+
+
+/* v6.25.15 deadline chart */
+.deadlineChart743{display:flex;flex-direction:column;gap:0;max-height:360px;overflow:auto;padding:4px 12px 8px 4px}
+.deadlineRow743{display:grid;grid-template-columns:minmax(125px,.9fr) minmax(150px,1.35fr);gap:16px;padding:13px 8px;border-bottom:1px solid #edf1f4;align-items:center}
+.deadlineRow743:last-child{border-bottom:0}
+.deadlineLabel743{min-width:0;padding-left:2px}
+.deadlineLabel743 b{display:block;font-size:13px;line-height:1.25;color:#173b59;overflow-wrap:anywhere}
+.deadlineLabel743 small{display:block;margin-top:4px;font-size:10px;line-height:1.25;color:#7c8a95}
+.deadlineVisual743{min-width:0;padding-right:3px}
+.deadlinePct743{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.deadlinePct743 strong{font-size:13px;color:#173b59}
+.deadlinePct743 span{font-size:11px;font-weight:700;text-align:right}
+.deadlineTrack743{height:9px;background:#edf1f4;border-radius:999px;overflow:hidden}
+.deadlineTrack743 i{display:block;height:100%;border-radius:999px;background:#2b78bd}
+.deadlineTrack743 i.lateBar743{background:#d95b5b}
+.deadlineTrack743 i.doneBar743{background:#27a66f}
+.deadlineVisual743>small{display:block;margin-top:5px;font-size:10px;color:#7c8a95;text-align:right}
+@media(max-width:720px){.deadlineRow743{grid-template-columns:1fr;gap:8px}.deadlineVisual743>small{text-align:left}}
