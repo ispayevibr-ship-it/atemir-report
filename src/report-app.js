@@ -241,7 +241,7 @@ function planFactChart737(){
       const mounted=group.reduce((s,t)=>s+Math.min(num(t.volume),workDone(t,new Date(8640000000000000))),0);
       const supplied=group.reduce((s,t)=>s+Math.min(num(t.volume),delivered(t)),0);
       const planned=group.reduce((s,t)=>{
-        const v=num(t.volume),a=parseDate(t.start),b=parseDate(t.date||t.end);
+        const v=num(t.volume),a=new Date(t.start+"T12:00:00"),b=new Date((t.date||t.end)+"T12:00:00");
         if(!v||!a||!b)return s;
         const den=Math.max(1,b-a),p=now<=a?0:now>=b?1:Math.max(0,Math.min(1,(now-a)/den));
         return s+v*p;
