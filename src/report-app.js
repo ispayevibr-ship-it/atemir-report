@@ -95,6 +95,24 @@ function deadlineAlerts528(){
   const unit=tasks[0]&&tasks[0].unit||"";
   const title=selected?selected.type:"Работа";
   const code=selected?selected.code:"Без шифра";
+  const starts=tasks.map(t=>t.start).filter(Boolean).sort();
+  const startStr=starts[0]||"";
+  const endStr=tasks.map(t=>t.date).filter(Boolean).sort().at(-1)||"";
+  const start=startStr?new Date(startStr+"T12:00:00"):null;
+  const totalDays=start?Math.max(1,Math.floor((end-start)/86400000)+1):0;
+  const elapsedDays=start?Math.max(0,Math.min(totalDays,Math.floor((td-start)/86400000)+1)):0;
+  const planPct=totalDays?Math.min(100,elapsedDays/totalDays*100):0;
+  const factPctRaw=volume?rawFact/volume*100:0;
+  const deviation=factPctRaw-planPct;
+  const workedDays=[...new Set(savedWorkDays574().filter(day=>day.date&&(!startStr||day.date>=startStr)&&(!endStr||day.date<=endStr)&&(day.items||[]).some(x=>String(x.type||"")===String(title||"")&&String(x.code||"")===String(code||""))).map(day=>day.date))].length;
+  const actualRate=workedDays?rawFact/workedDays:0;
+  const remaining=Math.max(0,volume-rawFact);
+  const calendarLeft=Math.max(0,left);
+  const requiredRate=calendarLeft?remaining/calendarLeft:remaining;
+  const forecastDays=actualRate>0?Math.ceil(remaining/actualRate):0;
+  const forecastDate=actualRate>0?new Date(td.getTime()+forecastDays*86400000):null;
+  const fmtDate=x=>x?String(x.getDate()).padStart(2,"0")+"."+String(x.getMonth()+1).padStart(2,"0")+"."+x.getFullYear():"—";
+  const forecastDelta=forecastDate?Math.ceil((forecastDate-end)/86400000):0;
 
   return '<div class="planFactFilter739 deadlineFilter746"><label>Показать контроль по</label><select id="deadlineFilter746">'+opts+'</select></div>'+
     '<div class="deadlineDonuts745 deadlineSingle746"><div class="deadlineDonutCard745 deadlineRich750">'+
@@ -113,6 +131,16 @@ function deadlineAlerts528(){
       (over>0?'<div class="deadlineNotice752 deadlineGood752"><small>Перевыполнено</small><b>+'+qtyFmt723(over,2)+' '+esc(unit)+'</b><span>Сверх проектного объёма</span></div>':'')+
       (left<0&&pct<100?'<div class="deadlineNotice752 deadlineBad752"><small>Просрочка</small><b>'+Math.abs(left)+' дн.</b><span>Осталось '+qtyFmt723(Math.max(0,volume-rawFact),2)+' '+esc(unit)+'</span></div>':'')+
       '<div class="deadlineNotice752"><small>Проектный объём</small><b>'+qtyFmt723(volume,2)+' '+esc(unit)+'</b><span>'+esc(title)+' · '+esc(code)+'</span></div>'+
+    '</div>'+
+    '<div class="deadlineAnalytics754">'+
+      '<div><small>Срок работ</small><b>'+(startStr?esc(startStr):"—")+' → '+esc(endStr)+'</b></div>'+
+      '<div><small>Прошло времени</small><b>'+elapsedDays+' из '+totalDays+' дней · '+planPct.toFixed(0)+'%</b></div>'+
+      '<div><small>Плановая готовность</small><b>'+planPct.toFixed(1)+'%</b></div>'+
+      '<div><small>Фактическая готовность</small><b>'+factPctRaw.toFixed(1)+'%</b></div>'+
+      '<div class="'+(deviation<0?'deadlineBad752':deviation>0?'deadlineGood752':'')+'"><small>Отклонение</small><b>'+(deviation>0?"+":"")+deviation.toFixed(1)+'%</b><span>'+(deviation<0?"Отставание":deviation>0?"Опережение":"По плану")+'</span></div>'+
+      '<div><small>Осталось до срока</small><b>'+(left<0?"Срок прошёл":left+" дней")+'</b></div>'+
+      '<div class="'+(forecastDelta>0?'deadlineBad752':forecastDate?'deadlineGood752':'')+'"><small>Прогноз завершения</small><b>'+fmtDate(forecastDate)+'</b><span>'+(forecastDate?(forecastDelta>0?"+"+forecastDelta+" дн. к сроку":forecastDelta<0?Math.abs(forecastDelta)+" дн. раньше срока":"В срок"):"Недостаточно данных")+'</span></div>'+
+      '<div><small>Темп выполнения</small><b>'+qtyFmt723(actualRate,2)+' / '+qtyFmt723(requiredRate,2)+' '+esc(unit)+'/день</b><span>Факт / необходимо</span></div>'+
     '</div></div></div>';
 }
 function objectSchedule248(){let today=d.reportDate||new Date().toISOString().slice(0,10),num=v=>parseFloat(String(v??"").replace(",","."))||0,total=(q,p)=>num(q)*(num(p)||1),done=t=>savedWorkDays574().reduce((s,day)=>s+(day.items||[]).filter(x=>((x.taskId&&t.id)?String(x.taskId)===String(t.id):(String(x.type||"")===String(t.type||"")&&String(x.code||"")===String(t.code||"")&&(!t.unit||!x.unit||String(x.unit)===String(t.unit))))).reduce((a,x)=>a+total(x.qty,x.per),0),0),rows=d.tasks.filter(t=>t.start&&t.date&&num(t.volume)>0).map(t=>{let st=new Date(t.start+"T12:00:00"),en=new Date(t.date+"T12:00:00"),td=new Date(today+"T12:00:00"),days=Math.max(1,Math.floor((en-st)/86400000)+1),elapsed=td<st?0:td>en?days:Math.floor((td-st)/86400000)+1,plan=Math.min(num(t.volume),num(t.volume)/days*elapsed),fact=done(t),delta=fact-plan,pct=num(t.volume)?Math.max(0,Math.min(100,fact/num(t.volume)*100)):0,rate=num(t.volume)/days,dayDelta=rate?delta/rate:0,status=Math.abs(delta)<.0001?"По плану":delta<0?"Отставание":"Опережение",dayText=Math.abs(dayDelta)<.05?"":" · "+Math.abs(dayDelta).toFixed(1)+" дн.";return '<div class="schedule248"><div><b>'+esc(t.type||"Работа")+'</b><small>'+esc(t.code||"Без шифра")+' · '+esc(t.start)+' → '+esc(t.date)+'</small></div><div class="scheduleTrack248"><i style="width:'+pct+'%"></i></div><div class="scheduleNums248"><b>'+pct.toFixed(1)+'%</b><span class="'+(delta<-.0001?'late248':delta>.0001?'ahead248':'')+'">'+status+(status==="По плану"?"":" "+qtyFmt723(Math.abs(delta),2)+" "+esc(t.unit||"")+dayText)+'</span><small>План на '+esc(today)+': '+qtyFmt723(plan,2)+' · факт: '+qtyFmt723(fact,2)+' '+esc(t.unit||"")+'</small></div></div>'}).join("");return rows||'<div class="empty">Чтобы увидеть график, задайте для вида работ проектный объём, дату начала и дату окончания.</div>'}
