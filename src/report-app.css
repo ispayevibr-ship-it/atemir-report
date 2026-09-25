@@ -215,3 +215,31 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .markCardDone736{border-left-color:#22ad72!important}
 .markCardDone736 .markCardTop736>small{color:#607b6e}
 .markCardMeta736{display:none!important}
+
+
+/* v6.25.2 dashboard clarity */
+.heroTitle551 h2{font-size:20px!important;line-height:1.18!important;font-weight:700!important}
+.recentBrief735{display:flex!important;flex-wrap:wrap;gap:6px 8px!important;margin-top:7px!important}
+.recentBriefItem737{display:inline-flex;align-items:center;gap:7px;padding:5px 9px;border:1px solid #e1e8ed;border-radius:8px;background:#f8fafb;color:#526a7d;font-size:12px}
+.recentBriefItem737 b{color:#29465f;font-weight:600}
+.recentBriefItem737 strong{color:#173b59;font-weight:600}
+.recentBriefItem737 i{width:1px;height:12px;background:#d5dfe6}
+.statusKpi737 b{display:flex!important;align-items:center;gap:7px;font-size:17px!important}
+.statusIcon737{display:inline-flex;align-items:center;justify-content:center;width:23px;height:23px;border-radius:50%;font-size:12px}
+.statusKpi737.work737 .statusIcon737{background:#dcf5e8;color:#17834f}
+.statusKpi737.work737 b{color:#17834f!important}
+.statusKpi737.closed737 .statusIcon737{background:#e7edf2;color:#536979}
+.statusKpi737.closed737 b{color:#536979!important}
+.planFact737{padding:4px 8px 12px}
+.chartLegend737{display:flex;justify-content:flex-end;gap:22px;font-size:13px;font-weight:600;margin:0 16px 4px}
+.plan737{color:#2575c4}.fact737{color:#24a76b}
+.chartArea737{position:relative;height:260px;padding-left:48px;padding-bottom:30px}
+.chartArea737 svg{position:absolute;left:48px;right:0;top:0;width:calc(100% - 48px);height:225px;overflow:visible}
+.grid737 line{stroke:#dfe6eb;stroke-width:.5}
+.linePlan737,.lineFact737{fill:none;stroke-width:1.5;vector-effect:non-scaling-stroke}
+.linePlan737{stroke:#2575c4}.lineFact737{stroke:#24a76b}
+.dotsPlan737 circle{fill:#2575c4}.dotsFact737 circle{fill:#24a76b}
+.yLabels737{position:absolute;left:0;top:7px;height:190px;display:flex;flex-direction:column;justify-content:space-between;color:#718290;font-size:11px}
+.xLabels737{position:absolute;left:48px;right:0;bottom:2px;height:22px}
+.xLabels737 span{position:absolute;transform:translateX(-50%);font-size:11px;color:#718290}
+@media(max-width:900px){.heroTitle551 h2{font-size:18px!important}.recentBrief735{display:grid!important}.planFact737{overflow-x:auto}}
