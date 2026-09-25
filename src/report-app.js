@@ -228,6 +228,24 @@ function planFactChart737(){
     :"Отставание "+qtyFmt723(Math.abs(delta),1)+"%";
   const title=selected?selected.type+" — "+selected.code:"Весь объект";
   const factArea=factPts.length?'8,92 '+poly("fact")+' '+factPts.at(-1).x+',92':'';
+  if(sel==="all"){
+    const palette=["#2563eb","#16a34a","#dc2626","#9333ea","#ea580c","#0891b2","#ca8a04","#db2777","#4f46e5","#059669"];
+    const series=pairs.map((pair,si)=>{
+      const group=all.filter(t=>String(t.type||"—")===String(pair.type)&&String(t.code||"—")===String(pair.code));
+      const totalVol=group.reduce((s,t)=>s+num(t.volume),0);
+      const values=months.map((m,i)=>{
+        const pointEnd=new Date(m.getFullYear(),m.getMonth()+1,0,23,59,59);
+        const factDone=group.reduce((sum,t)=>sum+Math.min(num(t.volume),workDone(t,pointEnd)),0);
+        return {x:months.length===1?50:8+i*(84/(months.length-1)),v:totalVol?Math.min(100,factDone/totalVol*100):0};
+      });
+      let last=-1;
+      workDays.forEach(day=>{if(!day.date)return;const dm=new Date(day.date+"T12:00:00");if(!(day.items||[]).some(x=>group.some(t=>matchesTask(x,t))))return;const ix=months.findIndex(m=>m.getFullYear()===dm.getFullYear()&&m.getMonth()===dm.getMonth());if(ix>last)last=ix});
+      return {pair,color:palette[si%palette.length],pts:last>=0?values.slice(0,last+1):[]};
+    });
+    const lines=series.map(s=>s.pts.length?'<polyline class="workSeries755" style="stroke:'+s.color+'" points="'+s.pts.map(p=>p.x+","+(92-p.v*.72)).join(" ")+'"/>'+s.pts.map(p=>'<circle class="workDot755" style="fill:'+s.color+'" cx="'+p.x+'" cy="'+(92-p.v*.72)+'" r="1.25"></circle>').join(""):'').join("");
+    const legend=series.map(s=>'<span><i style="background:'+s.color+'"></i>'+esc(s.pair.type)+' <small>'+esc(s.pair.code)+'</small></span>').join("");
+    return '<div class="planFact737 planFactPro738 workTypes755"><div class="planFactFilter739"><label>Показать график по</label><select id="planFactFilter739">'+opts+'</select></div><div class="planFactHead738"><div><b>Весь объект</b><small>Фактическая готовность каждого вида работ отдельно</small></div></div><div class="workLegend755">'+legend+'</div><div class="chartArea737"><div class="yLabels737"><span>100%</span><span>75%</span><span>50%</span><span>25%</span><span>0%</span></div><svg viewBox="0 0 100 100" preserveAspectRatio="none"><g class="grid737"><line x1="8" y1="20" x2="92" y2="20"/><line x1="8" y1="38" x2="92" y2="38"/><line x1="8" y1="56" x2="92" y2="56"/><line x1="8" y1="74" x2="92" y2="74"/><line x1="8" y1="92" x2="92" y2="92"/></g>'+lines+'</svg><div class="xLabels737">'+labels+'</div></div></div>';
+  }
 
   return '<div class="planFact737 planFactPro738">'+
     '<div class="planFactFilter739"><label>Показать график по</label><select id="planFactFilter739">'+opts+'</select></div>'+
