@@ -90,4 +90,15 @@ jobs:
           Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/latest.json" "hot/latest.json" -Force
           git add hot
           git commit -m "Lightweight update $version"
-          git push origin HEAD:main
+          $pushed = $false
+          for ($attempt = 1; $attempt -le 5 -and -not $pushed; $attempt++) {
+            git pull --rebase origin main
+            if ($LASTEXITCODE -ne 0) { throw "Failed to rebase lightweight update branch" }
+            git push origin HEAD:main
+            if ($LASTEXITCODE -eq 0) {
+              $pushed = $true
+            } else {
+              Start-Sleep -Seconds 2
+            }
+          }
+          if (-not $pushed) { throw "Failed to publish lightweight update after retries" }
