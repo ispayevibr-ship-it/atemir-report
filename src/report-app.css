@@ -527,3 +527,10 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .deadlineDonut745{min-width:0}
 @media(max-width:1100px){.deadlineRich750{grid-template-columns:1fr!important}.deadlineSide756{grid-template-columns:repeat(2,minmax(0,1fr))}.deadlineAnalytics754{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.deadlineSide756,.deadlineAnalytics754{grid-template-columns:1fr}}
+
+/* whole-object mounted vs supplied lines v6.25.42 */
+.supplySeries757{fill:none;stroke-width:1.45;stroke-dasharray:4 2.5;opacity:.72;vector-effect:non-scaling-stroke}
+.chartTypeLegend757{display:flex;gap:18px;align-items:center;padding:0 12px 7px;font-size:9px;color:#6f7e87}
+.chartTypeLegend757 span{display:flex;align-items:center;gap:6px}
+.chartTypeLegend757 i{display:block;width:20px;border-top:2px solid #667781}
+.chartTypeLegend757 .supply757 i{border-top-style:dashed}
