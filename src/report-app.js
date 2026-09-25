@@ -232,7 +232,8 @@ function planFactChart737(){
   if(sel==="all"){
     const palette=["#2563eb","#16a34a","#dc2626","#9333ea","#ea580c","#0891b2","#ca8a04","#db2777","#4f46e5","#059669"];
     const invoices=d.invoices||[];
-    const delivered=(t,date)=>invoices.filter(inv=>inv.date&&new Date(inv.date+"T12:00:00")<=date).reduce((sum,inv)=>sum+(inv.items||[]).filter(x=>matchesTask(x,t)).reduce((z,x)=>z+num(x.qty)*(num(x.per)||1),0),0);
+    const invoiceMatches=(x,t)=>((x.taskId&&t.id)?String(x.taskId)===String(t.id):(String(x.type||"")===String(t.type||"")&&String(x.code||"")===String(t.code||"")));
+    const delivered=(t,date)=>invoices.filter(inv=>inv.date&&new Date(inv.date+"T12:00:00")<=date).reduce((sum,inv)=>sum+(inv.items||[]).filter(x=>invoiceMatches(x,t)).reduce((z,x)=>z+num(x.qty)*(num(x.per)||1),0),0);
     const series=pairs.map((pair,si)=>{
       const group=all.filter(t=>String(t.type||"—")===String(pair.type)&&String(t.code||"—")===String(pair.code));
       const totalVol=group.reduce((s,t)=>s+num(t.volume),0);
@@ -247,7 +248,7 @@ function planFactChart737(){
       });
       let last=-1,lastSupply=-1;
       workDays.forEach(day=>{if(!day.date)return;const dm=new Date(day.date+"T12:00:00");if(!(day.items||[]).some(x=>group.some(t=>matchesTask(x,t))))return;const ix=months.findIndex(m=>m.getFullYear()===dm.getFullYear()&&m.getMonth()===dm.getMonth());if(ix>last)last=ix});
-      invoices.forEach(inv=>{if(!inv.date)return;const dm=new Date(inv.date+"T12:00:00");if(!(inv.items||[]).some(x=>group.some(t=>matchesTask(x,t))))return;const ix=months.findIndex(m=>m.getFullYear()===dm.getFullYear()&&m.getMonth()===dm.getMonth());if(ix>lastSupply)lastSupply=ix});
+      invoices.forEach(inv=>{if(!inv.date)return;const dm=new Date(inv.date+"T12:00:00");if(!(inv.items||[]).some(x=>group.some(t=>invoiceMatches(x,t))))return;const ix=months.findIndex(m=>m.getFullYear()===dm.getFullYear()&&m.getMonth()===dm.getMonth());if(ix>lastSupply)lastSupply=ix});
       const factPts=last>=0?[{x:startX,v:0},...values.slice(Math.max(0,startMonth),last+1).filter(p=>p.x>startX)]:[];
       const supplyPts=lastSupply>=0?[{x:startX,s:0},...values.slice(Math.max(0,startMonth),lastSupply+1).filter(p=>p.x>startX)]:[];
       return {pair,color:palette[si%palette.length],pts:factPts,supplyPts};
