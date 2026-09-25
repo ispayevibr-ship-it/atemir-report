@@ -259,3 +259,22 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .statusKpi737.closed737 .statusIcon737:after{content:"✓";font-size:13px;font-weight:800;line-height:22px;text-align:center;width:22px;height:22px;position:absolute;left:0;top:0}
 @media(max-width:1050px){.kpis551{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 @media(max-width:650px){.kpis551{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+
+
+/* v6.25.5 construction plan/fact chart */
+.planFactPro738{padding:2px 4px 10px}
+.planFactHead738{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin:2px 12px 8px}
+.planFactHead738>div:first-child b{display:block;font-size:15px;color:#173b59}
+.planFactHead738>div:first-child small{display:block;margin-top:3px;color:#7b8b98}
+.planFactStats738{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.planFactStats738>span{padding:6px 9px;border-radius:8px;background:#f3f6f8;font-size:12px;color:#526a7d}
+.planStat738 b{color:#2575c4}.factStat738 b{color:#24a76b}
+.lateStat738{background:#fff0f0!important;color:#b64646!important}
+.aheadStat738{background:#eaf8f0!important;color:#17834f!important}
+.evenStat738{background:#eef4f8!important;color:#526a7d!important}
+.areaPlan738{fill:#2575c4;fill-opacity:.055}
+.areaFact738{fill:#24a76b;fill-opacity:.075}
+.linePlan737,.lineFact737{stroke-width:2!important}
+.chartArea737{height:285px!important}
+.chartArea737 svg{height:245px!important}
+@media(max-width:800px){.planFactHead738{flex-direction:column}.planFactStats738{justify-content:flex-start}}
