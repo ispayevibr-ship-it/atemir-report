@@ -460,3 +460,11 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .marksTableRow751:last-child{border-bottom:0}.marksTableRow751 b{font-size:11px}.marksTableRow751 span:nth-child(2){overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.marksTableRow751 strong{font-size:11px}.marksTableRow751 small{font-size:10px}.marksTableRow751.done{background:#fafcfa}
 .marksAll751{margin:7px 10px 9px!important;padding:5px 9px!important;font-size:10px!important}
 @media(max-width:760px){.marksTableLabels751,.marksTableRow751{grid-template-columns:70px minmax(110px,1.6fr) 60px 55px 55px;gap:6px;padding-left:8px;padding-right:8px}}
+
+/* deadline footer status v6.25.33 */
+.deadlineBottom752{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%;margin-top:2px}
+.deadlineNotice752{border:1px solid #e2e8eb;border-radius:9px;padding:9px 11px;background:#fafcfd;min-width:0}
+.deadlineNotice752 small,.deadlineNotice752 span{display:block;font-size:9px;color:#77858d}.deadlineNotice752 b{display:block;font-size:14px;margin:2px 0}
+.deadlineGood752{background:#f0faf3!important;border-color:#bfe2c8!important}.deadlineGood752 b{color:#18763a!important}
+.deadlineBad752{background:#fff2f1!important;border-color:#f0c2be!important}.deadlineBad752 b{color:#bd2f27!important}
+@media(max-width:1050px){.deadlineBottom752{grid-template-columns:1fr}}
