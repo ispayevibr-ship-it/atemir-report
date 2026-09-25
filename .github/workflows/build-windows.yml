@@ -88,6 +88,27 @@ jobs:
           Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/src/*" "hot/$version/src/" -Force
           New-Item -ItemType Directory -Force -Path "hot" | Out-Null
           Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/latest.json" "hot/latest.json" -Force
+          # Never allow an older concurrently running build to move latest.json backwards.
+          try {
+            $remoteLatest = Invoke-RestMethod -Uri ("https://raw.githubusercontent.com/ispayevibr-ship-it/atemir-report-updates/main/hot/latest.json?ts=" + [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds())
+            if ($remoteLatest.version) {
+              $remoteParts = @($remoteLatest.version.Split('.') | ForEach-Object { [int]$_ })
+              $newParts = @($version.Split('.') | ForEach-Object { [int]$_ })
+              while ($remoteParts.Count -lt 3) { $remoteParts += 0 }
+              while ($newParts.Count -lt 3) { $newParts += 0 }
+              $remoteNewer = $false
+              for ($i=0; $i -lt 3; $i++) {
+                if ($remoteParts[$i] -gt $newParts[$i]) { $remoteNewer = $true; break }
+                if ($remoteParts[$i] -lt $newParts[$i]) { break }
+              }
+              if ($remoteNewer) {
+                Write-Host "Keeping newer hot/latest.json version $($remoteLatest.version); this build is $version"
+                Invoke-WebRequest -Uri ("https://raw.githubusercontent.com/ispayevibr-ship-it/atemir-report-updates/main/hot/latest.json?ts=" + [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()) -OutFile "hot/latest.json"
+              }
+            }
+          } catch {
+            Write-Host "Could not compare remote lightweight manifest; publishing current build manifest."
+          }
           git add hot
           git commit -m "Lightweight update $version"
           $pushed = $false
