@@ -231,19 +231,25 @@ function planFactChart737(){
   const factArea=factPts.length?'8,92 '+poly("fact")+' '+factPts.at(-1).x+',92':'';
   if(sel==="all"){
     const invoices=d.invoices||[];
-    const norm760=v=>String(v||"").toUpperCase().replace(/[–—−]/g,"-").replace(/\s+/g,"").trim();
-    const invoiceMatches=(x,t)=>{if(x.taskId&&t.id)return String(x.taskId)===String(t.id);return norm760(x.code)===norm760(t.code)&&(!x.type||!t.type||norm760(x.type)===norm760(t.type));};
+    const norm761=v=>String(v||"").toUpperCase().replace(/[–—−]/g,"-").replace(/\s+/g,"").trim();
+    const invoiceMatches=(x,t)=>{if(x.taskId&&t.id)return String(x.taskId)===String(t.id);return norm761(x.code)===norm761(t.code)&&(!x.type||!t.type||norm761(x.type)===norm761(t.type));};
     const delivered=t=>invoices.reduce((sum,inv)=>sum+(inv.items||[]).filter(x=>invoiceMatches(x,t)).reduce((z,x)=>z+num(x.qty)*(num(x.per)||1),0),0);
+    const now=new Date();
     const rows=pairs.map(pair=>{
       const group=all.filter(t=>String(t.type||"—")===String(pair.type)&&String(t.code||"—")===String(pair.code));
       const total=group.reduce((s,t)=>s+num(t.volume),0);
       const mounted=group.reduce((s,t)=>s+Math.min(num(t.volume),workDone(t,new Date(8640000000000000))),0);
       const supplied=group.reduce((s,t)=>s+Math.min(num(t.volume),delivered(t)),0);
-      const mp=total?Math.min(100,mounted/total*100):0,sp=total?Math.min(100,supplied/total*100):0;
-      const unit=group.find(t=>t.unit)?.unit||"";
-      return '<div class="objectProgressRow760"><div class="objectProgressTitle760"><b>'+esc(pair.type)+'</b><small>'+esc(pair.code)+'</small></div><div class="objectProgressBars760"><div class="objectProgressBar760"><span>Смонтировано</span><div><i class="mounted760" style="width:'+mp+'%"></i></div><strong>'+qtyFmt723(mp,1)+'%</strong><em>'+qtyFmt723(mounted)+' / '+qtyFmt723(total)+' '+esc(unit)+'</em></div><div class="objectProgressBar760"><span>Завезено</span><div><i class="supplied760" style="width:'+sp+'%"></i></div><strong>'+qtyFmt723(sp,1)+'%</strong><em>'+qtyFmt723(supplied)+' / '+qtyFmt723(total)+' '+esc(unit)+'</em></div></div></div>';
-    }).join("");
-    return '<div class="planFact737 planFactPro738 objectProgress760"><div class="planFactFilter739"><label>Показать график по</label><select id="planFactFilter739">'+opts+'</select></div><div class="planFactHead738"><div><b>Весь объект</b><small>Сводка по каждому виду работ: сколько смонтировано и сколько завезено по накладным</small></div></div><div class="objectProgressList760">'+rows+'</div></div>';
+      const planned=group.reduce((s,t)=>{
+        const v=num(t.volume),a=parseDate(t.start),b=parseDate(t.end);
+        if(!v||!a||!b)return s;
+        const den=Math.max(1,b-a),p=now<=a?0:now>=b?1:Math.max(0,Math.min(1,(now-a)/den));
+        return s+v*p;
+      },0);
+      return {pair,total,pp:total?Math.min(100,planned/total*100):0,mp:total?Math.min(100,mounted/total*100):0,sp:total?Math.min(100,supplied/total*100):0};
+    });
+    const bars=rows.map(r=>'<div class="stateRow761"><div class="stateName761"><b>'+esc(r.pair.type)+'</b><small>'+esc(r.pair.code)+'</small></div><div class="stateBars761"><div class="stateTrack761"><i class="plan761" style="width:'+r.pp+'%"></i><span>'+qtyFmt723(r.pp,1)+'%</span></div><div class="stateTrack761"><i class="fact761" style="width:'+r.mp+'%"></i><span>'+qtyFmt723(r.mp,1)+'%</span></div><div class="stateTrack761"><i class="supply761" style="width:'+r.sp+'%"></i><span>'+qtyFmt723(r.sp,1)+'%</span></div></div></div>').join("");
+    return '<div class="planFact737 planFactPro738 stateChart761"><div class="planFactFilter739"><label>Показать график по</label><select id="planFactFilter739">'+opts+'</select></div><div class="planFactHead738"><div><b>Состояние работ по объекту</b><small>План на текущую дату, фактический монтаж и завезённые материалы</small></div></div><div class="stateLegend761"><span><i class="plan761"></i>План на сегодня</span><span><i class="fact761"></i>Смонтировано</span><span><i class="supply761"></i>Завезено</span></div><div class="stateScale761"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div><div class="stateRows761">'+bars+'</div></div>';
   }
 
   return '<div class="planFact737 planFactPro738">'+
