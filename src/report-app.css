@@ -160,3 +160,6 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 
 /* v6.23.4 readiness in one column */
 .readyCell732{display:flex;align-items:center;gap:10px;min-width:190px}.readyCell732 .readyBar730{flex:1;width:auto;min-width:120px}.readyCell732 b{min-width:34px;text-align:right;color:#173b59;font-size:13px}.progressTable td:last-child{min-width:200px}
+
+/* v6.23.6 clean grouped report table */
+.recentWorkFull724{display:block!important;padding:0!important;border-bottom:1px solid #e7edf1}.recentWorkFull724 .recentWorkGrid724{padding:10px 0;margin:0!important;border-top:0!important;border-bottom:1px solid #edf1f4}.recentWorkFull724 .recentWorkGrid724:last-of-type{border-bottom:0}.recentWorkTotal731{margin:0 0 10px!important;padding:9px 12px!important}.recentReportBody722{overflow:hidden}.recentWorkGrid724{grid-template-columns:2.2fr 1.25fr 1.05fr .7fr .85fr .55fr!important}.recentWorkGrid724 span{min-width:0}.recentWorkGrid724 b{white-space:normal;word-break:normal;overflow-wrap:break-word}
