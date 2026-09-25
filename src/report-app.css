@@ -388,8 +388,8 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .recentReport722:nth-of-type(odd)>summary:hover{background:#f8fafb}
 
 /* dashboard compact layout v6.25.22 */
-.recentReport722:first-of-type[open] .firstReportBrief747{display:none!important}
-.recentReport722:first-of-type:not([open]) .firstReportBrief747{display:flex!important}
+.recentReport722:first-of-type[open] .recentBrief735{display:none!important}
+.recentReport722:first-of-type:not([open]) .recentBrief735{display:flex!important}
 .scheduleFull747{width:100%}
 .calendarPhotos747{grid-template-columns:minmax(300px,.72fr) minmax(0,1.28fr)!important;align-items:stretch!important}
 .calendarPhotos747>div,.calendarPhotos747 .card{min-width:0;height:100%}
