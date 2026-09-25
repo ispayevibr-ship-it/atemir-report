@@ -468,3 +468,10 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .deadlineGood752{background:#f0faf3!important;border-color:#bfe2c8!important}.deadlineGood752 b{color:#18763a!important}
 .deadlineBad752{background:#fff2f1!important;border-color:#f0c2be!important}.deadlineBad752 b{color:#bd2f27!important}
 @media(max-width:1050px){.deadlineBottom752{grid-template-columns:1fr}}
+
+/* active months calendar v6.25.34 */
+.calendarActiveMonths753{display:grid;grid-template-columns:repeat(3,minmax(210px,1fr));gap:8px;align-items:start}
+.calendarActiveMonths753 .monthCard{min-width:0}
+.calendarActiveMonths753 .workCalendar{gap:2px}
+.calendarActiveMonths753 .calDay{min-width:0}
+@media(max-width:1280px){.calendarActiveMonths753{grid-template-columns:1fr}.calendarActiveMonths753 .monthCard:nth-child(n+2){display:none}}
