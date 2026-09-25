@@ -488,3 +488,12 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .workLegend755{display:flex;flex-wrap:wrap;gap:7px 14px;padding:4px 12px 8px;font-size:10px}
 .workLegend755 span{display:flex;align-items:center;gap:5px;min-width:0}.workLegend755 i{width:9px;height:9px;border-radius:50%;flex:0 0 auto}.workLegend755 small{color:#7a878e}
 .workSeries755{fill:none;stroke-width:1.7;vector-effect:non-scaling-stroke}.workDot755{stroke:#fff;stroke-width:.45;vector-effect:non-scaling-stroke}
+
+/* full calendar and mounted mark states v6.25.38 */
+.calendarFull756{width:100%}
+.calendarFull756 .calendarActiveMonths753{grid-template-columns:repeat(3,minmax(0,1fr))}
+.marksTableRow751.partial756{background:#eef8f1;border-left:3px solid #3b9b5f}
+.marksTableRow751.partial756 strong{color:#237a43}
+.marksTableRow751.done{background:#e6f5ea;border-left:3px solid #238443}
+.marksTableRow751.done b,.marksTableRow751.done strong{color:#176b35}
+@media(max-width:900px){.calendarFull756 .calendarActiveMonths753{grid-template-columns:1fr}.calendarFull756 .calendarActiveMonths753 .monthCard:nth-child(n+2){display:none}}
