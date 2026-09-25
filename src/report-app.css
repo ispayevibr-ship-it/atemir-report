@@ -278,3 +278,10 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .chartArea737{height:285px!important}
 .chartArea737 svg{height:245px!important}
 @media(max-width:800px){.planFactHead738{flex-direction:column}.planFactStats738{justify-content:flex-start}}
+
+
+/* v6.25.6 plan/fact work-code selector */
+.planFactFilter739{display:flex;align-items:center;gap:10px;margin:2px 12px 14px;padding:10px 12px;background:#f7f9fb;border:1px solid #e2e9ee;border-radius:10px}
+.planFactFilter739 label{font-size:12px;font-weight:600;color:#526a7d;white-space:nowrap}
+.planFactFilter739 select{min-width:320px;max-width:560px;height:36px;border:1px solid #cfd9e0;border-radius:8px;background:#fff;padding:0 34px 0 10px;color:#173b59;font-weight:600}
+@media(max-width:760px){.planFactFilter739{align-items:stretch;flex-direction:column}.planFactFilter739 select{min-width:0;max-width:none;width:100%}}
