@@ -63,16 +63,25 @@ jobs:
           "version=$version" >> $env:GITHUB_OUTPUT
       - name: Publish public auto-update release
         if: github.event_name == 'push'
-        uses: softprops/action-gh-release@v2
-        with:
-          repository: ispayevibr-ship-it/atemir-report-updates
-          token: ${{ secrets.UPDATE_REPO_TOKEN }}
-          tag_name: v${{ steps.app_version.outputs.version }}
-          name: А-Темир Строй Отчёт v${{ steps.app_version.outputs.version }}
-          files: |
-            dist/*.exe
-            dist/latest.yml
-            dist/*.blockmap
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.UPDATE_REPO_TOKEN }}
+        run: |
+          $version = "${{ steps.app_version.outputs.version }}"
+          $tag = "v$version"
+          $repo = "ispayevibr-ship-it/atemir-report-updates"
+          gh release view $tag --repo $repo *> $null
+          if ($LASTEXITCODE -ne 0) {
+            gh release create $tag --repo $repo --title "А-Темир Строй Отчёт $tag"
+            if ($LASTEXITCODE -ne 0) { throw "Could not create release $tag" }
+          }
+          $files = @()
+          $files += Get-ChildItem dist -Filter *.exe | ForEach-Object { $_.FullName }
+          $files += Get-ChildItem dist -Filter latest.yml | ForEach-Object { $_.FullName }
+          $files += Get-ChildItem dist -Filter *.blockmap | ForEach-Object { $_.FullName }
+          if ($files.Count -eq 0) { throw "No update assets found" }
+          gh release upload $tag @files --repo $repo --clobber
+          if ($LASTEXITCODE -ne 0) { throw "Could not upload release assets for $tag" }
       - name: Publish lightweight update files
         if: github.event_name == 'push'
         shell: pwsh
