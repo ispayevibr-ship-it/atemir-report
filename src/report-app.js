@@ -233,7 +233,7 @@ function planFactChart737(){
     const palette=["#2563eb","#16a34a","#dc2626","#9333ea","#ea580c","#0891b2","#ca8a04","#db2777","#4f46e5","#059669"];
     const invoices=d.invoices||[];
     const norm757=v=>String(v||"").toUpperCase().replace(/[–—−]/g,"-").replace(/\s+/g,"").trim();
-    const invoiceMatches=(x,t)=>norm757(x.code)===norm757(t.code)&&(!x.type||!t.type||norm757(x.type)===norm757(t.type));
+    const invoiceMatches=(x,t)=>{if(x.taskId&&t.id)return String(x.taskId)===String(t.id);return norm757(x.code)===norm757(t.code)&&(!x.type||!t.type||norm757(x.type)===norm757(t.type));};
     const delivered=(t,date)=>invoices.filter(inv=>inv.date&&new Date(inv.date+"T12:00:00")<=date).reduce((sum,inv)=>sum+(inv.items||[]).filter(x=>invoiceMatches(x,t)).reduce((z,x)=>z+num(x.qty)*(num(x.per)||1),0),0);
     const series=pairs.map((pair,si)=>{
       const group=all.filter(t=>String(t.type||"—")===String(pair.type)&&String(t.code||"—")===String(pair.code));
