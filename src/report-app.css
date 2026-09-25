@@ -429,3 +429,9 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .recentWorkGrid749{grid-template-columns:minmax(170px,1.45fr) minmax(130px,.85fr) minmax(190px,1.5fr) minmax(80px,.55fr) minmax(70px,.5fr) minmax(85px,.6fr) minmax(95px,.7fr)!important}
 .recentWorkGrid749 .recentGroupSpacer749{visibility:hidden}
 @media(max-width:1100px){.recentWorkGrid749{grid-template-columns:repeat(2,minmax(0,1fr))!important}.recentWorkGrid749 .recentGroupSpacer749{display:none}}
+
+/* calendar gets more room than photos v6.25.30 */
+.calendarPhotos747{grid-template-columns:minmax(430px,1.45fr) minmax(260px,.55fr)!important;align-items:stretch!important}
+.calendarPhotos747 .dashPhotos734{min-width:0}
+.calendarPhotos747 .dashPhotos734 .photoGrid,.calendarPhotos747 .dashPhotos734 .photosGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+@media(max-width:900px){.calendarPhotos747{grid-template-columns:1fr!important}}
