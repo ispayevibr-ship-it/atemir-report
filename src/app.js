@@ -61,3 +61,9 @@ function taskMatch583(w,t){return (w?.taskId&&t?.id)?String(w.taskId)===String(t
  }
  const st515=document.createElement("style");st515.textContent="@keyframes allMove515{0%{transform:translateX(-100%)}100%{transform:translateX(190%)}}";document.head.appendChild(st515);const mo=new MutationObserver(()=>inject248());mo.observe(document.documentElement,{childList:true,subtree:true});setTimeout(inject248,0);
 })();
+
+const companyProfileKey591="atemir-company-profile-v1";
+function companyProfile591(){try{return JSON.parse(localStorage.getItem(companyProfileKey591)||"{}")}catch{return {}}}
+function openCompanyProfile591(){let p=companyProfile591(),set=(id,v)=>{let e=document.getElementById(id);if(e)e.value=v||""};set("companyName591",p.name);set("companyDirector591",p.director);set("companyBin591",p.bin);set("companyAddress591",p.address);set("companyPhone591",p.phone);set("companyEmail591",p.email);document.getElementById("companyProfile559")?.classList.add("on")}
+function closeCompanyProfile591(){document.getElementById("companyProfile559")?.classList.remove("on")}
+document.getElementById("companyInfo559")?.addEventListener("click",openCompanyProfile591);document.getElementById("companyProfileClose559")?.addEventListener("click",closeCompanyProfile591);document.getElementById("companyProfile559")?.addEventListener("click",e=>{if(e.target.id==="companyProfile559")closeCompanyProfile591()});document.getElementById("companyProfileSave591")?.addEventListener("click",()=>{let g=id=>document.getElementById(id)?.value.trim()||"",p={name:g("companyName591"),director:g("companyDirector591"),bin:g("companyBin591"),address:g("companyAddress591"),phone:g("companyPhone591"),email:g("companyEmail591")};localStorage.setItem(companyProfileKey591,JSON.stringify(p));closeCompanyProfile591()});
