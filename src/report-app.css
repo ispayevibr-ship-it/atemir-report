@@ -497,3 +497,11 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .marksTableRow751.done{background:#e6f5ea;border-left:3px solid #238443}
 .marksTableRow751.done b,.marksTableRow751.done strong{color:#176b35}
 @media(max-width:900px){.calendarFull756 .calendarActiveMonths753{grid-template-columns:1fr}.calendarFull756 .calendarActiveMonths753 .monthCard:nth-child(n+2){display:none}}
+
+/* key deadline metrics beside ring v6.25.39 */
+.deadlineSide756{display:grid;grid-template-columns:repeat(2,minmax(150px,1fr));gap:8px;align-self:center;width:100%}
+.deadlineSide756>div{border:1px solid #e3e9ed;border-radius:9px;padding:10px 12px;background:#fafcfd;min-width:0}
+.deadlineSide756 small{display:block;font-size:9px;color:#78858d;margin-bottom:3px}
+.deadlineSide756 b{display:block;font-size:13px;line-height:1.25}
+@media(max-width:1050px){.deadlineSide756{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.deadlineSide756{grid-template-columns:1fr}}
