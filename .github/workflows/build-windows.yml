@@ -113,13 +113,30 @@ jobs:
           git commit -m "Lightweight update $version"
           $pushed = $false
           for ($attempt = 1; $attempt -le 5 -and -not $pushed; $attempt++) {
-            git pull --rebase origin main
-            if ($LASTEXITCODE -ne 0) { throw "Failed to rebase lightweight update branch" }
-            git push origin HEAD:main
-            if ($LASTEXITCODE -eq 0) {
-              $pushed = $true
-            } else {
-              Start-Sleep -Seconds 2
+            git fetch origin main
+            git rebase origin/main
+            if ($LASTEXITCODE -ne 0) {
+              git rebase --abort 2>$null
+              git reset --hard origin/main
+              New-Item -ItemType Directory -Force -Path "hot/$version/src" | Out-Null
+              Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/src/*" "hot/$version/src/" -Force
+              $remoteVersion = ""
+              try { $remoteVersion = (Get-Content "hot/latest.json" -Raw | ConvertFrom-Json).version } catch {}
+              $useNew = $true
+              if ($remoteVersion) {
+                $rp = @($remoteVersion.Split('.') | ForEach-Object { [int]$_ })
+                $np = @($version.Split('.') | ForEach-Object { [int]$_ })
+                while ($rp.Count -lt 3) { $rp += 0 }; while ($np.Count -lt 3) { $np += 0 }
+                for ($i=0; $i -lt 3; $i++) {
+                  if ($rp[$i] -gt $np[$i]) { $useNew = $false; break }
+                  if ($rp[$i] -lt $np[$i]) { break }
+                }
+              }
+              if ($useNew) { Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/latest.json" "hot/latest.json" -Force }
+              git add hot
+              git commit -m "Lightweight update $version"
             }
+            git push origin HEAD:main
+            if ($LASTEXITCODE -eq 0) { $pushed = $true } else { Start-Sleep -Seconds 2 }
           }
           if (-not $pushed) { throw "Failed to publish lightweight update after retries" }
