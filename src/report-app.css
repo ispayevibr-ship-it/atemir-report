@@ -249,3 +249,13 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .chartArea737 svg circle{vector-effect:non-scaling-stroke;transform-box:fill-box;transform-origin:center}
 .dotsPlan737 circle,.dotsFact737 circle{stroke:#fff;stroke-width:.7}
 .chartArea737 svg{overflow:visible}
+
+
+/* v6.25.4 five KPI cards and clean status icon */
+.kpis551{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:10px!important}
+.kpis551>div{min-width:0!important}
+.statusIcon737{width:22px!important;height:22px!important;flex:0 0 22px!important;border-radius:50%!important;font-size:0!important;position:relative}
+.statusKpi737.work737 .statusIcon737:after{content:"";width:8px;height:8px;border-radius:50%;background:#1aa366;position:absolute;left:7px;top:7px}
+.statusKpi737.closed737 .statusIcon737:after{content:"✓";font-size:13px;font-weight:800;line-height:22px;text-align:center;width:22px;height:22px;position:absolute;left:0;top:0}
+@media(max-width:1050px){.kpis551{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(max-width:650px){.kpis551{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
