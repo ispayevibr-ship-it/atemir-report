@@ -184,3 +184,22 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .recentBrief735{display:block!important;margin-top:5px!important;color:#526a7d!important;font-size:12px!important;font-weight:400!important;white-space:normal;line-height:1.35}
 .heroTitle551 h2{font-size:24px!important;line-height:1.18!important;font-weight:700!important}
 @media(max-width:900px){.heroTitle551 h2{font-size:21px!important}}
+
+
+/* v6.25.0 marks dashboard cards */
+.marksGroups736{display:flex;flex-direction:column;gap:16px}
+.marksGroup736{border:1px solid #dce5eb;border-radius:14px;padding:14px;background:#fff}
+.marksGroupHead736{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;padding:0 2px}
+.marksGroupHead736 b{font-size:15px;color:#173b59}
+.marksGroupHead736 span{font-size:13px;color:#6b7f8f}
+.marksCards736{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.markCard736{border:1px solid #e1e8ed;border-radius:11px;padding:12px;background:#f9fbfc;min-width:0}
+.markCardTop736{min-height:48px}
+.markCardTop736>b{display:block;font-size:16px;color:#173b59;margin-bottom:3px}
+.markCardTop736>span{display:block;font-size:12px;color:#526a7d;white-space:normal}
+.markCardMeta736{border-top:1px solid #e5ebef;margin-top:10px;padding-top:9px;display:grid;gap:5px;font-size:12px;color:#70818f}
+.markCardMeta736 span{display:flex;justify-content:space-between;gap:8px}
+.markCardMeta736 b{color:#29465f;font-weight:600}
+.marksMore736{display:flex;justify-content:center;margin-top:12px}
+@media(max-width:1150px){.marksCards736{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:800px){.marksCards736{grid-template-columns:repeat(2,minmax(0,1fr))}.marksGroupHead736{align-items:flex-start;flex-direction:column}}
