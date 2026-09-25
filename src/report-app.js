@@ -86,7 +86,7 @@ function deadlineAlerts528(){
     .reduce((a,x)=>a+total(x.qty,x.per),0),0);
 
   const volume=tasks.reduce((s,t)=>s+num(t.volume),0);
-  const fact=tasks.reduce((s,t)=>s+Math.min(num(t.volume),done(t)),0);
+  const rawFact=tasks.reduce((s,t)=>s+done(t),0); const fact=Math.min(volume,rawFact); const over=Math.max(0,rawFact-volume);
   const pct=volume?Math.min(100,fact/volume*100):0;
   const end=new Date(Math.max(...tasks.map(t=>new Date(t.date+"T12:00:00"))));
   const left=Math.ceil((end-td)/86400000);
@@ -105,10 +105,14 @@ function deadlineAlerts528(){
     '<small>'+qtyFmt723(fact,2)+' / '+qtyFmt723(volume,2)+' '+esc(unit)+'</small>'+
     '</div></div>'+
     '<div class="deadlineStats750">'+
-      '<div><small>Выполнено</small><b>'+qtyFmt723(fact,2)+' '+esc(unit)+'</b></div>'+
-      '<div><small>Осталось выполнить</small><b>'+qtyFmt723(Math.max(0,volume-fact),2)+' '+esc(unit)+'</b></div>'+
+      '<div><small>Выполнено</small><b>'+qtyFmt723(rawFact,2)+' '+esc(unit)+'</b></div>'+
+      '<div><small>Осталось выполнить</small><b>'+qtyFmt723(Math.max(0,volume-rawFact),2)+' '+esc(unit)+'</b></div>'+
       '<div><small>Готовность</small><b>'+pct.toFixed(1)+'%</b></div>'+
       '<div><small>До срока</small><b>'+(pct>=100?'Готово':left<0?Math.abs(left)+' дн. просрочки':left+' дн.')+'</b></div>'+
+    '</div><div class="deadlineBottom752">'+
+      (over>0?'<div class="deadlineNotice752 deadlineGood752"><small>Перевыполнено</small><b>+'+qtyFmt723(over,2)+' '+esc(unit)+'</b><span>Сверх проектного объёма</span></div>':'')+
+      (left<0&&pct<100?'<div class="deadlineNotice752 deadlineBad752"><small>Просрочка</small><b>'+Math.abs(left)+' дн.</b><span>Осталось '+qtyFmt723(Math.max(0,volume-rawFact),2)+' '+esc(unit)+'</span></div>':'')+
+      '<div class="deadlineNotice752"><small>Проектный объём</small><b>'+qtyFmt723(volume,2)+' '+esc(unit)+'</b><span>'+esc(title)+' · '+esc(code)+'</span></div>'+
     '</div></div></div>';
 }
 function objectSchedule248(){let today=d.reportDate||new Date().toISOString().slice(0,10),num=v=>parseFloat(String(v??"").replace(",","."))||0,total=(q,p)=>num(q)*(num(p)||1),done=t=>savedWorkDays574().reduce((s,day)=>s+(day.items||[]).filter(x=>((x.taskId&&t.id)?String(x.taskId)===String(t.id):(String(x.type||"")===String(t.type||"")&&String(x.code||"")===String(t.code||"")&&(!t.unit||!x.unit||String(x.unit)===String(t.unit))))).reduce((a,x)=>a+total(x.qty,x.per),0),0),rows=d.tasks.filter(t=>t.start&&t.date&&num(t.volume)>0).map(t=>{let st=new Date(t.start+"T12:00:00"),en=new Date(t.date+"T12:00:00"),td=new Date(today+"T12:00:00"),days=Math.max(1,Math.floor((en-st)/86400000)+1),elapsed=td<st?0:td>en?days:Math.floor((td-st)/86400000)+1,plan=Math.min(num(t.volume),num(t.volume)/days*elapsed),fact=done(t),delta=fact-plan,pct=num(t.volume)?Math.max(0,Math.min(100,fact/num(t.volume)*100)):0,rate=num(t.volume)/days,dayDelta=rate?delta/rate:0,status=Math.abs(delta)<.0001?"По плану":delta<0?"Отставание":"Опережение",dayText=Math.abs(dayDelta)<.05?"":" · "+Math.abs(dayDelta).toFixed(1)+" дн.";return '<div class="schedule248"><div><b>'+esc(t.type||"Работа")+'</b><small>'+esc(t.code||"Без шифра")+' · '+esc(t.start)+' → '+esc(t.date)+'</small></div><div class="scheduleTrack248"><i style="width:'+pct+'%"></i></div><div class="scheduleNums248"><b>'+pct.toFixed(1)+'%</b><span class="'+(delta<-.0001?'late248':delta>.0001?'ahead248':'')+'">'+status+(status==="По плану"?"":" "+qtyFmt723(Math.abs(delta),2)+" "+esc(t.unit||"")+dayText)+'</span><small>План на '+esc(today)+': '+qtyFmt723(plan,2)+' · факт: '+qtyFmt723(fact,2)+' '+esc(t.unit||"")+'</small></div></div>'}).join("");return rows||'<div class="empty">Чтобы увидеть график, задайте для вида работ проектный объём, дату начала и дату окончания.</div>'}
