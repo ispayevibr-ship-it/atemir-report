@@ -10,6 +10,7 @@ function updates(){
  if(!app.isPackaged)return;
  autoUpdater.autoDownload=false;
  autoUpdater.autoInstallOnAppQuit=true;
+ autoUpdater.autoRunAppAfterInstall=true;
  autoUpdater.disableWebInstaller=true;
  autoUpdater.on("checking-for-update",()=>sendUpdate("checking"));
  autoUpdater.on("update-available",i=>sendUpdate("available",{version:i.version}));
@@ -19,7 +20,7 @@ function updates(){
   if(win&&!win.isDestroyed()){win.setProgressBar(percent/100);win.setTitle("А-Темир Строй Отчёт — обновление "+percent+"%")}
   sendUpdate("downloading",{percent,got,total});
  });
- autoUpdater.on("update-downloaded",i=>{if(win&&!win.isDestroyed()){win.setProgressBar(-1);win.setTitle("А-Темир Строй Отчёт")}sendUpdate("ready",{version:i.version})});
+ autoUpdater.on("update-downloaded",i=>{if(win&&!win.isDestroyed()){win.setProgressBar(-1);win.setTitle("А-Темир Строй Отчёт")}sendUpdate("ready",{version:i.version});setTimeout(()=>{sendUpdate("installing",{version:i.version});setTimeout(()=>autoUpdater.quitAndInstall(true,true),1200)},700)});
  autoUpdater.on("error",e=>{console.error("Auto update:",e.message);sendUpdate("error",{message:e.message})});
  setTimeout(()=>autoUpdater.checkForUpdates().catch(e=>console.error("Update check:",e.message)),2500);
 }
