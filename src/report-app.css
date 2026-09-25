@@ -108,3 +108,5 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .markSuggest713 button{width:100%;display:grid;grid-template-columns:minmax(70px,110px) 1fr;gap:12px;text-align:left;padding:9px 12px;border:0;border-bottom:1px solid #eef2f4;background:#fff;color:#17202a;cursor:pointer}
 .markSuggest713 button:hover{background:#f3f6f8}.markSuggest713 button span{color:#687785;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 [data-mark-search713]{position:relative}div:has(>[data-mark-search713]){position:relative}
+
+.markCombo715{display:grid;gap:6px}.markCombo715 select{width:100%}.markDone715{color:#9aa4ad}
