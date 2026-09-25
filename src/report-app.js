@@ -232,7 +232,8 @@ function planFactChart737(){
   if(sel==="all"){
     const palette=["#2563eb","#16a34a","#dc2626","#9333ea","#ea580c","#0891b2","#ca8a04","#db2777","#4f46e5","#059669"];
     const invoices=d.invoices||[];
-    const invoiceMatches=(x,t)=>String(x.code||"").trim()===String(t.code||"").trim()&&(!x.type||!t.type||String(x.type).trim()===String(t.type).trim());
+    const norm757=v=>String(v||"").toUpperCase().replace(/[–—−]/g,"-").replace(/\s+/g,"").trim();
+    const invoiceMatches=(x,t)=>norm757(x.code)===norm757(t.code)&&(!x.type||!t.type||norm757(x.type)===norm757(t.type));
     const delivered=(t,date)=>invoices.filter(inv=>inv.date&&new Date(inv.date+"T12:00:00")<=date).reduce((sum,inv)=>sum+(inv.items||[]).filter(x=>invoiceMatches(x,t)).reduce((z,x)=>z+num(x.qty)*(num(x.per)||1),0),0);
     const series=pairs.map((pair,si)=>{
       const group=all.filter(t=>String(t.type||"—")===String(pair.type)&&String(t.code||"—")===String(pair.code));
