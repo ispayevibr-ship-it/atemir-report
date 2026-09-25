@@ -80,8 +80,14 @@ jobs:
           $files += Get-ChildItem dist -Filter latest.yml | ForEach-Object { $_.FullName }
           $files += Get-ChildItem dist -Filter *.blockmap | ForEach-Object { $_.FullName }
           if ($files.Count -eq 0) { throw "No update assets found" }
-          gh release upload $tag @files --repo $repo --clobber
-          if ($LASTEXITCODE -ne 0) { throw "Could not upload release assets for $tag" }
+          gh release upload $tag @files --repo $repo
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "Release asset upload failed for $tag. Removing release and recreating it once."
+            gh release delete $tag --repo $repo --yes --cleanup-tag
+            if ($LASTEXITCODE -ne 0) { throw "Could not delete broken release $tag" }
+            gh release create $tag --repo $repo --title "А-Темир Строй Отчёт $tag" @files
+            if ($LASTEXITCODE -ne 0) { throw "Could not recreate release $tag with assets" }
+          }
       - name: Publish lightweight update files
         if: github.event_name == 'push'
         shell: pwsh
