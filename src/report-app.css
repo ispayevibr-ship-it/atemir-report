@@ -203,3 +203,15 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .marksMore736{display:flex;justify-content:center;margin-top:12px}
 @media(max-width:1150px){.marksCards736{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:800px){.marksCards736{grid-template-columns:repeat(2,minmax(0,1fr))}.marksGroupHead736{align-items:flex-start;flex-direction:column}}
+
+
+/* v6.25.1 compact mark cards like BOM reference */
+.marksCards736{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important}
+.markCard736{position:relative;border:1px solid #d5dde3!important;border-left:5px solid #cbd4da!important;border-radius:0!important;padding:9px 11px!important;background:#fff!important;min-height:68px;box-shadow:none!important}
+.markCardTop736{min-height:0!important}
+.markCardTop736>b{font-size:14px!important;line-height:1.15;margin:0 0 4px!important;color:#172d3e}
+.markCardTop736>span{font-size:12px!important;line-height:1.2;color:#42596b!important}
+.markCardTop736>small{display:block;margin-top:7px;font-size:10px;line-height:1.1;color:#7a8995}
+.markCardDone736{border-left-color:#22ad72!important}
+.markCardDone736 .markCardTop736>small{color:#607b6e}
+.markCardMeta736{display:none!important}
