@@ -100,3 +100,5 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 
 /* v6.8 fixed calendar cell geometry */
 .workCalendar{grid-auto-rows:42px;align-items:stretch}.calHead{height:24px;min-height:24px;align-self:center}.calDay{height:42px;min-height:42px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;padding:0}.calDay.empty{height:42px;min-height:42px}
+
+.bomGroupHead{display:flex;justify-content:space-between;align-items:center;margin:18px 0 8px;padding:10px 12px;background:#eaf3ff;border-left:4px solid #1677e8;border-radius:8px}.bomGroupHead span{color:#587083;font-size:13px}
