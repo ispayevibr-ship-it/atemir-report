@@ -177,3 +177,10 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .lowerTwo734{grid-template-columns:1fr 1fr!important}
 @media(max-width:1100px){.summaryPhotos722{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 @media(max-width:760px){.summaryPhotos722{grid-template-columns:repeat(2,minmax(0,1fr))!important}.lowerTwo734{grid-template-columns:1fr!important}}
+
+
+/* v6.24.5 report summary refinements */
+.recentWorkTotal731{justify-content:flex-end!important}
+.recentBrief735{display:block!important;margin-top:5px!important;color:#526a7d!important;font-size:12px!important;font-weight:400!important;white-space:normal;line-height:1.35}
+.heroTitle551 h2{font-size:24px!important;line-height:1.18!important;font-weight:700!important}
+@media(max-width:900px){.heroTitle551 h2{font-size:21px!important}}
