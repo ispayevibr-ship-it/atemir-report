@@ -339,3 +339,19 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .deadlineTrack743 i.doneBar743{background:#27a66f}
 .deadlineVisual743>small{display:block;margin-top:5px;font-size:10px;color:#7c8a95;text-align:right}
 @media(max-width:720px){.deadlineRow743{grid-template-columns:1fr;gap:8px}.deadlineVisual743>small{text-align:left}}
+
+
+/* v6.25.16 circular deadline diagrams */
+.deadlineDonuts744{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-height:390px;overflow:auto;padding:6px 12px 10px 4px}
+.deadlineDonutCard744{display:flex;align-items:center;gap:12px;min-width:0;padding:11px;border:1px solid #e3e9ed;border-radius:12px;background:#fff}
+.deadlineDonut744{--ring:#2b78bd;width:82px;height:82px;flex:0 0 82px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--ring) calc(var(--p)*1%),#e9eef2 0);position:relative}
+.deadlineDonut744:after{content:"";position:absolute;inset:8px;border-radius:50%;background:#fff}
+.deadlineDonut744>div{position:relative;z-index:1;text-align:center}
+.deadlineDonut744 b{display:block;font-size:15px;color:#173b59;line-height:1}
+.deadlineDonut744 small{display:block;margin-top:3px;font-size:8px;color:#83909a}
+.deadlineDonut744.late744{--ring:#d95b5b}.deadlineDonut744.done744{--ring:#27a66f}
+.deadlineDonutText744{min-width:0;padding-right:3px}
+.deadlineDonutText744>b{display:block;font-size:12px;line-height:1.25;color:#173b59;overflow-wrap:anywhere}
+.deadlineDonutText744>small,.deadlineDonutText744>span{display:block;margin-top:3px;font-size:9px;line-height:1.25;color:#7c8994}
+.deadlineDonutText744>span{font-size:10px;font-weight:700}
+@media(max-width:1250px){.deadlineDonuts744{grid-template-columns:1fr}}
