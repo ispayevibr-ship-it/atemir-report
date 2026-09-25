@@ -122,15 +122,9 @@ function deadlineAlerts528(){
     '<small>Срок '+esc(tasks.map(t=>t.date).sort().at(-1)||"")+'</small>'+
     '<small>'+qtyFmt723(fact,2)+' / '+qtyFmt723(volume,2)+' '+esc(unit)+'</small>'+
     '</div></div>'+
-    '<div class="deadlineStats750">'+
-      '<div><small>Выполнено</small><b>'+qtyFmt723(rawFact,2)+' '+esc(unit)+'</b></div>'+
-      '<div><small>Осталось выполнить</small><b>'+qtyFmt723(Math.max(0,volume-rawFact),2)+' '+esc(unit)+'</b></div>'+
-      '<div><small>Готовность</small><b>'+pct.toFixed(1)+'%</b></div>'+
-      '<div><small>До срока</small><b>'+(pct>=100?'Готово':left<0?Math.abs(left)+' дн. просрочки':left+' дн.')+'</b></div>'+
-    '</div><div class="deadlineBottom752">'+
+    '<div class="deadlineBottom752">'+
       (over>0?'<div class="deadlineNotice752 deadlineGood752"><small>Перевыполнено</small><b>+'+qtyFmt723(over,2)+' '+esc(unit)+'</b><span>Сверх проектного объёма</span></div>':'')+
       (left<0&&pct<100?'<div class="deadlineNotice752 deadlineBad752"><small>Просрочка</small><b>'+Math.abs(left)+' дн.</b><span>Осталось '+qtyFmt723(Math.max(0,volume-rawFact),2)+' '+esc(unit)+'</span></div>':'')+
-      '<div class="deadlineNotice752"><small>Проектный объём</small><b>'+qtyFmt723(volume,2)+' '+esc(unit)+'</b><span>'+esc(title)+' · '+esc(code)+'</span></div>'+
     '</div>'+
     '<div class="deadlineAnalytics754">'+
       '<div><small>Срок работ</small><b>'+(startStr?esc(startStr):"—")+' → '+esc(endStr)+'</b></div>'+
