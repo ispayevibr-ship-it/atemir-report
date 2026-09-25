@@ -110,3 +110,6 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 [data-mark-search713]{position:relative}div:has(>[data-mark-search713]){position:relative}
 
 .markCombo715{display:grid;gap:6px}.markCombo715 select{width:100%}.markDone715{color:#9aa4ad}
+
+/* v6.16 sidebar logo fills its slot */
+.brand{background:#fff;min-height:118px;height:118px;padding:0}.brand img{width:100%;height:100%;max-height:none;object-fit:cover;object-position:center}.brand:not(:has(img)){background:#0d3556}
