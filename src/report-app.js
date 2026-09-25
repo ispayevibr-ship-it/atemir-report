@@ -230,37 +230,20 @@ function planFactChart737(){
   const title=selected?selected.type+" — "+selected.code:"Весь объект";
   const factArea=factPts.length?'8,92 '+poly("fact")+' '+factPts.at(-1).x+',92':'';
   if(sel==="all"){
-    const palette=["#2563eb","#16a34a","#dc2626","#9333ea","#ea580c","#0891b2","#ca8a04","#db2777","#4f46e5","#059669"];
     const invoices=d.invoices||[];
-    const norm757=v=>String(v||"").toUpperCase().replace(/[–—−]/g,"-").replace(/\s+/g,"").trim();
-    const invoiceMatches=(x,t)=>{if(x.taskId&&t.id)return String(x.taskId)===String(t.id);return norm757(x.code)===norm757(t.code)&&(!x.type||!t.type||norm757(x.type)===norm757(t.type));};
-    const delivered=(t,date)=>invoices.filter(inv=>inv.date&&new Date(inv.date+"T12:00:00")<=date).reduce((sum,inv)=>sum+(inv.items||[]).filter(x=>invoiceMatches(x,t)).reduce((z,x)=>z+num(x.qty)*(num(x.per)||1),0),0);
-    const series=pairs.map((pair,si)=>{
+    const norm760=v=>String(v||"").toUpperCase().replace(/[–—−]/g,"-").replace(/\s+/g,"").trim();
+    const invoiceMatches=(x,t)=>{if(x.taskId&&t.id)return String(x.taskId)===String(t.id);return norm760(x.code)===norm760(t.code)&&(!x.type||!t.type||norm760(x.type)===norm760(t.type));};
+    const delivered=t=>invoices.reduce((sum,inv)=>sum+(inv.items||[]).filter(x=>invoiceMatches(x,t)).reduce((z,x)=>z+num(x.qty)*(num(x.per)||1),0),0);
+    const rows=pairs.map(pair=>{
       const group=all.filter(t=>String(t.type||"—")===String(pair.type)&&String(t.code||"—")===String(pair.code));
-      const totalVol=group.reduce((s,t)=>s+num(t.volume),0);
-      const firstStart=new Date(Math.min(...group.map(t=>new Date(t.start+"T12:00:00"))));
-      const startMonth=months.findIndex(m=>m.getFullYear()===firstStart.getFullYear()&&m.getMonth()===firstStart.getMonth());
-      const startX=startMonth<0?8:(months.length===1?50:8+(startMonth+Math.max(0,(firstStart.getDate()-1)/Math.max(1,new Date(firstStart.getFullYear(),firstStart.getMonth()+1,0).getDate())))*(84/(months.length-1)));
-      const values=months.map((m,i)=>{
-        const pointEnd=new Date(m.getFullYear(),m.getMonth()+1,0,23,59,59);
-        const factDone=group.reduce((sum,t)=>sum+Math.min(num(t.volume),workDone(t,pointEnd)),0);
-        const supplied=group.reduce((sum,t)=>sum+Math.min(num(t.volume),delivered(t,pointEnd)),0);
-        return {x:months.length===1?50:8+i*(84/(months.length-1)),v:totalVol?Math.min(100,factDone/totalVol*100):0,s:totalVol?Math.min(100,supplied/totalVol*100):0};
-      });
-      let last=-1,lastSupply=-1;
-      workDays.forEach(day=>{if(!day.date)return;const dm=new Date(day.date+"T12:00:00");if(!(day.items||[]).some(x=>group.some(t=>matchesTask(x,t))))return;const ix=months.findIndex(m=>m.getFullYear()===dm.getFullYear()&&m.getMonth()===dm.getMonth());if(ix>last)last=ix});
-      invoices.forEach(inv=>{if(!inv.date)return;const dm=new Date(inv.date+"T12:00:00");if(!(inv.items||[]).some(x=>group.some(t=>invoiceMatches(x,t))))return;const ix=months.findIndex(m=>m.getFullYear()===dm.getFullYear()&&m.getMonth()===dm.getMonth());if(ix>lastSupply)lastSupply=ix});
-      const factPts=last>=0?[{x:startX,v:0},...values.slice(Math.max(0,startMonth),last+1).filter(p=>p.x>startX)]:[];
-      const supplyPts=lastSupply>=0?[{x:startX,s:0},...values.slice(Math.max(0,startMonth),lastSupply+1).filter(p=>p.x>startX)]:[];
-      return {pair,color:palette[si%palette.length],pts:factPts,supplyPts};
-    });
-    const lines=series.map(s=>{
-      const fact=s.pts.length?'<polyline class="workSeries755" style="stroke:'+s.color+'" points="'+s.pts.map(p=>p.x+","+(92-p.v*.72)).join(" ")+'"/>'+s.pts.map(p=>'<circle class="workDot755" style="fill:'+s.color+'" cx="'+p.x+'" cy="'+(92-p.v*.72)+'" r="1.25"></circle>').join(""):'';
-      const supply=s.supplyPts.length?'<polyline class="supplySeries757" style="stroke:'+s.color+'" points="'+s.supplyPts.map(p=>p.x+","+(92-p.s*.72)).join(" ")+'"/>':'';
-      return fact+supply;
+      const total=group.reduce((s,t)=>s+num(t.volume),0);
+      const mounted=group.reduce((s,t)=>s+Math.min(num(t.volume),workDone(t,new Date(8640000000000000))),0);
+      const supplied=group.reduce((s,t)=>s+Math.min(num(t.volume),delivered(t)),0);
+      const mp=total?Math.min(100,mounted/total*100):0,sp=total?Math.min(100,supplied/total*100):0;
+      const unit=group.find(t=>t.unit)?.unit||"";
+      return '<div class="objectProgressRow760"><div class="objectProgressTitle760"><b>'+esc(pair.type)+'</b><small>'+esc(pair.code)+'</small></div><div class="objectProgressBars760"><div class="objectProgressBar760"><span>Смонтировано</span><div><i class="mounted760" style="width:'+mp+'%"></i></div><strong>'+qtyFmt723(mp,1)+'%</strong><em>'+qtyFmt723(mounted)+' / '+qtyFmt723(total)+' '+esc(unit)+'</em></div><div class="objectProgressBar760"><span>Завезено</span><div><i class="supplied760" style="width:'+sp+'%"></i></div><strong>'+qtyFmt723(sp,1)+'%</strong><em>'+qtyFmt723(supplied)+' / '+qtyFmt723(total)+' '+esc(unit)+'</em></div></div></div>';
     }).join("");
-    const legend=series.map(s=>'<span><i style="background:'+s.color+'"></i>'+esc(s.pair.type)+' <small>'+esc(s.pair.code)+'</small></span>').join("");
-    return '<div class="planFact737 planFactPro738 workTypes755"><div class="planFactFilter739"><label>Показать график по</label><select id="planFactFilter739">'+opts+'</select></div><div class="planFactHead738"><div><b>Весь объект</b><small>Каждый вид работ начинается с 0% · сплошная линия — монтаж, пунктир — завезено по накладным</small></div></div><div class="workLegend755">'+legend+'</div><div class="chartTypeLegend757"><span><i></i>Монтаж</span><span class="supply757"><i></i>Завезено</span></div><div class="chartArea737"><div class="yLabels737"><span>100%</span><span>75%</span><span>50%</span><span>25%</span><span>0%</span></div><svg viewBox="0 0 100 100" preserveAspectRatio="none"><g class="grid737"><line x1="8" y1="20" x2="92" y2="20"/><line x1="8" y1="38" x2="92" y2="38"/><line x1="8" y1="56" x2="92" y2="56"/><line x1="8" y1="74" x2="92" y2="74"/><line x1="8" y1="92" x2="92" y2="92"/></g>'+lines+'</svg><div class="xLabels737">'+labels+'</div></div></div>';
+    return '<div class="planFact737 planFactPro738 objectProgress760"><div class="planFactFilter739"><label>Показать график по</label><select id="planFactFilter739">'+opts+'</select></div><div class="planFactHead738"><div><b>Весь объект</b><small>Сводка по каждому виду работ: сколько смонтировано и сколько завезено по накладным</small></div></div><div class="objectProgressList760">'+rows+'</div></div>';
   }
 
   return '<div class="planFact737 planFactPro738">'+
