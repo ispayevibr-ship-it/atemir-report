@@ -151,3 +151,6 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 
 /* v6.22.8 report expand icon */
 .recentChevron722{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#f1f5f8;color:#476176;flex:0 0 30px;transition:transform .18s,background .18s}.recentChevron722 svg{display:block}.recentReport722>summary:hover .recentChevron722{background:#e3ebf1}.recentReport722[open] .recentChevron722{transform:rotate(180deg);background:#e7f0f7;color:#173b59}
+
+/* v6.23.1 readiness bars */
+.readyBar730{width:150px;max-width:100%;height:10px;border-radius:999px;background:#e6edf2;overflow:hidden;box-shadow:inset 0 0 0 1px #d7e1e8}.readyBar730 i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#e3a51c,#2f83bd);min-width:0;transition:width .35s ease}.progressTable td:last-child{min-width:165px}
