@@ -379,3 +379,10 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .deadlineSingle746 .deadlineDonut745{width:min(240px,90%);height:auto;aspect-ratio:1/1}
 .deadlineFilter746{padding:12px 14px 0}
 .deadlineFilter746 select{width:100%;max-width:none!important}
+
+/* alternating daily report rows */
+.recentReport722:nth-of-type(odd){background:#ffffff}
+.recentReport722:nth-of-type(even){background:#f2f6f9}
+.recentReport722:nth-of-type(even) .recentReportBody722{background:#f7f9fb}
+.recentReport722:nth-of-type(even)>summary:hover{background:#edf3f7}
+.recentReport722:nth-of-type(odd)>summary:hover{background:#f8fafb}
