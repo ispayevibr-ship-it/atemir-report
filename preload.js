@@ -1,5 +1,5 @@
 const {contextBridge,ipcRenderer}=require("electron");
-contextBridge.exposeInMainWorld("atemirDesktop",{savePdf:(arg)=>ipcRenderer.invoke("report:pdf",arg),saveHtml:(arg)=>ipcRenderer.invoke("report:html",arg),getVersion:()=>ipcRenderer.invoke("app:version"),checkUpdates:()=>ipcRenderer.send("app:update-check")});
+contextBridge.exposeInMainWorld("atemirDesktop",{savePdf:(arg)=>ipcRenderer.invoke("report:pdf",arg),saveHtml:(arg)=>ipcRenderer.invoke("report:html",arg),getVersion:()=>ipcRenderer.invoke("app:version"),checkUpdates:()=>ipcRenderer.invoke("app:update-check")});
 function versionBadge(){ipcRenderer.invoke("app:version").then(v=>{let x=document.createElement("div");x.textContent="Версия "+v;x.title="Текущая версия программы";x.style.cssText="position:fixed;right:18px;bottom:18px;z-index:2147483000;padding:5px 9px;border-radius:7px;background:rgba(16,59,100,.08);color:#65798a;font:12px Arial,sans-serif;pointer-events:none";document.body.appendChild(x)}).catch(()=>{})}
 function updaterUi(){versionBadge();
  let box=document.createElement("div");box.id="atemirUpdater";box.style.cssText="display:none;position:fixed;right:18px;bottom:18px;z-index:2147483647;width:min(430px,calc(100vw - 36px));background:#fff;border:1px solid #d8e2ea;border-radius:14px;padding:14px 16px;box-shadow:0 12px 36px rgba(0,0,0,.22);font:14px Arial,sans-serif;color:#173b59";
