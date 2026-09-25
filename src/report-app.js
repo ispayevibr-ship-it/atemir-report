@@ -89,7 +89,7 @@ function deadlineAlerts528(){
   const volume=tasks.reduce((s,t)=>s+num(t.volume),0);
   const rawFact=tasks.reduce((s,t)=>s+done(t),0); const fact=Math.min(volume,rawFact); const over=Math.max(0,rawFact-volume);
   const pct=volume?Math.min(100,fact/volume*100):0;
-  const end=new Date(Math.max(...tasks.map(t=>new Date(t.date+"T12:00:00"))));
+  const end=new Date(Math.max(...tasks.map(t=>new Date((t.date||t.end)+"T12:00:00"))));
   const left=Math.ceil((end-td)/86400000);
   const state=pct>=100?"done":left<0?"late":left<=3?"critical":left<=7?"soon":"ok";
   const txt=state==="done"?"Завершено":state==="late"?"Просрочено на "+Math.abs(left)+" дн.":left===0?"Срок сегодня":left===1?"Остался 1 день":"Осталось "+left+" дн.";
@@ -144,7 +144,7 @@ function objectSchedule248(){let today=d.reportDate||new Date().toISOString().sl
 function monthlyDynamics248(){let days=[...savedWorkDays574()].filter(x=>x.date).sort((a,b)=>String(a.date).localeCompare(String(b.date)));if(!days.length)return '<div class="empty">График появится после ежедневных отчётов.</div>';let today=new Date(),ym=today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0"),months=[...new Set(days.map(x=>String(x.date).slice(0,7)))],month=months.includes(ym)?ym:months.at(-1),inMonth=days.filter(x=>String(x.date).startsWith(month)),num=v=>parseFloat(String(v??"").replace(",","."))||0,total=(q,p)=>num(q)*(num(p)||1),groups={};inMonth.forEach(day=>(day.items||[]).forEach(x=>{let k=(x.type||"Работа")+"|||"+(x.code||"")+"|||"+(x.unit||"");if(!groups[k])groups[k]={type:x.type||"Работа",code:x.code||"",unit:x.unit||"",days:{},sum:0};let v=total(x.qty,x.per);groups[k].days[day.date]=(groups[k].days[day.date]||0)+v;groups[k].sum+=v}));let monthNames=["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"],palette=["barA719","barB719","barC719","barD719","barE719"],rows=Object.values(groups).map(g=>{let dates=Object.keys(g.days).sort(),max=Math.max(1,...dates.map(dt=>g.days[dt])),bars=dates.map((dt,i)=>{let v=g.days[dt],h=Math.max(v?3:0,v/max*100),label=(Math.round(v*1000)/1000).toLocaleString("ru-RU",{maximumFractionDigits:3});return '<div class="monthBar719" title="'+esc(dt)+' · '+esc(label)+' '+esc(g.unit)+'"><b>'+esc(label)+'</b><div class="barSlot719"><i class="'+palette[i%palette.length]+'" style="height:'+h+'%"></i></div><small>'+esc(dt.slice(8))+'.'+esc(dt.slice(5,7))+'</small></div>'}).join("");return '<div class="monthPanel719"><div class="monthTitle719"><b>'+esc(g.type)+' · '+esc(g.code||"Без шифра")+'</b><small>'+monthNames[+month.slice(5,7)-1]+' '+month.slice(0,4)+' г. · '+esc(g.unit)+' · за месяц '+g.sum.toLocaleString("ru-RU",{maximumFractionDigits:3})+'</small></div><div class="monthScroll719"><div class="monthChart719">'+bars+'</div></div></div>'}).join("");return rows||'<div class="empty">В этом месяце выполненных объёмов нет.</div>'}
 function planFactChart737(){
   const num=v=>parseFloat(String(v??"").replace(",","."))||0;
-  const all=(d.tasks||[]).filter(t=>t.start&&t.date&&num(t.volume)>0);
+  const all=(d.tasks||[]).filter(t=>t.start&&(t.date||t.end)&&num(t.volume)>0);
   if(!all.length)return '<div class="empty">Чтобы построить график, задайте даты начала, окончания и проектные объёмы.</div>';
 
   let sel=window.planFactFilter739||"all";
@@ -188,7 +188,7 @@ function planFactChart737(){
     const pointEnd=new Date(m.getFullYear(),m.getMonth()+1,0,23,59,59);
     const planDone=tasks.reduce((sum,t)=>{
       const ts=new Date(t.start+"T12:00:00");
-      const te=new Date(t.date+"T12:00:00");
+      const te=new Date((t.date||t.end)+"T12:00:00");
       const vol=num(t.volume);
       if(pointEnd<ts)return sum;
       if(pointEnd>=te)return sum+vol;
@@ -241,7 +241,7 @@ function planFactChart737(){
       const mounted=group.reduce((s,t)=>s+Math.min(num(t.volume),workDone(t,new Date(8640000000000000))),0);
       const supplied=group.reduce((s,t)=>s+Math.min(num(t.volume),delivered(t)),0);
       const planned=group.reduce((s,t)=>{
-        const v=num(t.volume),a=parseDate(t.start),b=parseDate(t.end);
+        const v=num(t.volume),a=parseDate(t.start),b=parseDate(t.date||t.end);
         if(!v||!a||!b)return s;
         const den=Math.max(1,b-a),p=now<=a?0:now>=b?1:Math.max(0,Math.min(1,(now-a)/den));
         return s+v*p;
