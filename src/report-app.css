@@ -407,3 +407,20 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .marksCompact747 .marksMore736 .white{padding:5px 8px!important;font-size:10px!important}
 @media(max-width:1250px){.marksCompact747 .marksCards736{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
 @media(max-width:900px){.calendarPhotos747{grid-template-columns:1fr!important}.marksCompact747 .marksCards736{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+
+/* compact dashboard marks v6.25.28 */
+.marksCompactList748{display:grid;gap:8px}
+.marksGroup748{border:1px solid #e1e7eb;border-radius:9px;padding:8px 10px;background:#fff}
+.marksHead748{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:5px}
+.marksHead748>div{display:flex;align-items:baseline;gap:8px;min-width:0}
+.marksHead748 b{font-size:13px}
+.marksHead748 span,.marksHead748 small{font-size:10px;color:#6d7b83}
+.marksRows748{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px 12px}
+.markRow748{display:grid;grid-template-columns:minmax(65px,.6fr) minmax(120px,1.7fr) auto auto;align-items:center;gap:7px;min-width:0;padding:5px 3px;border-top:1px solid #edf1f3}
+.markRow748 b{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.markRow748 span{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#56646c}
+.markRow748 strong{font-size:10px;white-space:nowrap}
+.markRow748 small{font-size:9px;white-space:nowrap;color:#7a858b}
+.markRow748.done small{font-weight:700}
+.marksAll748{margin-top:6px!important;padding:4px 8px!important;font-size:10px!important}
+@media(max-width:1050px){.marksRows748{grid-template-columns:1fr}}
