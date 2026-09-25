@@ -91,4 +91,3 @@ jobs:
           git add hot
           git commit -m "Lightweight update $version"
           git push origin HEAD:main
-          fail_on_unmatched_files: true
