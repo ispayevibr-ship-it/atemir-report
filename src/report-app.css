@@ -243,3 +243,9 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 .xLabels737{position:absolute;left:48px;right:0;bottom:2px;height:22px}
 .xLabels737 span{position:absolute;transform:translateX(-50%);font-size:11px;color:#718290}
 @media(max-width:900px){.heroTitle551 h2{font-size:18px!important}.recentBrief735{display:grid!important}.planFact737{overflow-x:auto}}
+
+
+/* v6.25.3 plan/fact chart geometry fix */
+.chartArea737 svg circle{vector-effect:non-scaling-stroke;transform-box:fill-box;transform-origin:center}
+.dotsPlan737 circle,.dotsFact737 circle{stroke:#fff;stroke-width:.7}
+.chartArea737 svg{overflow:visible}
