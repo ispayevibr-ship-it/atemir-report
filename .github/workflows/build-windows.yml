@@ -41,6 +41,20 @@ jobs:
         run: npm install
       - name: Build Windows installer
         run: npx electron-builder --win nsis --x64 --publish never
+      - name: Build lightweight update package
+        if: github.event_name == 'push'
+        shell: pwsh
+        run: |
+          $version = node -p "require('./package.json').version"
+          New-Item -ItemType Directory -Force -Path hot-publish/src | Out-Null
+          Copy-Item src/*.html hot-publish/src/
+          Copy-Item src/*.js hot-publish/src/
+          Copy-Item src/*.css hot-publish/src/
+          $files = Get-ChildItem hot-publish/src -File | ForEach-Object {
+            @{ path = "src/" + $_.Name; size = $_.Length }
+          }
+          $size = ($files | Measure-Object -Property size -Sum).Sum
+          @{ version=$version; size=$size; files=$files } | ConvertTo-Json -Depth 5 | Set-Content hot-publish/latest.json -Encoding UTF8
       - name: Read app version
         id: app_version
         shell: pwsh
@@ -59,4 +73,22 @@ jobs:
             dist/*.exe
             dist/latest.yml
             dist/*.blockmap
+      - name: Publish lightweight update files
+        if: github.event_name == 'push'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.UPDATE_REPO_TOKEN }}
+        run: |
+          $version = node -p "require('./package.json').version"
+          git clone "https://x-access-token:$env:GH_TOKEN@github.com/ispayevibr-ship-it/atemir-report-updates.git" "$env:RUNNER_TEMP/hot-repo"
+          Set-Location "$env:RUNNER_TEMP/hot-repo"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          New-Item -ItemType Directory -Force -Path "hot/$version/src" | Out-Null
+          Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/src/*" "hot/$version/src/" -Force
+          New-Item -ItemType Directory -Force -Path "hot" | Out-Null
+          Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/latest.json" "hot/latest.json" -Force
+          git add hot
+          git commit -m "Lightweight update $version"
+          git push origin HEAD:main
           fail_on_unmatched_files: true
