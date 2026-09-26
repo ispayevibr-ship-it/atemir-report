@@ -548,3 +548,8 @@ main{overflow-x:hidden}#view{max-width:none;width:100%;overflow:hidden}.hero551,
 
 /* v6.25.54 remove AT badge from object sidebar */
 .brand:before{display:none!important;content:none!important}.brand{padding-left:18px!important}
+
+/* v6.25.58 clearer readiness in main work types */
+.readyCell732 .readyBar730{height:12px;background:#e8edf2;box-shadow:inset 0 0 0 1px #d9e1e7}
+.readyCell732 .readyBar730 i{background:#22a66f!important}
+.readyCell732 b{color:#148257!important;background:#e2f5eb;padding:4px 7px;border-radius:6px;min-width:48px;text-align:center;font-weight:800}
