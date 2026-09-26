@@ -1364,3 +1364,185 @@ aside #nav button[data-v="dynamics"] .navIcon552{font-size:19px!important;line-h
 @media(max-width:1100px){
  .objectSecondary770>div:nth-child(2) .multiCalendar{grid-template-columns:1fr!important}
 }
+
+
+/* v6.26.00 OVERVIEW NORMALIZATION — one geometry system, no legacy scroll conflicts */
+.objectOverview770{--ov-gap:14px;--ov-pad:16px;--ov-head:15px;--ov-text:11px;display:block!important}
+.objectOverview770 .card{box-sizing:border-box!important;position:relative!important;overflow:hidden!important}
+.objectOverview770 .card>h2,.objectOverview770 .card>h3{
+  position:relative!important;top:auto!important;z-index:5!important;
+  margin:0 0 12px!important;padding:0 0 11px!important;
+  background:#fff!important;border-bottom:1px solid #e7edf1!important;box-shadow:none!important;
+  font-size:var(--ov-head)!important;line-height:1.2!important;font-weight:750!important;color:#173c56!important;
+}
+.objectMid770,.objectBottomTop773,.objectBottomData773,.objectSecondary770{
+  display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  gap:var(--ov-gap)!important;align-items:stretch!important;
+}
+.objectMid770>div,.objectBottomTop773>div,.objectBottomData773>div,.objectSecondary770>div{
+  min-width:0!important;display:flex!important;align-self:stretch!important;
+}
+.objectMid770>div>.card,.objectBottomTop773>div>.card,.objectBottomData773>div>.card,.objectSecondary770>div>.card{
+  width:100%!important;box-sizing:border-box!important;
+}
+
+/* status = one visual unit */
+.objectStatusLine793{
+  display:inline-flex!important;width:max-content!important;max-width:100%!important;
+  align-items:center!important;gap:7px!important;margin:0 0 8px!important;
+  min-height:25px!important;padding:0 10px!important;border-radius:999px!important;
+  background:#e9f8f0!important;color:#477162!important;font-size:10px!important;line-height:1!important;
+}
+.objectStatusLine793>span:first-child{color:#477162!important}
+.objectStatusLine793 .objectStatus784{
+  min-height:0!important;padding:0!important;margin:0!important;background:transparent!important;
+  color:#168454!important;font-size:10px!important;font-weight:750!important;gap:6px!important;
+}
+.objectStatusLine793 .objectStatus784 i{width:7px!important;height:7px!important;flex-basis:7px!important;background:#20aa68!important}
+
+/* pair 1: readiness + key dates, same height */
+.objectMid770>div>.card{
+  height:350px!important;min-height:350px!important;max-height:350px!important;
+  padding:var(--ov-pad)!important;
+}
+.objectMid770 .progressTable{max-height:278px!important;overflow:auto!important;padding:0 10px 12px 0!important;scrollbar-gutter:stable!important}
+.objectMid770>div:nth-child(2)>.card{padding:var(--ov-pad)!important}
+.objectMid770>div:nth-child(2) .deadlineMain745{min-height:0!important}
+.objectMid770>div:nth-child(2) .deadlineAnalytics754{padding-bottom:0!important;margin-bottom:0!important}
+
+/* pair 2: 9 photos + recent reports */
+.objectBottomTop773>div>.card{
+  height:430px!important;min-height:430px!important;max-height:430px!important;
+}
+.objectBottomTop773>div:first-child>.card{padding:var(--ov-pad)!important}
+.objectBottomTop773 .summaryPhotos722{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  grid-template-rows:repeat(3,101px)!important;gap:7px!important;
+}
+.objectBottomTop773 .summaryPhoto722,.objectBottomTop773 .summaryPhoto722.featured722{height:101px!important;min-height:101px!important}
+.objectBottomTop773 .photoOverviewActions783{padding-top:10px!important}
+.objectBottomTop773 .recentReportsCard797>.card{
+  height:430px!important;min-height:430px!important;max-height:430px!important;padding:0!important;
+}
+.objectBottomTop773 .recentReportsCard797>.card>h2{
+  margin:0!important;padding:16px 18px 12px!important;font-size:var(--ov-head)!important;
+  line-height:1.2!important;font-weight:750!important;border-bottom:1px solid #e7edf1!important;
+}
+.recentReportsScroll797{padding:12px 18px 16px!important;font-size:var(--ov-text)!important}
+.recentReportsScroll797 .recentReport722>summary b{font-size:12px!important}
+.recentReportsScroll797 .recentReport722>summary small{font-size:9px!important}
+.recentReportsScroll797 .recentBriefItem737{font-size:9px!important;padding:5px 8px!important}
+.recentReportsScroll797 .recentBriefItem737 b,.recentReportsScroll797 .recentBriefItem737 strong{font-size:10px!important}
+.recentReportsScroll797 .recentBriefItem737 span{font-size:9px!important}
+
+/* pair 3: BOM + latest volumes: fixed shell, dedicated inner scrolls */
+.objectBottomData773>div>.card{
+  height:470px!important;min-height:470px!important;max-height:470px!important;
+  padding:var(--ov-pad)!important;display:flex!important;flex-direction:column!important;
+}
+.objectBottomData773>div>.card>h2{flex:0 0 auto!important}
+.marksCard801 .marksTableList751,.latestVolumesScroll801{
+  flex:1 1 auto!important;min-height:0!important;max-height:none!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+  padding:6px 12px 16px 0!important;margin:0!important;box-sizing:border-box!important;scrollbar-gutter:stable!important;
+}
+.latestVolumesScroll801 .tablewrap{overflow:visible!important;max-height:none!important;padding:0!important}
+.latestVolumesScroll801 table{font-size:10px!important}
+.latestVolumesScroll801 th{font-size:9px!important;padding:8px 9px!important}
+.latestVolumesScroll801 td{font-size:10px!important;padding:10px 9px!important;height:auto!important;line-height:1.25!important}
+.latestVolumesScroll801 td b{font-size:10px!important}
+.latestVolumesScroll801 .muted{font-size:9px!important;margin:10px 0 0!important}
+.marksCard801 .marksTableGroup751{margin:0 0 12px!important}
+.marksCard801 .marksTableList751:after{content:"";display:block;height:8px!important}
+
+/* pair 4: schedule + calendar: same shell, only bodies scroll */
+.objectSecondary770>div>.card{
+  height:500px!important;min-height:500px!important;max-height:500px!important;
+  padding:var(--ov-pad)!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;
+}
+.objectSecondary770>div>.card>h2{flex:0 0 auto!important;margin:0 0 12px!important}
+.scheduleScroll801{
+  flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;
+  padding:0 12px 14px 0!important;scrollbar-gutter:stable!important;
+}
+.scheduleScroll801 .schedule248{
+  display:grid!important;grid-template-columns:minmax(165px,1.2fr) minmax(125px,.9fr) minmax(205px,1.25fr)!important;
+  gap:12px!important;align-items:center!important;min-height:64px!important;
+  padding:9px 4px!important;border-bottom:1px solid #e8eef2!important;box-sizing:border-box!important;
+}
+.scheduleScroll801 .schedule248>div:first-child{min-width:0!important}
+.scheduleScroll801 .schedule248>div:first-child b{
+  display:block!important;font-size:11px!important;line-height:1.15!important;font-weight:750!important;
+  white-space:normal!important;overflow-wrap:break-word!important;
+}
+.scheduleScroll801 .schedule248>div:first-child small{
+  display:block!important;margin-top:3px!important;font-size:9px!important;line-height:1.15!important;color:#7a8d9b!important;
+}
+.scheduleScroll801 .scheduleTrack248{min-width:0!important}
+.scheduleScroll801 .scheduleNums248{min-width:0!important;text-align:right!important;padding:0!important}
+.scheduleScroll801 .scheduleNums248>b{font-size:12px!important;line-height:1.1!important}
+.scheduleScroll801 .scheduleNums248>span{
+  display:block!important;margin-top:2px!important;font-size:10px!important;line-height:1.15!important;font-weight:700!important;
+  white-space:normal!important;
+}
+.scheduleScroll801 .scheduleNums248>small{
+  display:block!important;margin-top:3px!important;font-size:9px!important;line-height:1.15!important;color:#7a8d9b!important;
+}
+.calendarCard801>.card{padding:var(--ov-pad)!important}
+.calendarCard801 .calendarLegend512{flex:0 0 auto!important;margin:0 0 12px!important}
+.calendarCard801 .multiCalendar{
+  flex:1 1 auto!important;min-height:0!important;
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-content:start!important;
+  gap:12px!important;overflow-y:auto!important;overflow-x:hidden!important;
+  padding:0 12px 14px 0!important;scrollbar-gutter:stable!important;
+}
+.calendarCard801 .monthCard{min-width:0!important;width:100%!important;margin:0!important;padding:11px!important;box-sizing:border-box!important}
+.calendarCard801 .monthTitle{font-size:13px!important;margin:0 0 9px!important}
+.calendarCard801 .workCalendar{grid-template-columns:repeat(7,minmax(0,1fr))!important;width:100%!important;min-width:0!important}
+.calendarCard801 .calDay,.calendarCard801 .calHead{min-width:0!important;width:auto!important;font-size:9px!important}
+
+/* monthly chart: compact panels, no giant vertical bars */
+.monthlyCard801>.card{padding:var(--ov-pad)!important;overflow:hidden!important}
+.monthlyScroll801{display:grid!important;gap:12px!important}
+.monthlyScroll801 .monthPanel719{margin:0!important;padding:12px 14px!important;border-radius:10px!important;box-sizing:border-box!important}
+.monthlyScroll801 .monthTitle719{margin-bottom:8px!important}
+.monthlyScroll801 .monthTitle719 b{font-size:12px!important;line-height:1.2!important}
+.monthlyScroll801 .monthTitle719 small{font-size:9px!important;line-height:1.2!important}
+.monthlyScroll801 .monthScroll719{padding-bottom:8px!important}
+.monthlyScroll801 .monthChart719{height:155px!important;min-height:155px!important}
+.monthlyScroll801 .monthBar719{min-width:72px!important}
+.monthlyScroll801 .monthBar719>b{font-size:11px!important}
+.monthlyScroll801 .monthBar719>small{font-size:9px!important}
+.monthlyScroll801 .barSlot719{height:112px!important}
+
+/* one scrollbar treatment everywhere */
+.marksCard801 .marksTableList751::-webkit-scrollbar,
+.latestVolumesScroll801::-webkit-scrollbar,
+.scheduleScroll801::-webkit-scrollbar,
+.calendarCard801 .multiCalendar::-webkit-scrollbar,
+.recentReportsScroll797::-webkit-scrollbar{width:8px!important;height:8px!important}
+.marksCard801 .marksTableList751::-webkit-scrollbar-track,
+.latestVolumesScroll801::-webkit-scrollbar-track,
+.scheduleScroll801::-webkit-scrollbar-track,
+.calendarCard801 .multiCalendar::-webkit-scrollbar-track,
+.recentReportsScroll797::-webkit-scrollbar-track{background:transparent!important;margin:8px 0 12px!important}
+.marksCard801 .marksTableList751::-webkit-scrollbar-thumb,
+.latestVolumesScroll801::-webkit-scrollbar-thumb,
+.scheduleScroll801::-webkit-scrollbar-thumb,
+.calendarCard801 .multiCalendar::-webkit-scrollbar-thumb,
+.recentReportsScroll797::-webkit-scrollbar-thumb{background:#a9b7c1!important;border:2px solid transparent!important;background-clip:padding-box!important;border-radius:99px!important}
+
+/* keep tables readable and headers fixed inside their own scroll bodies */
+.objectOverview770 .progressTable thead th,.latestVolumesScroll801 thead th{
+  position:sticky!important;top:0!important;z-index:8!important;background:#f5f8fa!important;
+}
+
+@media(max-width:1250px){
+  .scheduleScroll801 .schedule248{grid-template-columns:minmax(145px,1fr) minmax(110px,.8fr) minmax(175px,1.1fr)!important}
+}
+@media(max-width:1050px){
+  .objectMid770,.objectBottomTop773,.objectBottomData773,.objectSecondary770{grid-template-columns:1fr!important}
+  .objectMid770>div>.card,.objectBottomTop773>div>.card,.objectBottomData773>div>.card,.objectSecondary770>div>.card{height:auto!important;min-height:0!important;max-height:none!important}
+  .marksCard801 .marksTableList751,.latestVolumesScroll801,.scheduleScroll801,.calendarCard801 .multiCalendar{max-height:430px!important}
+  .calendarCard801 .multiCalendar{grid-template-columns:1fr!important}
+}
