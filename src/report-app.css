@@ -1078,3 +1078,23 @@ main{padding-right:24px!important;box-sizing:border-box!important}
 
 @media(max-width:1150px){main{padding-right:16px!important}.objectSecondary770>div>.card{height:auto!important;min-height:0!important;max-height:none!important}.objectSecondary770 .schedule248{grid-template-columns:1fr!important}}
 @media(max-width:700px){main{padding-right:10px!important}}
+
+
+/* v6.25.90 custom export date controls match header action buttons */
+#objectExportFrom610,#objectExportTo610{
+  height:32px!important;
+  min-height:32px!important;
+  box-sizing:border-box!important;
+  padding:6px 10px!important;
+  border:1px solid #d5e0e8!important;
+  border-radius:7px!important;
+  background:#fff!important;
+  color:#29465f!important;
+  font:inherit!important;
+  font-size:11px!important;
+  font-weight:600!important;
+  box-shadow:none!important;
+  cursor:pointer!important;
+}
+#objectExportFrom610:hover,#objectExportTo610:hover{background:#f7fafc!important;border-color:#bdccd7!important}
+#objectExportFrom610:focus,#objectExportTo610:focus{outline:2px solid #0868e826!important;border-color:#6aa6ef!important}
