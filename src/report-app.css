@@ -1133,3 +1133,53 @@ main{
   box-sizing:border-box!important;
 }
 @media(max-width:850px){main{margin-left:0!important;width:100%!important;padding-right:12px!important}}
+
+
+/* v6.25.92 proper inner scroll padding + sticky card titles */
+.objectOverview770 .card{
+  position:relative!important;
+}
+.objectOverview770 .card>h2,
+.objectOverview770 .card>h3{
+  position:sticky!important;
+  top:0!important;
+  z-index:30!important;
+  background:#fff!important;
+  padding:12px 0 10px!important;
+  margin:-12px 0 12px!important;
+  border-bottom:1px solid #edf2f5!important;
+}
+
+/* scrollable overview cards must keep visible air above/below their content */
+.objectBottomData773>div>.card,
+.objectSecondary770>div>.card{
+  padding-top:16px!important;
+  padding-bottom:16px!important;
+  scroll-padding-top:54px!important;
+  scroll-padding-bottom:16px!important;
+}
+.objectBottomData773 .marksTableList751{
+  padding-top:6px!important;
+  padding-bottom:14px!important;
+  margin-top:0!important;
+}
+.objectBottomData773 .marksTableGroup751:first-child{margin-top:0!important}
+.objectBottomData773 .marksTableGroup751:last-child{margin-bottom:0!important}
+
+/* keep the card title fixed while its content scrolls */
+.objectBottomData773>div>.card>h2,
+.objectSecondary770>div>.card>h2{
+  top:-16px!important;
+  margin:-16px 0 12px!important;
+  padding:16px 0 11px!important;
+  box-shadow:0 1px 0 #edf2f5!important;
+}
+
+/* leave breathing room at the physical end of internal scroll areas */
+.objectBottomData773 .marksTableList751:after,
+.objectSecondary770>div>.card:after{
+  content:""!important;
+  display:block!important;
+  height:12px!important;
+  flex:0 0 12px!important;
+}
