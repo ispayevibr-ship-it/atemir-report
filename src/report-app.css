@@ -774,3 +774,38 @@ header{width:auto!important;min-width:0!important}
 .objectBottom770>div:nth-child(3) .card h2,.objectBottom770>div:nth-child(4) .card h2{white-space:nowrap!important}
 .objectMid770 .card,.objectBottom770 .card{box-sizing:border-box!important}
 @media(min-width:1400px){.objectMid770{grid-template-columns:minmax(0,1.8fr) minmax(390px,.72fr)!important}.objectBottom770{grid-template-columns:minmax(330px,.9fr) minmax(560px,1.7fr) minmax(300px,.85fr) minmax(300px,.85fr)!important}}
+
+/* v6.25.74 readable lower overview: no four-column squeeze */
+.objectMid770{grid-template-columns:minmax(0,2.15fr) minmax(460px,.85fr)!important;gap:10px!important}
+.objectMid770 .card{height:auto!important;overflow:hidden!important}
+.objectMid770 .progressTable{overflow:hidden!important}
+.objectMid770 .progressTable table{width:100%!important;min-width:0!important;table-layout:fixed!important}
+.objectMid770 .progressTable th,.objectMid770 .progressTable td{white-space:nowrap!important}
+.objectMid770 .progressTable td:first-child{white-space:normal!important}
+.objectMid770>div:nth-child(2) .card{padding:10px 12px!important}
+.objectMid770>div:nth-child(2) .deadlineFilter746{display:flex!important;gap:8px!important;align-items:center!important;padding:6px!important;margin:0 0 8px!important}
+.objectMid770>div:nth-child(2) .deadlineFilter746 label{font-size:9px!important;white-space:nowrap!important}
+.objectMid770>div:nth-child(2) .deadlineFilter746 select{height:30px!important;min-width:0!important;font-size:9px!important}
+.objectMid770>div:nth-child(2) .deadlineDonut745{width:150px!important;height:150px!important;flex:0 0 150px!important}
+.objectMid770>div:nth-child(2) .deadlineInside745 b{font-size:10px!important;max-width:110px!important}
+.objectMid770>div:nth-child(2) .deadlineInside745 strong{font-size:20px!important}
+.objectMid770>div:nth-child(2) .deadlineSide756{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+.objectMid770>div:nth-child(2) .deadlineSide756>div{padding:7px!important;min-width:0!important}
+.objectMid770>div:nth-child(2) .deadlineSide756 small{font-size:7px!important}
+.objectMid770>div:nth-child(2) .deadlineSide756 b{font-size:9px!important;overflow-wrap:anywhere!important}
+.objectMid770>div:nth-child(2) .deadlineAnalytics754{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}
+.objectMid770>div:nth-child(2) .deadlineAnalytics754>div{min-width:0!important;padding:7px!important}
+.objectMid770>div:nth-child(2) .deadlineAnalytics754 small,.objectMid770>div:nth-child(2) .deadlineAnalytics754 span{font-size:7px!important}
+.objectMid770>div:nth-child(2) .deadlineAnalytics754 b{font-size:9px!important;overflow-wrap:anywhere!important}
+.objectBottomTop773{display:grid;grid-template-columns:minmax(350px,.8fr) minmax(0,1.8fr);gap:10px;align-items:start}
+.objectBottomTop773>div{min-width:0}.objectBottomTop773 .card{height:auto!important;max-height:450px!important;overflow:auto!important;margin:0!important;padding:10px!important}
+.objectBottomTop773>div:first-child .card{overflow:hidden!important}
+.objectBottomTop773 .summaryPhotos722{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:5px!important}
+.objectBottomTop773 .summaryPhoto722{height:145px!important;min-height:145px!important}
+.objectBottomTop773 .recentReport722{margin:0!important}
+.objectBottomData773{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}
+.objectBottomData773>div{min-width:0}.objectBottomData773 .card{height:auto!important;max-height:430px!important;overflow:auto!important;margin:0!important;padding:10px!important}
+.objectBottomData773 .marksTableList751{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+.objectBottomData773 .marksTableGroup751{margin:0!important;min-width:0!important}
+.objectBottomData773 table{width:100%!important;table-layout:auto!important}
+@media(max-width:1250px){.objectMid770{grid-template-columns:1fr!important}.objectBottomTop773,.objectBottomData773{grid-template-columns:1fr!important}.objectBottomData773 .marksTableList751{grid-template-columns:1fr!important}}
