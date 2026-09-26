@@ -1546,3 +1546,35 @@ aside #nav button[data-v="dynamics"] .navIcon552{font-size:19px!important;line-h
   .marksCard801 .marksTableList751,.latestVolumesScroll801,.scheduleScroll801,.calendarCard801 .multiCalendar{max-height:430px!important}
   .calendarCard801 .multiCalendar{grid-template-columns:1fr!important}
 }
+
+
+/* v6.26.01 visible vertical gutters between every overview block */
+.objectOverview770{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:16px!important;
+  padding-top:16px!important;
+  padding-bottom:24px!important;
+}
+.objectOverview770>section{
+  margin:0!important;
+  flex:0 0 auto!important;
+}
+.objectOverview770 .objectHero770,
+.objectOverview770 .objectKpis770,
+.objectOverview770 .objectMainChart770,
+.objectOverview770 .objectMid770,
+.objectOverview770 .objectBottomTop773,
+.objectOverview770 .objectBottomData773,
+.objectOverview770 .objectSecondary770,
+.objectOverview770 .monthlyCard801{
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+.objectOverview770 .card{
+  margin-top:0!important;
+  margin-bottom:0!important;
+}
+@media(max-width:1050px){
+  .objectOverview770{gap:14px!important;padding-top:14px!important;padding-bottom:20px!important}
+}
