@@ -992,3 +992,33 @@ aside #nav{min-height:0!important;flex:1 1 auto!important}
 .objectMid770>div:nth-child(2) .deadlineMain745{flex:none!important}
 .objectMid770>div:nth-child(2) .deadlineAnalytics754{flex:none!important;margin-bottom:0!important;padding-bottom:8px!important}
 @media(max-width:850px){aside{position:relative!important;width:auto!important;height:auto!important;min-height:0!important}main{margin-left:0!important;width:100%!important}}
+
+
+/* v6.25.88 equal-height overview rows */
+.objectOverview770 .objectMid770,
+.objectOverview770 .objectBottomTop773,
+.objectOverview770 .objectBottom773{
+  align-items:stretch!important;
+}
+.objectOverview770 .objectMid770>div,
+.objectOverview770 .objectBottomTop773>div,
+.objectOverview770 .objectBottom773>div{
+  display:flex!important;
+  align-self:stretch!important;
+}
+.objectOverview770 .objectMid770>div>.card,
+.objectOverview770 .objectBottomTop773>div>.card,
+.objectOverview770 .objectBottom773>div>.card{
+  width:100%!important;
+  height:100%!important;
+  min-height:100%!important;
+  box-sizing:border-box!important;
+}
+@media(max-width:1250px){
+  .objectOverview770 .objectMid770>div>.card,
+  .objectOverview770 .objectBottomTop773>div>.card,
+  .objectOverview770 .objectBottom773>div>.card{
+    height:auto!important;
+    min-height:0!important;
+  }
+}
