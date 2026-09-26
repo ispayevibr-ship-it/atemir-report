@@ -748,3 +748,29 @@ header{width:auto!important;min-width:0!important}
 .homeGanttTrack772{height:25px;position:relative;background:repeating-linear-gradient(90deg,#f7f9fb 0,#f7f9fb 1px,transparent 1px,transparent 12.5%);overflow:hidden}.homeGanttTrack772 i{position:absolute;border-radius:3px}.hgPlan772{top:5px;height:5px;background:#cbd8e3}.hgFact772{top:12px;height:5px;background:#18ad65}.hgSupply772{top:19px;height:3px;background:#f6a623}.hgToday772{top:1px!important;bottom:1px!important;width:2px!important;height:auto!important;background:#ef4444!important;border-radius:0!important}
 .homeGanttReady772{font-size:10px;text-align:right;color:#183b59}.homeGanttLag772{font-size:8px;font-weight:700;text-align:right;color:#18a25f}.homeGanttLag772.late{color:#ed4545}
 @media(max-width:1050px){.homeGanttHead772,.homeGanttRow772{grid-template-columns:180px minmax(300px,1fr) 65px 85px}.homeGantt772{overflow-x:auto}.homeGanttHead772,.homeGanttRow772{min-width:760px}}
+
+/* v6.25.73 tighten overview lower dashboard from real screenshots */
+.objectMid770{align-items:start!important}
+.objectMid770>div>.card{height:auto!important;min-height:0!important}
+.objectMid770 .progressTable{max-height:none!important}
+.objectMid770 .progressTable table{table-layout:fixed!important}
+.objectMid770 .progressTable th:nth-child(1){width:27%}.objectMid770 .progressTable th:nth-child(2){width:11%}.objectMid770 .progressTable th:nth-child(3),.objectMid770 .progressTable th:nth-child(4),.objectMid770 .progressTable th:nth-child(5){width:10%}.objectMid770 .progressTable th:nth-child(6){width:32%}
+.objectBottom770{align-items:start!important}
+.objectBottom770>div>.card{height:auto!important;min-height:0!important;max-height:430px!important}
+.objectBottom770>div:nth-child(1)>.card{max-height:390px!important}
+.objectBottom770>div:nth-child(2)>.card{max-height:430px!important;overflow:auto!important}
+.objectBottom770>div:nth-child(3)>.card{max-height:430px!important;overflow:auto!important}
+.objectBottom770>div:nth-child(4)>.card{max-height:430px!important;overflow:auto!important}
+.objectBottom770 .summaryPhotos722{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.objectBottom770 .summaryPhoto722{height:150px!important;min-height:150px!important;aspect-ratio:auto!important}
+.objectBottom770 .summaryPhoto722 img{width:100%!important;height:100%!important;object-fit:cover!important}
+.objectBottom770 .recentReport722{margin:0!important}
+.objectBottom770 .recentReportBody722{padding:8px 14px!important}
+.objectBottom770 .progressTable{max-height:355px!important;overflow:auto!important}
+.objectBottom770 table{table-layout:fixed!important}
+.objectBottom770 td,.objectBottom770 th{overflow:hidden!important;text-overflow:ellipsis!important}
+.objectBottom770>div:nth-child(3){min-width:300px!important}
+.objectBottom770>div:nth-child(4){min-width:300px!important}
+.objectBottom770>div:nth-child(3) .card h2,.objectBottom770>div:nth-child(4) .card h2{white-space:nowrap!important}
+.objectMid770 .card,.objectBottom770 .card{box-sizing:border-box!important}
+@media(min-width:1400px){.objectMid770{grid-template-columns:minmax(0,1.8fr) minmax(390px,.72fr)!important}.objectBottom770{grid-template-columns:minmax(330px,.9fr) minmax(560px,1.7fr) minmax(300px,.85fr) minmax(300px,.85fr)!important}}
