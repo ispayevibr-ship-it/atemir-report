@@ -1209,3 +1209,20 @@ header{
 .objectStatusLine793 .objectStatus784{margin:0!important}
 .objectName770{margin-top:0!important}
 @media(max-width:850px){main{padding-left:10px!important;padding-right:10px!important}header{margin-left:-10px!important;margin-right:-10px!important;padding-left:10px!important;padding-right:10px!important}}
+
+
+/* v6.25.95 rebalance object page side gutters */
+main{
+  padding-left:28px!important;
+  padding-right:10px!important;
+}
+header{
+  margin-left:-28px!important;
+  margin-right:-10px!important;
+  padding-left:28px!important;
+  padding-right:10px!important;
+}
+@media(max-width:850px){
+  main{padding-left:16px!important;padding-right:8px!important}
+  header{margin-left:-16px!important;margin-right:-8px!important;padding-left:16px!important;padding-right:8px!important}
+}
