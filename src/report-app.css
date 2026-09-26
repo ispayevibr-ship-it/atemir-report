@@ -1226,3 +1226,48 @@ header{
   main{padding-left:16px!important;padding-right:8px!important}
   header{margin-left:-16px!important;margin-right:-8px!important;padding-left:16px!important;padding-right:8px!important}
 }
+
+
+/* v6.25.96 status/nav/scroll card cleanup */
+.objectStatusLine793{gap:8px!important;margin-bottom:7px!important;font-size:9px!important}
+.objectStatusLine793>span:first-child{color:#718697!important}
+.objectStatusLine793 .objectStatus784{
+  display:inline-flex!important;align-items:center!important;gap:6px!important;
+  min-height:24px!important;padding:0 10px!important;border-radius:999px!important;
+  background:#e9f8f0!important;color:#168454!important;font-size:10px!important;font-weight:700!important;
+}
+.objectStatusLine793 .objectStatus784 i{
+  display:block!important;width:7px!important;height:7px!important;border-radius:50%!important;
+  background:#20aa68!important;color:transparent!important;font-size:0!important;flex:0 0 7px!important;
+}
+aside #nav button[data-v="dynamics"] .navIcon552{font-size:19px!important;line-height:1!important;font-weight:800!important;transform:translateY(-1px)}
+
+/* scroll cards: scrollbar lives inside padded body, never on card edge */
+.objectBottomData773>div>.card,
+.objectSecondary770>div>.card{
+  overflow:hidden!important;
+  padding:16px!important;
+}
+.objectBottomData773 .marksTableList751{
+  max-height:430px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  padding:8px 12px 16px 0!important;
+  margin:0!important;
+  scrollbar-gutter:stable!important;
+}
+.objectSecondary770>div>.card{
+  height:auto!important;min-height:0!important;max-height:none!important;
+}
+.objectSecondary770>div>.card>h2,
+.objectBottomData773>div>.card>h2{
+  position:sticky!important;top:0!important;z-index:20!important;
+  margin:0 0 12px!important;padding:0 0 10px!important;background:#fff!important;
+  border-bottom:1px solid #edf2f5!important;box-shadow:none!important;
+}
+.objectBottomData773{row-gap:16px!important}
+.objectBottomData773>div{min-width:0!important}
+.objectBottomData773 .marksTableList751::-webkit-scrollbar{width:8px!important}
+.objectBottomData773 .marksTableList751::-webkit-scrollbar-track{background:transparent!important;margin:8px 0 12px!important}
+.objectBottomData773 .marksTableList751::-webkit-scrollbar-thumb{background:#aab7c0!important;border:2px solid transparent!important;background-clip:padding-box!important;border-radius:99px!important}
+.objectBottomData773 .marksTableList751:after{height:8px!important}
