@@ -961,3 +961,16 @@ header{height:64px!important}
 .objectMeta784 span{font-size:9px!important;color:#627d91!important}
 .objectOverview770{padding-top:0!important}
 @media(max-width:850px){aside{height:auto!important;min-height:0!important;position:relative!important}.asideTop784{display:none!important}}
+
+/* v6.25.85 compact deadline card and true donut centering */
+.objectMid770>div:nth-child(2)>.card{height:auto!important;min-height:0!important;padding-bottom:10px!important}
+.objectMid770>div:nth-child(2) .deadlineMain745{min-height:0!important;padding-top:2px!important;padding-bottom:2px!important}
+.objectMid770>div:nth-child(2) .deadlineAnalytics754{margin-bottom:0!important;padding-bottom:0!important}
+.objectMid770>div:nth-child(2) .deadlineDonut745{position:relative!important}
+.objectMid770>div:nth-child(2) .deadlineInside745{position:absolute!important;inset:50% auto auto 50%!important;width:94px!important;height:auto!important;transform:translate(-50%,-50%)!important;padding:0!important;margin:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:2px!important;text-align:center!important}
+.objectMid770>div:nth-child(2) .deadlineInside745>*{width:100%!important;max-width:94px!important;margin:0!important;text-align:center!important;align-self:center!important}
+.objectMid770>div:nth-child(2) .deadlineInside745 b{font-size:8px!important;line-height:1.05!important}
+.objectMid770>div:nth-child(2) .deadlineInside745 small{font-size:7px!important;line-height:1!important}
+.objectMid770>div:nth-child(2) .deadlineInside745 strong{font-size:18px!important;line-height:1.05!important;margin:1px 0!important}
+.objectMid770>div:nth-child(2) .deadlineInside745 span{font-size:8px!important;line-height:1.05!important}
+.objectMid770>div:nth-child(2) .deadlineInside745 em{font-size:7px!important;line-height:1.05!important}
