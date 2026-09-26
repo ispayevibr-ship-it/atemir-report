@@ -1598,7 +1598,7 @@ aside #nav button[data-v="dynamics"] .navIcon552{font-size:19px!important;line-h
 .recentReportsScroll797 .recentReport722,
 .recentReportsScroll797 .recentReportBody722,
 .recentReportsScroll797 .recentExpanded722,
-.recentReportsScroll797 .recentWorkRow722{
+.recentReportsScroll797 .recentWorkFull724{
   max-width:100%!important;
   min-width:0!important;
   box-sizing:border-box!important;
@@ -1606,28 +1606,28 @@ aside #nav button[data-v="dynamics"] .navIcon552{font-size:19px!important;line-h
 }
 .recentReportsScroll797 .recentReportBody722{padding:8px 12px 12px!important}
 .recentReportsScroll797 .recentExpanded722{display:grid!important;gap:8px!important}
-.recentReportsScroll797 .recentWorkRow722{
+.recentReportsScroll797 .recentWorkFull724{
   display:grid!important;
   grid-template-columns:minmax(125px,1.25fr) minmax(90px,.9fr) minmax(145px,1.35fr) minmax(90px,.85fr)!important;
   column-gap:12px!important;row-gap:4px!important;
   padding:9px 0!important;border-bottom:1px solid #e7edf1!important;
 }
-.recentReportsScroll797 .recentWorkRow722:last-child{border-bottom:0!important}
-.recentReportsScroll797 .recentWorkRow722>div{
+.recentReportsScroll797 .recentWorkFull724:last-child{border-bottom:0!important}
+.recentReportsScroll797 .recentWorkFull724>div{
   min-width:0!important;max-width:100%!important;overflow:hidden!important;
 }
-.recentReportsScroll797 .recentWorkRow722 small{
+.recentReportsScroll797 .recentWorkFull724 small{
   display:block!important;margin-bottom:3px!important;
   font-size:8px!important;line-height:1.1!important;color:#82929d!important;
   white-space:nowrap!important;
 }
-.recentReportsScroll797 .recentWorkRow722 b,
-.recentReportsScroll797 .recentWorkRow722 strong{
+.recentReportsScroll797 .recentWorkFull724 b,
+.recentReportsScroll797 .recentWorkFull724 strong{
   display:block!important;max-width:100%!important;
   font-size:10px!important;line-height:1.18!important;font-weight:700!important;color:#173c56!important;
   white-space:normal!important;overflow-wrap:anywhere!important;word-break:normal!important;
 }
-.recentReportsScroll797 .recentWorkTotal722{
+.recentReportsScroll797 .recentWorkTotal731{
   grid-column:1/-1!important;
   display:flex!important;justify-content:flex-end!important;align-items:center!important;
   min-height:26px!important;margin-top:3px!important;padding:5px 9px!important;
@@ -1635,8 +1635,8 @@ aside #nav button[data-v="dynamics"] .navIcon552{font-size:19px!important;line-h
   font-size:9px!important;line-height:1.1!important;color:#456276!important;
 }
 @media(max-width:1180px){
-  .recentReportsScroll797 .recentWorkRow722{
+  .recentReportsScroll797 .recentWorkFull724{
     grid-template-columns:minmax(120px,1.2fr) minmax(80px,.8fr) minmax(130px,1.2fr)!important;
   }
-  .recentReportsScroll797 .recentWorkRow722>div:nth-child(4){grid-column:1/-1!important}
+  .recentReportsScroll797 .recentWorkFull724>div:nth-child(4){grid-column:1/-1!important}
 }
