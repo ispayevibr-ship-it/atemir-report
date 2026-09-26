@@ -815,3 +815,25 @@ header{width:auto!important;min-width:0!important}
 .objectTabs770 button{color:#526b80!important;opacity:1!important;background:transparent!important;border:0!important;border-bottom:3px solid transparent!important;font-size:10px!important;font-weight:700!important;text-shadow:none!important;filter:none!important}
 .objectTabs770 button:hover{color:#0d6eae!important;background:#f3f8fb!important}
 .objectTabs770 button.on{color:#fff!important;background:#1479b8!important;border-bottom-color:#1479b8!important;border-radius:0!important}
+
+/* v6.25.76 overview: maximum two blocks per row + safe right gutter */
+main{padding-right:18px!important;box-sizing:border-box!important}
+#view{padding-right:0!important;margin-right:0!important}
+.objectOverview770{padding:0 6px 18px 0!important;gap:12px!important}
+.objectHero770{grid-template-columns:240px minmax(0,1fr)!important;gap:12px!important}
+.objectDates770{grid-column:1/-1!important;display:grid!important;grid-template-columns:1fr 1fr!important}
+.objectTabs770{margin-right:0!important}
+.objectKpis770{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+.objectKpis770>div{height:86px!important}
+.objectKpis770>div:first-child{grid-column:auto!important}
+.objectMainChart770{width:100%!important}
+.objectMid770{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+.objectMid770>div:nth-child(2) .deadlineDonut745{width:140px!important;height:140px!important;flex-basis:140px!important}
+.objectBottomTop773{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+.objectBottomData773{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+.objectBottomData773 .marksTableList751{grid-template-columns:1fr!important}
+.objectSecondary770{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+.objectOverview770>section:last-child{width:100%!important}
+.objectOverview770 .card{border-radius:10px!important}
+@media(max-width:1150px){main{padding-right:12px!important}.objectKpis770,.objectMid770,.objectBottomTop773,.objectBottomData773,.objectSecondary770{grid-template-columns:1fr!important}.objectHero770{grid-template-columns:1fr!important}.objectDates770{grid-template-columns:1fr 1fr!important}}
+@media(max-width:700px){main{padding-right:8px!important}.objectOverview770{padding-right:2px!important}.objectDates770{grid-template-columns:1fr!important}}
