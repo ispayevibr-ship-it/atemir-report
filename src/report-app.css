@@ -613,3 +613,31 @@ table{font-size:11px}th{font-size:10px}
 .primary{background:#168cf0;color:#fff}.white{border:1px solid #dbe6ee!important;background:#fff!important;color:#244864!important;border-radius:6px!important}
 @media(max-width:1150px){.kpis551{grid-template-columns:repeat(3,1fr)!important}.summaryPhotos722{grid-template-columns:repeat(3,1fr)!important}}
 @media(max-width:850px){.shell{grid-template-columns:1fr}.hero551{align-items:flex-start!important}.kpis551{grid-template-columns:repeat(2,1fr)!important}.homeLower767{grid-template-columns:1fr!important}.summaryPhotos722{grid-template-columns:repeat(2,1fr)!important}}
+
+/* v6.25.65 exact object dashboard composition */
+#view{max-width:none!important}
+.dashboard551{gap:10px!important}
+.objectCompactGrid768{display:grid;grid-template-columns:1.15fr 1.05fr 1fr 1fr;gap:10px;align-items:stretch}
+.objectCompactGrid768>.card,.objectCompactGrid768>div>.card{height:100%;margin:0;padding:11px}
+.objectCompactGrid768 .card h2{font-size:13px;margin-bottom:9px}
+.objectPhotos768 .summaryPhotos722{grid-template-columns:repeat(3,1fr)!important;gap:5px!important}
+.objectPhotos768 .summaryPhoto722{min-height:82px!important;aspect-ratio:1.35}
+.objectPhotos768 .summaryPhoto722:nth-child(n+7){display:none}
+.objectPhotos768 .summaryPhoto722 span{padding:4px 5px;font-size:8px}
+.objectPhotos768 .summaryPhoto722 small{display:none}
+.objectReports768 .recentReport722:nth-of-type(n+6){display:none}
+.objectReports768 .recentReport722 summary{padding:6px 3px!important}
+.objectReports768 .recentReport722 summary>div>b{font-size:10px}
+.objectReports768 .recentReport722 summary small{font-size:8px}
+.objectReports768 .recentReportBody722{font-size:9px}
+.objectMarks768 .progressTable,.objectVolumes768 .progressTable{max-height:255px;overflow:auto}
+.objectMarks768 table,.objectVolumes768 table{font-size:9px}
+.objectMarks768 th,.objectMarks768 td,.objectVolumes768 th,.objectVolumes768 td{padding:5px!important}
+.objectDetailGrid768{display:grid;grid-template-columns:1.5fr 1fr;gap:10px;align-items:start}
+.objectDetailGrid768>.card,.objectDetailGrid768>div>.card{margin:0;height:100%}
+.homeLower767{grid-template-columns:1.65fr .75fr!important}
+.homeLower767 .card{margin:0}
+.homeSchedule767 .card{margin:0}
+.dashboard551>.dashboardFull722>.card{margin:0}
+@media(max-width:1250px){.objectCompactGrid768{grid-template-columns:repeat(2,1fr)}.objectDetailGrid768{grid-template-columns:1fr}}
+@media(max-width:800px){.objectCompactGrid768{grid-template-columns:1fr}.homeLower767{grid-template-columns:1fr!important}}
