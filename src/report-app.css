@@ -869,3 +869,25 @@ main{padding-right:18px!important;box-sizing:border-box!important}
 .objectKpisSummary778 .kpiActivity778{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:center!important}
 .objectKpisSummary778 .kpiActivity778>div:first-child{border-left:0!important}
 @media(max-width:1150px){.objectTabs770{justify-content:flex-start!important;overflow-x:auto!important}.objectTabs770 button{flex:0 0 135px!important}.objectKpis770.objectKpisSummary778{grid-template-columns:1fr!important}.objectKpisSummary778>.kpiGroup778{height:auto!important}.objectKpisSummary778 .kpiGroup778:first-child{grid-template-columns:1fr!important}.kpiSplit778>div{border-left:0!important;border-top:1px solid #e5edf2!important}}
+
+/* v6.25.79 compact overview header/KPIs/Gantt based on real desktop screenshot */
+.objectOverview770{gap:10px!important}
+.objectHero770{grid-template-columns:230px minmax(0,1fr) 330px!important;min-height:112px!important;padding:10px!important;align-items:center!important}
+.objectPhoto770{height:105px!important}
+.objectIdentity770{align-self:center!important}.objectCrumb770{margin-bottom:5px!important}.objectName770 h1{font-size:20px!important}.objectIdentity770 p{margin-top:4px!important}
+.objectDates770{grid-column:auto!important;grid-template-columns:1fr 1fr!important;gap:8px!important;align-self:center!important}
+.objectDates770>div{padding:10px 12px!important;min-height:52px!important;box-sizing:border-box!important}.objectDates770 small{font-size:8px!important}.objectDates770 b{font-size:12px!important}
+.objectTabs770{height:40px!important;padding:0 10px!important;justify-content:center!important;gap:2px!important}
+.objectTabs770 button{flex:0 0 auto!important;width:auto!important;min-width:0!important;padding:0 17px!important;font-size:9px!important}
+.objectKpis770.objectKpisSummary778{gap:10px!important}
+.objectKpisSummary778>.kpiGroup778{height:96px!important;padding:10px 14px!important}
+.objectKpisSummary778 .kpiGroup778:first-child{grid-template-columns:210px minmax(0,1fr)!important}
+.objectKpisSummary778 .overall770{min-width:0!important;overflow:visible!important;display:flex!important;align-items:center!important;gap:10px!important}
+.objectKpisSummary778 .overall770 .ring770{width:54px!important;height:54px!important;flex-basis:54px!important}
+.objectKpisSummary778 .overall770 span{min-width:0!important}.objectKpisSummary778 .overall770 span>b{font-size:15px!important}.objectKpisSummary778 .overall770 small,.objectKpisSummary778 .overall770 em{font-size:7px!important}
+.kpiSplit778>div,.kpiActivity778>div{padding:7px 12px!important;gap:10px!important}.kpiSplit778 strong,.kpiActivity778 strong{font-size:21px!important}.kpiSplit778 span>b,.kpiActivity778 span>b{font-size:15px!important}
+.objectMainChart770>.card{padding:12px 14px!important}.objectMainChart770>.card>h2{font-size:14px!important;margin-bottom:7px!important}
+.homeGanttTop772{padding:0 0 6px!important}.homeGanttTop772 div>b{font-size:10px!important}.homeGanttTop772 small{font-size:7px!important}.homeGanttLegend772{gap:11px!important;font-size:7px!important}
+.homeGanttHead772,.homeGanttRow772{grid-template-columns:190px minmax(0,1fr) 70px 92px!important;gap:8px!important}.homeGanttHead772{height:22px!important}.homeGanttRow772{min-height:39px!important}
+.homeGanttName772 b{font-size:9px!important}.homeGanttName772 small{font-size:7px!important}.homeGanttTrack772{height:22px!important}.homeGanttReady772{font-size:9px!important}.homeGanttLag772{font-size:8px!important;padding:4px 5px!important;border-radius:5px!important;background:#e9f7ef!important;color:#16864f!important}.homeGanttLag772.late{background:#fff0f0!important;color:#dc4141!important}
+@media(max-width:1250px){.objectHero770{grid-template-columns:190px minmax(0,1fr)!important}.objectDates770{grid-column:1/-1!important}.objectTabs770{justify-content:flex-start!important;overflow-x:auto!important}.objectTabs770 button{flex:0 0 auto!important}.objectKpisSummary778 .kpiGroup778:first-child{grid-template-columns:1fr!important}}
