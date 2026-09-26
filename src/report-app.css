@@ -707,3 +707,33 @@ header h1{font-size:12px!important;font-weight:600!important;color:#54708b!impor
 .objectOverview770 table{font-size:9px!important}.objectOverview770 th{font-size:8px!important;background:#f6f9fb!important}.objectOverview770 td,.objectOverview770 th{padding:6px!important}.objectOverview770 .progressTable{border:1px solid #e3ebf1!important;border-radius:4px!important}
 @media(max-width:1200px){.objectHero770{grid-template-columns:170px 1fr}.objectDates770{grid-column:1/-1}.objectKpis770{grid-template-columns:repeat(3,1fr)}.objectBottom770{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:800px){.objectHero770{grid-template-columns:1fr}.objectPhoto770{width:100%;height:150px}.objectKpis770{grid-template-columns:1fr}.objectMid770,.objectBottom770,.objectSecondary770{grid-template-columns:1fr}}
+
+/* v6.25.71 desktop geometry fix from real 1920px screenshots */
+html,body{margin:0!important;overflow-x:hidden!important}
+.shell{width:100vw!important;max-width:100vw!important;grid-template-columns:220px minmax(0,1fr)!important}
+aside{width:220px!important;min-width:220px!important;overflow:hidden!important}
+main{min-width:0!important;width:auto!important;overflow:hidden!important}
+header{width:auto!important;min-width:0!important}
+#view{width:auto!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;overflow:hidden!important}
+.objectOverview770{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;overflow:hidden!important}
+.objectOverview770>*{min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+.objectHero770{grid-template-columns:245px minmax(0,1fr) 320px!important;width:100%!important}
+.objectTabs770{width:100%!important;box-sizing:border-box!important;overflow:hidden!important;justify-content:flex-start!important}
+.objectTabs770 button{flex:0 1 auto!important;min-width:0!important;padding:0 18px!important}
+.objectKpis770{grid-template-columns:repeat(5,minmax(0,1fr))!important;width:100%!important}
+.objectKpis770>div{min-width:0!important;overflow:hidden!important}
+.objectMainChart770,.objectMainChart770>.card{width:100%!important;min-width:0!important;overflow:hidden!important;box-sizing:border-box!important}
+.objectMainChart770 .planFact737{width:100%!important;min-width:0!important;max-width:100%!important;overflow:hidden!important;box-sizing:border-box!important}
+.objectMainChart770 .planFactFilter739{max-width:100%!important}
+.objectMainChart770 svg,.objectMainChart770 canvas{max-width:100%!important}
+.objectMid770{grid-template-columns:minmax(0,1.65fr) minmax(300px,.7fr)!important;width:100%!important}
+.objectMid770>div,.objectBottom770>div,.objectSecondary770>div{min-width:0!important;overflow:hidden!important}
+.objectBottom770{grid-template-columns:minmax(240px,.9fr) minmax(420px,1.7fr) minmax(240px,.85fr) minmax(240px,.85fr)!important;width:100%!important}
+.objectBottom770 .card{min-width:0!important;max-width:100%!important}
+.objectBottom770 .progressTable{width:100%!important;max-width:100%!important;overflow:auto!important}
+.objectSecondary770{grid-template-columns:minmax(0,1.55fr) minmax(320px,.65fr)!important;width:100%!important}
+.objectSecondary770 .card{min-width:0!important;max-width:100%!important;overflow:hidden!important}
+.objectOverview770 table{width:100%!important;max-width:100%!important;table-layout:auto!important}
+.objectOverview770 .summaryPhotos722{width:100%!important}
+@media(min-width:1400px){.objectBottom770{grid-template-columns:minmax(230px,.8fr) minmax(500px,1.75fr) minmax(220px,.8fr) minmax(220px,.8fr)!important}}
+@media(max-width:1300px){.objectHero770{grid-template-columns:190px minmax(0,1fr)!important}.objectDates770{grid-column:1/-1!important}.objectKpis770{grid-template-columns:repeat(3,minmax(0,1fr))!important}.objectBottom770{grid-template-columns:repeat(2,minmax(0,1fr))!important}.objectMid770,.objectSecondary770{grid-template-columns:1fr!important}}
