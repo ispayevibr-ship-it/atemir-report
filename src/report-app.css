@@ -837,3 +837,16 @@ main{padding-right:18px!important;box-sizing:border-box!important}
 .objectOverview770 .card{border-radius:10px!important}
 @media(max-width:1150px){main{padding-right:12px!important}.objectKpis770,.objectMid770,.objectBottomTop773,.objectBottomData773,.objectSecondary770{grid-template-columns:1fr!important}.objectHero770{grid-template-columns:1fr!important}.objectDates770{grid-template-columns:1fr 1fr!important}}
 @media(max-width:700px){main{padding-right:8px!important}.objectOverview770{padding-right:2px!important}.objectDates770{grid-template-columns:1fr!important}}
+
+/* v6.25.77 consistent inner spacing for overview blocks */
+.objectOverview770 .card{padding:16px!important}
+.objectOverview770 .card>h2,.objectOverview770 .card>h3{margin:0 0 12px!important}
+.objectMainChart770>.card{padding:16px!important}
+.objectMid770>div>.card{padding:16px!important}
+.objectBottomTop773 .card{padding:16px!important}
+.objectBottomData773 .card{padding:16px!important}
+.objectSecondary770>div>.card{padding:16px!important}
+.objectKpis770>div{padding:16px 18px!important}
+.objectHero770{padding:14px!important}
+.objectTabs770{padding-left:12px!important;padding-right:12px!important}
+@media(max-width:800px){.objectOverview770 .card,.objectMainChart770>.card,.objectMid770>div>.card,.objectBottomTop773 .card,.objectBottomData773 .card,.objectSecondary770>div>.card{padding:12px!important}}
