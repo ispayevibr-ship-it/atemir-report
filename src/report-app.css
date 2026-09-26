@@ -809,3 +809,9 @@ header{width:auto!important;min-width:0!important}
 .objectBottomData773 .marksTableGroup751{margin:0!important;min-width:0!important}
 .objectBottomData773 table{width:100%!important;table-layout:auto!important}
 @media(max-width:1250px){.objectMid770{grid-template-columns:1fr!important}.objectBottomTop773,.objectBottomData773{grid-template-columns:1fr!important}.objectBottomData773 .marksTableList751{grid-template-columns:1fr!important}}
+
+/* v6.25.75 object tabs visibility */
+.objectTabs770{background:#fff!important;border:1px solid #d7e1e8!important;height:44px!important;padding:0 8px!important;display:flex!important;align-items:stretch!important}
+.objectTabs770 button{color:#526b80!important;opacity:1!important;background:transparent!important;border:0!important;border-bottom:3px solid transparent!important;font-size:10px!important;font-weight:700!important;text-shadow:none!important;filter:none!important}
+.objectTabs770 button:hover{color:#0d6eae!important;background:#f3f8fb!important}
+.objectTabs770 button.on{color:#fff!important;background:#1479b8!important;border-bottom-color:#1479b8!important;border-radius:0!important}
