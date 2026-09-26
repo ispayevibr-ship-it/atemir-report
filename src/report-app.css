@@ -1183,3 +1183,29 @@ main{
   height:12px!important;
   flex:0 0 12px!important;
 }
+
+
+/* v6.25.93 restore left content gutter + status above title */
+main{
+  padding-left:18px!important;
+  padding-right:22px!important;
+  box-sizing:border-box!important;
+}
+header{
+  margin-left:-18px!important;
+  margin-right:-22px!important;
+  padding-left:18px!important;
+  padding-right:22px!important;
+}
+.objectOverview770{padding-left:0!important;padding-right:0!important}
+.objectStatusLine793{
+  display:flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  margin:0 0 6px!important;
+  font-size:9px!important;
+  color:#748a9a!important;
+}
+.objectStatusLine793 .objectStatus784{margin:0!important}
+.objectName770{margin-top:0!important}
+@media(max-width:850px){main{padding-left:10px!important;padding-right:10px!important}header{margin-left:-10px!important;margin-right:-10px!important;padding-left:10px!important;padding-right:10px!important}}
