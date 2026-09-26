@@ -1319,3 +1319,48 @@ aside #nav button[data-v="dynamics"] .navIcon552{font-size:19px!important;line-h
 .recentReportsScroll797 .recentReportBody722{padding:4px 12px 14px!important}
 .recentReportsToolbar797{margin:14px 0 0!important;padding-bottom:2px!important}
 @media(max-width:1250px){.objectBottomTop773 .recentReportsCard797>.card{height:386px!important;min-height:386px!important;max-height:386px!important}}
+
+
+/* v6.25.98 calendar: two columns, chronological, no clipping/empty fixed height */
+.objectSecondary770>div:nth-child(2)>.card{
+  display:flex!important;flex-direction:column!important;
+  height:auto!important;min-height:0!important;max-height:520px!important;
+  overflow:hidden!important;padding:16px!important;
+}
+.objectSecondary770>div:nth-child(2)>.card>h2{
+  flex:0 0 auto!important;position:relative!important;top:auto!important;
+  margin:0 0 10px!important;padding:0 0 11px!important;
+  background:#fff!important;border-bottom:1px solid #edf2f5!important;z-index:20!important;
+}
+.objectSecondary770>div:nth-child(2) .calendarLegend512{
+  flex:0 0 auto!important;margin:0 0 12px!important;padding:0!important;
+}
+.objectSecondary770>div:nth-child(2) .multiCalendar{
+  flex:1 1 auto!important;min-height:0!important;
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  align-items:start!important;gap:12px!important;
+  width:100%!important;max-width:100%!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+  padding:0 10px 14px 0!important;box-sizing:border-box!important;
+  scrollbar-gutter:stable!important;
+}
+.objectSecondary770>div:nth-child(2) .monthCard{
+  min-width:0!important;width:100%!important;height:auto!important;
+  margin:0!important;padding:12px!important;box-sizing:border-box!important;
+}
+.objectSecondary770>div:nth-child(2) .monthTitle{
+  margin:0 0 10px!important;font-size:14px!important;line-height:1.2!important;
+}
+.objectSecondary770>div:nth-child(2) .workCalendar{
+  width:100%!important;min-width:0!important;grid-template-columns:repeat(7,minmax(0,1fr))!important;
+}
+.objectSecondary770>div:nth-child(2) .calDay,
+.objectSecondary770>div:nth-child(2) .calHead{
+  min-width:0!important;width:auto!important;
+}
+.objectSecondary770>div:nth-child(2) .multiCalendar::-webkit-scrollbar{width:8px!important}
+.objectSecondary770>div:nth-child(2) .multiCalendar::-webkit-scrollbar-track{background:transparent!important;margin:6px 0 10px!important}
+.objectSecondary770>div:nth-child(2) .multiCalendar::-webkit-scrollbar-thumb{background:#aab7c0!important;border:2px solid transparent!important;background-clip:padding-box!important;border-radius:99px!important}
+@media(max-width:1100px){
+ .objectSecondary770>div:nth-child(2) .multiCalendar{grid-template-columns:1fr!important}
+}
