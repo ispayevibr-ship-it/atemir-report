@@ -1578,3 +1578,13 @@ aside #nav button[data-v="dynamics"] .navIcon552{font-size:19px!important;line-h
 @media(max-width:1050px){
   .objectOverview770{gap:14px!important;padding-top:14px!important;padding-bottom:20px!important}
 }
+
+
+/* v6.26.02 proper status icon */
+.objectStatusLine793 .objectStatus784 .statusIcon802{
+  width:18px!important;height:18px!important;flex:0 0 18px!important;
+  display:grid!important;place-items:center!important;
+  border-radius:50%!important;background:#20a86b!important;color:#fff!important;
+  font-size:11px!important;line-height:1!important;font-weight:900!important;font-style:normal!important;
+  box-shadow:0 0 0 3px rgba(32,168,107,.10)!important;
+}
