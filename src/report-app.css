@@ -974,3 +974,21 @@ header{height:64px!important}
 .objectMid770>div:nth-child(2) .deadlineInside745 strong{font-size:18px!important;line-height:1.05!important;margin:1px 0!important}
 .objectMid770>div:nth-child(2) .deadlineInside745 span{font-size:8px!important;line-height:1.05!important}
 .objectMid770>div:nth-child(2) .deadlineInside745 em{font-size:7px!important;line-height:1.05!important}
+
+/* v6.25.86 exact requested layout fixes */
+html,body,.shell{min-height:100%!important}
+aside{position:fixed!important;left:0!important;top:0!important;bottom:0!important;height:100vh!important;min-height:100vh!important;width:205px!important;z-index:50!important;overflow:hidden!important}
+.shell{display:block!important}
+main{margin-left:205px!important;width:calc(100% - 205px)!important;min-height:100vh!important}
+aside #nav{min-height:0!important;flex:1 1 auto!important}
+.objectMeta784{display:block!important;margin-top:5px!important}
+.objectMeta784 p{display:block!important;margin:3px 0 0!important;font-size:9px!important;color:#627d91!important}
+.objectMeta784 p b{font-weight:600!important;color:#48667d!important}
+.objectMid770{align-items:start!important}
+.objectMid770>div{align-self:start!important}
+.objectMid770>div>.card{height:auto!important;min-height:0!important;max-height:none!important}
+.objectMid770>div:first-child>.card{height:auto!important}
+.objectMid770>div:nth-child(2)>.card{height:auto!important;min-height:0!important;max-height:none!important;padding-bottom:0!important;margin-bottom:0!important}
+.objectMid770>div:nth-child(2) .deadlineMain745{flex:none!important}
+.objectMid770>div:nth-child(2) .deadlineAnalytics754{flex:none!important;margin-bottom:0!important;padding-bottom:8px!important}
+@media(max-width:850px){aside{position:relative!important;width:auto!important;height:auto!important;min-height:0!important}main{margin-left:0!important;width:100%!important}}
