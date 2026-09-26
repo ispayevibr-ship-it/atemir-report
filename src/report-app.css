@@ -1022,3 +1022,59 @@ aside #nav{min-height:0!important;flex:1 1 auto!important}
     min-height:0!important;
   }
 }
+
+
+/* v6.25.89 object overview spacing, scrolling and header polish */
+main{padding-right:24px!important;box-sizing:border-box!important}
+#view{width:auto!important;max-width:none!important;padding-right:0!important;overflow:visible!important}
+.objectOverview770{width:100%!important;box-sizing:border-box!important;padding-right:0!important}
+
+/* export caption to the left, vertically centered */
+.exports{padding-top:0!important;align-items:center!important}
+.exports:before{position:static!important;display:block!important;flex:0 0 auto!important;width:auto!important;margin-right:5px!important;line-height:30px!important;text-align:left!important;white-space:nowrap!important}
+#saveState{display:flex!important;align-items:center!important;justify-content:center!important;height:30px!important;line-height:1!important}
+
+/* long object names stay clean */
+.objectIdentity770{min-width:0!important;overflow:visible!important}
+.objectName770{display:flex!important;align-items:flex-start!important;flex-wrap:wrap!important;column-gap:10px!important;row-gap:5px!important;min-width:0!important}
+.objectName770 h1{flex:0 1 auto!important;min-width:0!important;max-width:100%!important;white-space:normal!important;overflow-wrap:anywhere!important;word-break:normal!important;line-height:1.12!important;margin:0!important}
+.objectStatus784{flex:0 0 auto!important;margin-top:2px!important;white-space:nowrap!important}
+.objectStatus784 i{width:auto!important;height:auto!important;background:transparent!important;color:#16a463!important;font-size:12px!important;line-height:1!important}
+.objectMeta784{margin-top:7px!important}
+.objectMeta784 p{margin:0!important}
+.objectMeta784 p+p{margin-top:9px!important}
+
+/* nine overview photos: 3 x 3 */
+.objectBottomTop773 .summaryPhotos722{grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-template-rows:repeat(3,112px)!important}
+.objectBottomTop773 .summaryPhoto722,.objectBottomTop773 .summaryPhoto722.featured722{height:112px!important;min-height:112px!important}
+
+/* schedule + calendar use the same geometry */
+.objectSecondary770{align-items:stretch!important}
+.objectSecondary770>div{display:flex!important;min-width:0!important;align-self:stretch!important}
+.objectSecondary770>div>.card{width:100%!important;height:430px!important;min-height:430px!important;max-height:430px!important;overflow-y:auto!important;overflow-x:hidden!important;box-sizing:border-box!important;padding-right:10px!important;scrollbar-gutter:stable!important}
+.objectSecondary770 .schedule248{grid-template-columns:minmax(170px,1.05fr) minmax(140px,1.35fr) minmax(205px,1.15fr)!important;gap:14px!important;padding:12px 4px!important}
+.objectSecondary770 .scheduleNums248{padding-right:4px!important}
+.objectSecondary770 .multiCalendar{width:100%!important;box-sizing:border-box!important}
+.objectSecondary770 .monthCard{width:100%!important;box-sizing:border-box!important;margin:0 0 10px!important}
+.objectSecondary770 .workCalendar{width:100%!important;box-sizing:border-box!important}
+
+/* internal scrolling: breathing room + fixed headings */
+.objectOverview770 .card{scrollbar-gutter:stable!important}
+.objectOverview770 .card::-webkit-scrollbar,
+.objectOverview770 .progressTable::-webkit-scrollbar,
+.objectOverview770 .tablewrap::-webkit-scrollbar,
+.objectOverview770 .marksTableList751::-webkit-scrollbar{width:8px;height:8px}
+.objectOverview770 .card::-webkit-scrollbar-thumb,
+.objectOverview770 .progressTable::-webkit-scrollbar-thumb,
+.objectOverview770 .tablewrap::-webkit-scrollbar-thumb,
+.objectOverview770 .marksTableList751::-webkit-scrollbar-thumb{background:#aab7c0;border-radius:99px;border:2px solid transparent;background-clip:padding-box}
+.objectOverview770 .card::-webkit-scrollbar-track,
+.objectOverview770 .progressTable::-webkit-scrollbar-track,
+.objectOverview770 .tablewrap::-webkit-scrollbar-track,
+.objectOverview770 .marksTableList751::-webkit-scrollbar-track{background:transparent}
+.objectSecondary770 .card>h2{position:sticky!important;top:-16px!important;z-index:12!important;background:#fff!important;padding:16px 0 10px!important;margin-top:-16px!important;border-bottom:1px solid #edf2f5!important}
+.objectOverview770 .progressTable,.objectOverview770 .tablewrap,.objectOverview770 .marksTableList751{padding-right:7px!important;box-sizing:border-box!important;scrollbar-gutter:stable!important}
+.objectOverview770 .progressTable thead th,.objectOverview770 .tablewrap thead th{position:sticky!important;top:0!important;z-index:8!important;background:#f5f8fa!important}
+
+@media(max-width:1150px){main{padding-right:16px!important}.objectSecondary770>div>.card{height:auto!important;min-height:0!important;max-height:none!important}.objectSecondary770 .schedule248{grid-template-columns:1fr!important}}
+@media(max-width:700px){main{padding-right:10px!important}}
