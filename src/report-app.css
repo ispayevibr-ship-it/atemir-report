@@ -1640,3 +1640,56 @@ aside #nav button[data-v="dynamics"] .navIcon552{font-size:19px!important;line-h
   }
   .recentReportsScroll797 .recentWorkFull724>div:nth-child(4){grid-column:1/-1!important}
 }
+
+
+/* v6.26.04 compact BOM + latest volumes pair; no forced 470px / unnecessary scroll */
+.objectBottomData773{align-items:stretch!important}
+.objectBottomData773>div>.card{
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  padding:16px!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+.marksCard801 .marksTableList751{
+  flex:0 0 auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+  padding:4px 0 0!important;
+  scrollbar-gutter:auto!important;
+}
+.marksCard801 .marksTableGroup751{margin:0 0 9px!important}
+.marksCard801 .marksTableGroup751:last-child{margin-bottom:0!important}
+.marksCard801 .marksTableGroup751>summary{
+  min-height:34px!important;
+  padding:6px 12px!important;
+  box-sizing:border-box!important;
+}
+.latestVolumesCard801>.card{height:100%!important}
+.latestVolumesScroll801{
+  flex:0 0 auto!important;
+  max-height:none!important;
+  overflow:visible!important;
+  padding:4px 0 0!important;
+  scrollbar-gutter:auto!important;
+}
+.latestVolumesScroll801 .tablewrap{
+  overflow:visible!important;
+  max-height:none!important;
+}
+.latestVolumesScroll801 table{table-layout:fixed!important;width:100%!important}
+.latestVolumesScroll801 th{height:30px!important;padding:7px 10px!important}
+.latestVolumesScroll801 td{
+  height:45px!important;
+  padding:8px 10px!important;
+  line-height:1.2!important;
+  vertical-align:middle!important;
+}
+.latestVolumesScroll801 tbody tr{height:45px!important}
+.latestVolumesScroll801 .muted{margin:8px 0 0!important}
+
+/* equalize the pair to the taller natural card, without a fixed pixel height */
+.objectBottomData773{grid-auto-rows:1fr!important}
+.objectBottomData773>div{height:100%!important}
+.objectBottomData773>div>.card{height:100%!important}
