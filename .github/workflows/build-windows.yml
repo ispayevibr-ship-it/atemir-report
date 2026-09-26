@@ -61,8 +61,27 @@ jobs:
         run: |
           $version = node -p "require('./package.json').version"
           "version=$version" >> $env:GITHUB_OUTPUT
-      - name: Publish public auto-update release
+      - name: Detect version bump
+        id: version_bump
         if: github.event_name == 'push'
+        shell: pwsh
+        run: |
+          $changed = git diff-tree --no-commit-id --name-only -r $env:GITHUB_SHA
+          $isBump = "false"
+          if ($changed -contains "package.json") {
+            $current = node -p "require('./package.json').version"
+            $parent = git show "$env:GITHUB_SHA^:package.json" 2>$null
+            if ($LASTEXITCODE -eq 0 -and $parent) {
+              $parentPath = Join-Path $env:RUNNER_TEMP "parent-package.json"
+              Set-Content -Path $parentPath -Value $parent -Encoding UTF8
+              $previous = node -e "console.log(JSON.parse(require('fs').readFileSync(process.argv[1],'utf8')).version)" $parentPath
+              if ($current -ne $previous) { $isBump = "true" }
+            }
+          }
+          "release=$isBump" >> $env:GITHUB_OUTPUT
+          Write-Host "Full release required: $isBump"
+      - name: Publish public auto-update release
+        if: github.event_name == 'push' && steps.version_bump.outputs.release == 'true'
         shell: pwsh
         env:
           GH_TOKEN: ${{ secrets.UPDATE_REPO_TOKEN }}
