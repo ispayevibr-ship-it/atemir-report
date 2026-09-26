@@ -850,3 +850,22 @@ main{padding-right:18px!important;box-sizing:border-box!important}
 .objectHero770{padding:14px!important}
 .objectTabs770{padding-left:12px!important;padding-right:12px!important}
 @media(max-width:800px){.objectOverview770 .card,.objectMainChart770>.card,.objectMid770>div>.card,.objectBottomTop773 .card,.objectBottomData773 .card,.objectSecondary770>div>.card{padding:12px!important}}
+
+/* v6.25.78 centered object tabs + two KPI summary blocks */
+.objectTabs770{justify-content:center!important;gap:4px!important}
+.objectTabs770 button{flex:0 1 150px!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;padding:0 12px!important}
+.objectKpis770.objectKpisSummary778{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+.objectKpisSummary778>.kpiGroup778{height:118px!important;min-width:0!important;background:#fff!important;border:1px solid #dfe8ef!important;border-radius:10px!important;padding:14px 18px!important;box-sizing:border-box!important}
+.objectKpisSummary778 .kpiGroup778:first-child{display:grid!important;grid-template-columns:minmax(220px,.9fr) minmax(0,1.4fr)!important;align-items:center!important;gap:12px!important}
+.objectKpisSummary778 .overall770{height:auto!important;border:0!important;padding:0!important;background:transparent!important}
+.kpiSplit778{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;height:100%!important}
+.kpiSplit778>div,.kpiActivity778>div{display:flex!important;align-items:center!important;gap:12px!important;min-width:0!important;padding:10px 14px!important;border-left:1px solid #e5edf2!important}
+.kpiSplit778 strong,.kpiActivity778 strong{font-size:24px!important;color:#148be8!important}
+.kpiSplit778 .danger770 strong,.kpiSplit778 .danger770 span>b,.kpiSplit778 .danger770 em{color:#ed4545!important}
+.kpiSplit778 span,.kpiActivity778 span{display:grid!important;gap:3px!important;min-width:0!important}
+.kpiSplit778 small,.kpiActivity778 small{font-size:8px!important;color:#6e8497!important}
+.kpiSplit778 span>b,.kpiActivity778 span>b{font-size:17px!important;color:#153755!important}
+.kpiSplit778 em,.kpiActivity778 em{font-size:8px!important;color:#8091a0!important;font-style:normal!important}
+.objectKpisSummary778 .kpiActivity778{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:center!important}
+.objectKpisSummary778 .kpiActivity778>div:first-child{border-left:0!important}
+@media(max-width:1150px){.objectTabs770{justify-content:flex-start!important;overflow-x:auto!important}.objectTabs770 button{flex:0 0 135px!important}.objectKpis770.objectKpisSummary778{grid-template-columns:1fr!important}.objectKpisSummary778>.kpiGroup778{height:auto!important}.objectKpisSummary778 .kpiGroup778:first-child{grid-template-columns:1fr!important}.kpiSplit778>div{border-left:0!important;border-top:1px solid #e5edf2!important}}
