@@ -1773,3 +1773,45 @@ aside #nav button[data-v="dynamics"] .navIcon552{font-size:19px!important;line-h
  .objectHeroCover812 .heroContent812{width:72%!important}
  .objectHeroCover812 .heroFacts812{gap:14px!important;flex-wrap:wrap!important}
 }
+
+
+/* v7.0.13 — tighten overview hero to reference proportions and hide legacy toolbar on overview */
+body:has(.objectOverview770) main>header{display:none!important}
+body:has(.objectOverview770) #view{padding-top:0!important}
+body:has(.objectOverview770) .objectOverview770{
+ padding-top:0!important;margin-top:0!important;gap:14px!important
+}
+.objectOverview770 .objectHero770.objectHeroCover812{
+ height:180px!important;min-height:180px!important;
+ margin:0!important;border-radius:0 0 12px 12px!important;
+ background-position:center 43%!important
+}
+.objectHeroCover812 .heroShade812{
+ background:linear-gradient(90deg,rgba(7,29,45,.84) 0%,rgba(8,31,48,.68) 36%,rgba(8,31,48,.24) 70%,rgba(7,28,43,.18) 100%)!important
+}
+.objectHeroCover812 .heroContent812{
+ left:24px!important;top:13px!important;bottom:14px!important;width:min(760px,70%)!important
+}
+.objectHeroCover812 .heroCrumb812{margin-bottom:9px!important;font-size:9px!important}
+.objectHeroCover812 h1{font-size:24px!important;line-height:1.05!important}
+.objectHeroCover812 .heroParty812{margin-top:6px!important;font-size:9px!important}
+.objectHeroCover812 .heroFacts812{
+ margin-top:auto!important;gap:22px!important;align-items:center!important
+}
+.objectHeroCover812 .heroFacts812>span{grid-template-columns:20px auto!important;column-gap:6px!important}
+.objectHeroCover812 .heroFacts812 strong{font-size:15px!important}
+.objectHeroCover812 .heroFacts812 b{font-size:9px!important}
+.objectHeroCover812 .heroFacts812 small{font-size:7px!important}
+.objectHeroCover812 .heroFacts812 .heroStatus812{
+ min-height:31px!important;padding:0 12px!important;font-size:9px!important;border-radius:6px!important
+}
+.objectHeroCover812 .heroActions812{right:18px!important;top:14px!important;gap:7px!important}
+.objectHeroCover812 .heroActions812 button{
+ min-height:33px!important;padding:0 12px!important;border-radius:7px!important;font-size:8px!important
+}
+.objectHeroCover812 .heroActions812 .heroMore812{width:34px!important}
+@media(max-width:1050px){
+ body:has(.objectOverview770) main>header{display:none!important}
+ .objectOverview770 .objectHero770.objectHeroCover812{height:205px!important;min-height:205px!important}
+ .objectHeroCover812 .heroContent812{width:76%!important}
+}
