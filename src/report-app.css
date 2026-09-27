@@ -1578,3 +1578,47 @@ aside #nav button[data-v="dynamics"] .navIcon552{font-size:19px!important;line-h
 @media(max-width:1050px){
   .objectOverview770{gap:14px!important;padding-top:14px!important;padding-bottom:20px!important}
 }
+
+
+/* v7.0.8 — safe redesign step: overview components only. No shell/main/nav geometry changes. */
+.objectOverview770 .objectHero770{
+  border:1px solid #dfe7ee!important;border-radius:12px!important;overflow:hidden!important;
+  background:#fff!important;box-shadow:0 3px 12px rgba(20,52,74,.055)!important;
+}
+.objectOverview770 .objectPhoto770{background:#eaf0f4!important}
+.objectOverview770 .objectPhoto770 img{width:100%!important;height:100%!important;object-fit:cover!important}
+.objectOverview770 .objectIdentity770{background:#fff!important}
+.objectOverview770 .objectName770 h1{
+  color:#102f49!important;font-weight:800!important;letter-spacing:-.02em!important
+}
+.objectOverview770 .objectMeta784 p{color:#708493!important}
+.objectOverview770 .objectMeta784 b{color:#29495f!important}
+.objectOverview770 .objectDates770{
+  background:#f7f9fb!important;border-left:1px solid #e2e9ee!important
+}
+.objectOverview770 .objectDates770>div{border-color:#e0e8ed!important}
+.objectOverview770 .objectDates770 small{color:#81929e!important}
+.objectOverview770 .objectDates770 b{color:#173c56!important}
+.objectOverview770 .objectStatusLine793{
+  background:#eaf8f1!important;color:#547365!important;border:1px solid #d3efe0!important
+}
+.objectOverview770 .objectStatus784{color:#168454!important}
+.objectOverview770 .objectKpis770>div{
+  border:1px solid #dfe7ee!important;border-radius:11px!important;background:#fff!important;
+  box-shadow:0 2px 8px rgba(20,52,74,.035)!important
+}
+.objectOverview770 .overall770,.objectOverview770 .kpiSplit778>div,.objectOverview770 .kpiActivity778>div{
+  background:#fff!important
+}
+.objectOverview770 .ring770{box-shadow:inset 0 0 0 1px #edf2f5!important}
+.objectOverview770 .card{
+  border:1px solid #dfe7ee!important;border-radius:11px!important;background:#fff!important;
+  box-shadow:0 2px 8px rgba(20,52,74,.035)!important
+}
+.objectOverview770 .card>h2,.objectOverview770 .card>h3{
+  color:#173c56!important;border-bottom-color:#e8eef2!important
+}
+.objectOverview770 .progressTable thead th,.latestVolumesScroll801 thead th{
+  background:#f5f8fa!important;color:#496476!important
+}
+.objectOverview770 .readyBar730,.objectOverview770 .scheduleTrack248{background:#e8eef2!important}
