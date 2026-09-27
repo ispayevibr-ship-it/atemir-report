@@ -1717,3 +1717,59 @@ aside #nav button[data-v="dynamics"] .navIcon552{font-size:19px!important;line-h
 }
 .objectOverview770 .kpiSplit778 .danger770 strong{background:#fff1ef!important;color:#e05247!important}
 .objectOverview770 .kpiSplit778 .danger770 span>b{color:#df5147!important}
+
+
+/* v7.0.12 — reference-style full-width construction hero */
+.objectOverview770 .objectHero770.objectHeroCover812{
+ position:relative!important;display:block!important;width:100%!important;height:225px!important;min-height:225px!important;
+ padding:0!important;border:0!important;border-radius:0!important;overflow:hidden!important;
+ background:#17364d var(--hero-bg) center 46%/cover no-repeat!important;
+ box-shadow:0 7px 20px rgba(12,37,56,.14)!important;color:#fff!important
+}
+.objectHeroCover812 .heroShade812{
+ position:absolute!important;inset:0!important;
+ background:linear-gradient(90deg,rgba(7,29,45,.93) 0%,rgba(8,31,48,.80) 34%,rgba(8,31,48,.36) 67%,rgba(7,28,43,.26) 100%)!important
+}
+.objectHeroCover812 .heroContent812{
+ position:absolute!important;z-index:2!important;left:24px!important;top:17px!important;bottom:18px!important;
+ width:min(720px,66%)!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important
+}
+.objectHeroCover812 .heroCrumb812{font-size:10px!important;color:#b8c8d4!important;margin-bottom:13px!important}
+.objectHeroCover812 .heroCrumb812 span{padding:0 8px!important;color:#8098aa!important}
+.objectHeroCover812 h1{
+ margin:0!important;max-width:680px!important;font-size:26px!important;line-height:1.08!important;
+ letter-spacing:-.02em!important;color:#fff!important;font-weight:800!important;text-shadow:0 1px 3px rgba(0,0,0,.18)!important
+}
+.objectHeroCover812 .heroParty812{
+ display:flex!important;align-items:center!important;gap:9px!important;margin-top:9px!important;
+ font-size:10px!important;color:#c7d4dd!important
+}
+.objectHeroCover812 .heroParty812 i{display:block!important;width:3px!important;height:3px!important;border-radius:50%!important;background:#93a7b5!important}
+.objectHeroCover812 .heroParty812 b{font-weight:700!important;color:#e4edf3!important}
+.objectHeroCover812 .heroFacts812{
+ margin-top:auto!important;display:flex!important;align-items:center!important;gap:28px!important;max-width:100%!important
+}
+.objectHeroCover812 .heroFacts812>span{position:relative!important;display:grid!important;grid-template-columns:22px auto!important;column-gap:7px!important;align-items:center!important}
+.objectHeroCover812 .heroFacts812 strong{grid-row:1/3!important;font-size:17px!important;color:#d7e5ee!important;font-weight:500!important}
+.objectHeroCover812 .heroFacts812 b{font-size:10px!important;line-height:1.15!important;color:#fff!important;white-space:nowrap!important}
+.objectHeroCover812 .heroFacts812 small{font-size:8px!important;color:#a9bdca!important;margin-top:2px!important}
+.objectHeroCover812 .heroFacts812 .heroStatus812{
+ display:flex!important;min-height:34px!important;padding:0 13px!important;border-radius:7px!important;
+ background:#17754e!important;color:#fff!important;font-size:10px!important;font-weight:750!important
+}
+.objectHeroCover812 .heroActions812{
+ position:absolute!important;z-index:3!important;right:20px!important;top:18px!important;
+ display:flex!important;gap:8px!important
+}
+.objectHeroCover812 .heroActions812 button{
+ min-height:36px!important;padding:0 14px!important;border:1px solid rgba(255,255,255,.13)!important;border-radius:8px!important;
+ background:rgba(7,31,47,.86)!important;color:#fff!important;font-size:9px!important;font-weight:700!important;
+ box-shadow:0 3px 10px rgba(0,0,0,.12)!important
+}
+.objectHeroCover812 .heroActions812 button:hover{background:rgba(15,57,82,.96)!important}
+.objectHeroCover812 .heroActions812 .heroMore812{width:38px!important;padding:0!important;font-size:18px!important}
+@media(max-width:1050px){
+ .objectOverview770 .objectHero770.objectHeroCover812{height:250px!important;min-height:250px!important}
+ .objectHeroCover812 .heroContent812{width:72%!important}
+ .objectHeroCover812 .heroFacts812{gap:14px!important;flex-wrap:wrap!important}
+}
