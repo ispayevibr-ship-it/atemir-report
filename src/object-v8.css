@@ -667,3 +667,9 @@ main>header{display:none!important}
 @media(max-width:900px){
  .homeLatest925.two925 .latestPhoto925{flex-basis:calc((100% - 12px)/3)!important}
 }
+
+
+/* v8.0.42 — карточки фото и объёмов независимой высоты */
+.homeLatest925.two925{align-items:start!important}
+.homeLatest925.two925 .latestCard925{height:auto!important;align-self:start!important}
+.homeLatest925.two925 .photos925{min-height:0!important}
