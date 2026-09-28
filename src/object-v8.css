@@ -979,3 +979,21 @@ main>header{display:none!important}
 .scheduleRow923>div{height:27px!important}
 .plan923,.fact923{top:7px!important;height:13px!important}
 .today923{height:39px!important;top:-6px!important;bottom:-6px!important}
+
+
+/* v8.0.60 — немного уменьшаем верхние два блока */
+.homeWorkSchedule923 h3,.homeReady923 h3,.homeSchedule923 h3,.scheduleTitle923 h3{
+  font-size:15px!important;
+}
+.readyHead923{min-height:29px!important;font-size:10px!important}
+.readyRow923{min-height:34px!important;font-size:11px!important}
+.readyRow923>span,.readyRow923 b,.readyRow923 strong{font-size:11px!important}
+.readyRow923>i{height:11px!important}
+.scheduleTitle923>div,.scheduleTitle923>div span{font-size:10px!important}
+.scheduleMonths923{min-height:27px!important;grid-template-columns:170px 1fr!important}
+.scheduleMonths923>div{height:26px!important;font-size:10px!important}
+.scheduleRow923{grid-template-columns:170px 1fr!important;min-height:35px!important;font-size:11px!important}
+.scheduleRow923>span{font-size:11px!important}
+.scheduleRow923>div{height:24px!important}
+.plan923,.fact923{top:6px!important;height:12px!important}
+.today923{height:35px!important;top:-5px!important;bottom:-5px!important}
