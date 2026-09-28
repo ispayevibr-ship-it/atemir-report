@@ -1333,3 +1333,45 @@ main>header{display:none!important}
   font-size:11px!important;
   line-height:16px!important;
 }
+
+
+/* v8.0.72 — новый понятный график выполнения за месяц */
+.monthGraph924{height:330px!important;min-height:330px!important}
+.mcStats972{
+  display:grid!important;
+  grid-template-columns:repeat(4,1fr)!important;
+  gap:6px!important;
+  margin:7px 0 4px!important;
+}
+.mcStats972>div{
+  min-width:0!important;
+  border:1px solid #e4ebf0!important;
+  border-radius:6px!important;
+  background:#f8fafb!important;
+  padding:6px 8px!important;
+  display:flex!important;
+  align-items:baseline!important;
+  justify-content:space-between!important;
+  gap:5px!important;
+}
+.mcStats972 small{font-size:9px!important;color:#718594!important;white-space:nowrap!important}
+.mcStats972 b{font-size:12px!important;color:#17364d!important;white-space:nowrap!important}
+.mcStats972 .ahead972 b{color:#218c68!important}
+.mcStats972 .behind972 b{color:#d45757!important}
+.mcChart924.line950{flex:1 1 auto!important;min-height:0!important;margin-top:1px!important}
+.mcLine950.clean972{width:100%!important;height:100%!important;min-height:125px!important}
+.mcLine950.clean972 .mcPlan950{
+  fill:none!important;
+  stroke-width:2!important;
+  stroke-dasharray:6 5!important;
+}
+.mcLine950.clean972 .mcFact950{
+  fill:none!important;
+  stroke-width:2.5!important;
+}
+.mcFactDot972{
+  stroke:#fff!important;
+  stroke-width:1.5!important;
+  pointer-events:none!important;
+}
+.mcLine950.clean972 text{font-size:9px!important}
