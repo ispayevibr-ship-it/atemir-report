@@ -142,3 +142,25 @@ main>header{display:none!important}
 .sidebarBrand{height:auto!important;min-height:0!important;padding:0!important;margin:0 -9px 6px!important;width:calc(100% + 18px)!important;background:#fff!important;overflow:hidden!important}
 #companyBrand641{width:100%!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;display:block!important;background:#fff!important;overflow:hidden!important}
 #companyBrand641 img{display:block!important;width:100%!important;height:auto!important;max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;object-fit:contain!important;object-position:center!important}
+
+/* v8.0.13 — второй блок: сводка объекта */
+.summary913{display:grid;grid-template-columns:190px minmax(330px,1.7fr) minmax(250px,1fr) minmax(210px,.85fr);gap:10px;width:100%;margin:0;padding:0}
+.summary913>div{min-height:104px;background:#fff;border:1px solid #e3e9ee;border-radius:8px;box-shadow:0 1px 5px rgba(21,48,68,.045)}
+.summaryReady913{display:flex;align-items:center;gap:11px;padding:13px}
+.summaryRing913{--p:0;width:64px;height:64px;min-width:64px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#1f69bd calc(var(--p)*1%),#e9eff4 0);position:relative}
+.summaryRing913:after{content:"";position:absolute;inset:7px;border-radius:50%;background:#fff}
+.summaryRing913 b{position:relative;z-index:1;font-size:12px;color:#17364d}
+.summaryReady913>div:last-child{display:flex;flex-direction:column;gap:2px}.summaryReady913 strong{font-size:15px}.summaryReady913 span{font-size:8px;color:#50697b}.summaryReady913 small{font-size:7px;color:#15935b;margin-top:4px}
+.summaryStats913{display:grid;grid-template-columns:repeat(3,1fr);padding:0!important;overflow:hidden}
+.summaryStat913{display:flex;align-items:center;gap:9px;padding:13px 10px;border-right:1px solid #edf1f4}.summaryStat913:last-child{border-right:0}
+.summaryStat913 i{width:28px;height:28px;min-width:28px;border-radius:50%;display:grid;place-items:center;background:#edf5ff;color:#2b79c8}
+.summaryStat913 i svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.summaryStat913.orange913 i{background:#fff4e7;color:#ed8a24}.summaryStat913.red913 i{background:#fff0f0;color:#df5555}
+.summaryStat913>div{display:flex;flex-direction:column;gap:2px}.summaryStat913 b{font-size:13px;color:#19384f;white-space:nowrap}.summaryStat913 span{font-size:8px;color:#647b8c}.summaryStat913 small{font-size:7px;color:#8a9aa6}
+.summaryDates913{padding:10px 12px}.summaryHead913{display:flex!important;justify-content:space-between!important;border:0!important;margin-bottom:3px}.summaryHead913 b{font-size:9px}.summaryHead913 span{font-size:15px;color:#8495a2}
+.summaryDates913>div:not(.summaryHead913){display:grid;grid-template-columns:8px 1fr auto;align-items:center;gap:6px;min-height:22px;font-size:7px;color:#63798a}
+.summaryDates913>div:not(.summaryHead913) i{width:5px;height:5px;border-radius:50%;background:#8195a5}.summaryDates913 i.green913{background:#22a477!important}.summaryDates913>div:not(.summaryHead913) b{font-size:7px;color:#516a7c}
+.summaryWeather913{padding:11px 13px}.summaryWeather913>b{display:block;font-size:9px;margin-bottom:10px}.weatherNow913{display:flex;align-items:center;gap:7px}.weatherNow913 span{font-size:20px;color:#f1a11f}.weatherNow913 strong{font-size:15px}.summaryWeather913>small{display:block;margin-top:8px;font-size:7px;color:#718492}.weatherEmpty913{margin-top:22px;font-size:8px;color:#8a9aa6}
+.objectKpis770.objectKpisSummary778{display:none!important}
+@media(max-width:1200px){.summary913{grid-template-columns:190px 1fr 1fr}.summaryWeather913{grid-column:3}.summaryDates913{grid-column:1/3}}
+@media(max-width:900px){.summary913{grid-template-columns:1fr}.summaryDates913,.summaryWeather913{grid-column:auto}}
