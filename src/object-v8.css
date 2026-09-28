@@ -409,3 +409,62 @@ main>header{display:none!important}
 .previewTabs927{gap:0!important;padding:0!important;height:31px!important}.previewTabs927 button{height:31px;border:0;border-bottom:2px solid transparent;background:#fff;padding:0 10px;font-size:7.5px;color:#647d8f;cursor:pointer}.previewTabs927 button.on{color:#197ce0;border-bottom-color:#2588e5;font-weight:700}.previewBody927{display:block!important;height:180px!important}.previewEmpty931{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(#fff,#f7fafc);color:#8a9aa5}.previewEmpty931 strong{font-size:22px;color:#36556a;margin-bottom:6px}.previewEmpty931 small{font-size:8px}
 .drawing927,.model927{display:none!important}
 @media(max-width:1200px){.recentReport722.mock926>summary{grid-template-columns:125px 240px 110px minmax(0,1fr) 20px!important}.marksWorkspace927{grid-template-columns:1fr!important}.marksPreview927{min-height:160px}}
+
+
+/* v8.0.32 — polish: Последние отчёты + Ведомость / марки */
+.reportsStandalone926>.card>h2,.marksCard801>.card>h2{
+ display:flex!important;align-items:center!important;min-height:25px!important;
+ font-size:11px!important;font-weight:750!important;letter-spacing:0!important;
+ color:#17364d!important;margin:0 0 9px!important;padding:0 0 8px!important;
+ border-bottom:1px solid #e7edf1!important
+}
+.reportsStandalone926>.card>h2:before,.marksCard801>.card>h2:before{
+ box-sizing:border-box!important;width:9px!important;height:9px!important;border:2px solid #2588e5!important;
+ border-radius:2px!important;margin:0 7px 0 0!important;vertical-align:0!important;flex:0 0 auto!important
+}
+.recentReport722.mock926{border:1px solid #e3e9ee!important;border-radius:7px!important;overflow:hidden!important;margin-bottom:7px!important;background:#fff!important}
+.recentReport722.mock926>summary{background:#fbfcfd!important;cursor:pointer!important}
+.recentReport722.mock926[open]>summary{background:#f7fafc!important;border-bottom:1px solid #e7edf1!important}
+.rrMetric926{display:inline-flex!important;align-items:center!important;gap:3px!important;white-space:nowrap!important}
+.rrMetric926 svg{width:10px!important;height:10px!important;fill:none!important;stroke:#557387!important;stroke-width:1.6!important;stroke-linecap:round!important;stroke-linejoin:round!important;flex:0 0 auto!important}
+.rrStatus926{justify-self:center!important;background:#e7f7ed!important;color:#288657!important;border-radius:5px!important;padding:5px 11px!important;font-size:7px!important;font-weight:650!important;white-space:nowrap!important}
+.rrThumbs926{display:flex!important;justify-content:flex-end!important;gap:4px!important;min-width:0!important}
+.rrThumbs926 img{width:38px!important;height:29px!important;object-fit:cover!important;border-radius:4px!important;border:1px solid #e0e6ea!important}
+.recentReportBody722{background:#fff!important}
+.rrWorkGroup930{border:1px solid #e5ebef!important;border-radius:6px!important;overflow:hidden!important}
+.rrWorkHead930{background:#f4f8fa!important;padding:7px 9px!important;color:#34566c!important}
+.rrWorkLabels930{background:#fbfcfd!important;color:#81919c!important}
+.rrWorkLabels930,.rrWorkRow930{padding:6px 9px!important}
+.recentOpen722,.recentReportsToolbar797 .white{border-radius:5px!important;border:1px solid #cbd7df!important;background:#fff!important;color:#34566c!important;font-weight:650!important;padding:7px 11px!important}
+.recentOpen722:hover,.recentReportsToolbar797 .white:hover{border-color:#2588e5!important;color:#1977cc!important;background:#f7fbff!important}
+.rrGallery926{display:none!important}
+
+.marksCard801>.card{padding:11px 13px!important;border:1px solid #e2e8ed!important;border-radius:8px!important;box-shadow:0 1px 5px rgba(21,48,68,.045)!important}
+.marksTools927{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:10px!important;align-items:center!important;margin-bottom:7px!important}
+.marksTabs927{display:flex!important;gap:6px!important;overflow-x:auto!important;max-width:none!important;padding:0 0 4px!important}
+.marksTabs927 button{display:inline-flex!important;align-items:center!important;gap:7px!important;flex:0 0 auto!important;height:30px!important;padding:0 11px!important;border:1px solid #d8e1e7!important;border-radius:5px!important;background:#f8fafb!important;color:#4c6678!important;font-size:7.5px!important;font-weight:600!important}
+.marksTabs927 button small{display:inline-grid!important;place-items:center!important;min-width:20px!important;height:16px!important;padding:0 5px!important;border-radius:8px!important;background:#e8eef2!important;color:#738795!important;font-size:6.5px!important}
+.marksTabs927 button.on{background:#2588e5!important;border-color:#2588e5!important;color:#fff!important}
+.marksTabs927 button.on small{background:rgba(255,255,255,.22)!important;color:#fff!important}
+.marksActions927{display:flex!important;gap:7px!important;align-items:center!important}
+.marksSearchWrap931{display:flex!important;align-items:center!important;width:205px!important;height:30px!important;border:1px solid #d8e1e7!important;border-radius:5px!important;background:#fff!important;padding:0 8px!important}
+.marksSearchWrap931:focus-within{border-color:#2588e5!important;box-shadow:0 0 0 2px rgba(37,136,229,.08)!important}
+.marksSearchWrap931 svg{width:11px!important;height:11px!important;fill:none!important;stroke:#78909f!important;stroke-width:1.7!important;flex:0 0 auto!important}
+.marksSearchWrap931 input{width:100%!important;height:28px!important;border:0!important;outline:0!important;box-shadow:none!important;padding:0 0 0 6px!important;font-size:7.5px!important}
+.dashBtn930{height:30px!important;padding:0 11px!important;white-space:nowrap!important}
+.marksCode931{font-size:7px!important;color:#82929d!important;margin:0 0 6px 2px!important}.marksCode931 b{color:#48677b!important}
+.marksWorkspace927{border:1px solid #e2e8ed!important;border-radius:6px!important;overflow:hidden!important;align-items:stretch!important}
+.marksDashTable927{min-width:0!important;overflow:auto!important;background:#fff!important}
+.marksDashLabels927{position:sticky!important;top:0!important;z-index:1!important;background:#f5f8fa!important;color:#7a8d9a!important}
+.marksDashRow927{cursor:pointer!important;background:#fff!important;transition:background .12s ease!important}
+.marksDashRow927:hover{background:#f8fbfd!important}.marksDashRow927.selected927{background:#f1f8ff!important;box-shadow:inset 2px 0 #2588e5!important}
+.marksDashRow927.selected927>b{color:#1677cf!important}
+.marksPreview927{border-left:1px solid #e2e8ed!important;background:#fff!important;min-width:0!important}
+.previewTabs927{display:flex!important;border-bottom:1px solid #e7edf1!important;background:#fff!important}
+.previewTabs927 button{flex:1 1 auto!important;white-space:nowrap!important}
+.previewBody927{height:205px!important;overflow:auto!important;background:#f8fafc!important}
+.previewEmpty931{background:linear-gradient(180deg,#fff,#f6f9fb)!important}
+.previewEmpty931 strong{font-size:18px!important;color:#36556a!important;margin:5px 0 3px!important}.previewEmpty931 small{font-size:7.5px!important}
+.previewIcon931{font-size:22px!important;color:#7e94a3!important;line-height:1!important}.preview3d931{font-size:24px!important;color:#a65f45!important;line-height:1!important}
+.markPhotos931{display:grid!important;grid-template-columns:repeat(2,1fr)!important;gap:5px!important;padding:6px!important}.markPhotos931 img{width:100%!important;height:92px!important;object-fit:cover!important;border-radius:4px!important}
+@media(max-width:1200px){.marksTools927{grid-template-columns:1fr!important}.marksActions927{justify-content:flex-end!important}.marksWorkspace927{grid-template-columns:1fr!important}.marksPreview927{border-left:0!important;border-top:1px solid #e2e8ed!important}}
