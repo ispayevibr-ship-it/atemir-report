@@ -1246,3 +1246,34 @@ main>header{display:none!important}
     grid-template-columns:1fr!important;
   }
 }
+
+
+/* v8.0.69 — жёстко фиксируем читаемую типографику фактических элементов Последних отчётов */
+.objectOverview770 .objectReports926 .reportsStandalone926 details.recentReport722.mock926>summary .rrDate926>b,
+.objectOverview770 .objectReports926 .reportsStandalone926 details.recentReport722.mock926>summary .rrMetric926>b,
+.objectOverview770 .objectReports926 .reportsStandalone926 details.recentReport722.mock926>summary .rrWeather926 b,
+.objectOverview770 .objectReports926 .reportsStandalone926 details.recentReport722.mock926>summary .rrBriefLines935>b{
+  font-family:Arial,sans-serif!important;
+  font-size:12px!important;
+  font-weight:700!important;
+  line-height:16px!important;
+  letter-spacing:0!important;
+}
+.objectOverview770 .objectReports926 .reportsStandalone926 details.recentReport722.mock926>summary .rrMetric926>small,
+.objectOverview770 .objectReports926 .reportsStandalone926 details.recentReport722.mock926>summary .rrWeather926 small,
+.objectOverview770 .objectReports926 .reportsStandalone926 details.recentReport722.mock926>summary .rrBrief926>small{
+  font-family:Arial,sans-serif!important;
+  font-size:10px!important;
+  font-weight:400!important;
+  line-height:14px!important;
+  letter-spacing:0!important;
+}
+.objectOverview770 .objectReports926 .reportsStandalone926 .rrDateIcon926 svg{
+  width:24px!important;height:24px!important
+}
+.objectOverview770 .objectReports926 .reportsStandalone926 .rrMetric926 svg{
+  width:27px!important;height:27px!important
+}
+.objectOverview770 .objectReports926 .reportsStandalone926 .rrWeather926>svg{
+  width:31px!important;height:31px!important
+}
