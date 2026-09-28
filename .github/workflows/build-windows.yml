@@ -137,6 +137,25 @@ jobs:
           } catch {
             Write-Host "Could not compare remote lightweight manifest; publishing current build manifest."
           }
+          # Re-check latest.json after clone/rebase. Concurrent older builds must never overwrite a newer manifest.
+          try {
+            $manifestPath = Join-Path (Get-Location) "hot/latest.json"
+            $currentManifest = Get-Content $manifestPath -Raw | ConvertFrom-Json
+            $currentParts = @($currentManifest.version.Split('.') | ForEach-Object { [int]$_ })
+            $newParts = @($version.Split('.') | ForEach-Object { [int]$_ })
+            while ($currentParts.Count -lt 3) { $currentParts += 0 }
+            while ($newParts.Count -lt 3) { $newParts += 0 }
+            $currentNewer = $false
+            for ($i=0; $i -lt 3; $i++) {
+              if ($currentParts[$i] -gt $newParts[$i]) { $currentNewer = $true; break }
+              if ($currentParts[$i] -lt $newParts[$i]) { break }
+            }
+            if (-not $currentNewer) {
+              Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/latest.json" "hot/latest.json" -Force
+            }
+          } catch {
+            Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/latest.json" "hot/latest.json" -Force
+          }
           git add hot
           git commit -m "Lightweight update $version"
           $pushed = $false
