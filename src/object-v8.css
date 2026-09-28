@@ -1498,3 +1498,56 @@ main>header{display:none!important}
 .objectHeroCover812 .heroStatus812.completed976{
   background:#28748f!important;
 }
+
+
+/* v8.0.77 — фильтр/месяц больше не пересекаются + свой tooltip графика */
+.monthGraph924 .mcFilter924{
+  display:flex!important;
+  align-items:center!important;
+  gap:0!important;
+  width:100%!important;
+}
+.monthGraph924 .mcFilter924 #homeMonthFilter924{
+  flex:0 0 330px!important;
+  width:330px!important;
+  max-width:42%!important;
+  margin:0 22px 0 0!important;
+}
+.monthGraph924 .mcFilter924 .mcMonth945{
+  flex:0 0 auto!important;
+  display:block!important;
+  margin:0 24px 0 0!important;
+  padding:0!important;
+  white-space:nowrap!important;
+}
+.monthGraph924 .mcFilter924>small{
+  margin-left:auto!important;
+  padding-left:12px!important;
+  white-space:nowrap!important;
+}
+.mcSvgWrap976{
+  position:relative!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:125px!important;
+}
+.mcSvgWrap976 .mcLine950.clean972{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+}
+.mcTooltip976{
+  position:absolute!important;
+  z-index:8!important;
+  display:none!important;
+  max-width:240px!important;
+  padding:6px 9px!important;
+  border-radius:5px!important;
+  background:#17364d!important;
+  color:#fff!important;
+  box-shadow:0 3px 10px rgba(20,45,63,.18)!important;
+  font:10px/1.35 Arial,sans-serif!important;
+  white-space:nowrap!important;
+  pointer-events:none!important;
+}
+.mcTooltip976.show{display:block!important}
