@@ -233,3 +233,80 @@ main>header{display:none!important}
 .summarySix913 .weatherEmpty913{margin-top:18px!important;font-size:8px!important;color:#8a9aa6!important}
 @media(max-width:1350px){.summary913.summarySix913{grid-template-columns:1.15fr repeat(3,1fr) 1.1fr 1.1fr!important}.summarySix913 .summaryWeather913{grid-column:1/-1!important;border-top:1px solid #edf1f4!important}}
 @media(max-width:900px){.summary913.summarySix913{grid-template-columns:1fr 1fr!important}.summarySix913 .summaryWeather913{grid-column:1/-1!important}}
+
+/* v8.0.22 — погода: центрирование и цветные состояния */
+.summarySix913 .summaryWeather913{
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  padding:9px 14px!important;
+}
+.summarySix913 .weatherTitle913{
+  width:100%!important;
+  margin-bottom:5px!important;
+}
+.summarySix913 .weatherBody913{
+  width:100%!important;
+  display:grid!important;
+  grid-template-columns:minmax(92px,1.05fr) minmax(120px,1.45fr)!important;
+  grid-template-rows:auto auto!important;
+  align-items:center!important;
+  justify-content:center!important;
+  column-gap:12px!important;
+  margin:0!important;
+}
+.summarySix913 .weatherCurrent913{
+  justify-content:center!important;
+  min-height:42px!important;
+}
+.summarySix913 .weatherCurrent913>span{
+  width:31px!important;height:31px!important;
+  display:grid!important;place-items:center!important;
+  border-radius:50%!important;
+  background:#fff4d8!important;
+  color:#f2a400!important;
+  font-size:20px!important;
+}
+.summarySix913 .weatherCurrent913 strong{
+  font-size:14px!important;
+  line-height:1!important;
+}
+.summarySix913 .weatherCurrent913 small{
+  margin-top:3px!important;
+  color:#6f8595!important;
+}
+.summarySix913 .weatherMeta913{
+  text-align:center!important;
+  color:#547083!important;
+  margin:0!important;
+}
+.summarySix913 .weatherDays913{
+  height:48px!important;
+  align-items:center!important;
+  gap:7px!important;
+}
+.summarySix913 .weatherDays913>div{
+  min-width:36px!important;
+  padding:2px 3px!important;
+  border-radius:6px!important;
+  background:#f7fafc!important;
+}
+.summarySix913 .weatherDays913>div:nth-child(1) span{color:#f1a20d!important}
+.summarySix913 .weatherDays913>div:nth-child(2) span{color:#4d91cf!important}
+.summarySix913 .weatherDays913>div:nth-child(3) span{color:#8a73d6!important}
+.summarySix913 .weatherDays913 span{
+  display:grid!important;
+  place-items:center!important;
+  width:23px!important;height:23px!important;
+  border-radius:50%!important;
+  background:#fff!important;
+  font-size:14px!important;
+}
+.summarySix913 .weatherDays913 b{
+  color:#536d7f!important;
+  font-weight:700!important;
+}
+.summarySix913 .weatherDays913 small{
+  color:#294d66!important;
+  font-weight:650!important;
+}
