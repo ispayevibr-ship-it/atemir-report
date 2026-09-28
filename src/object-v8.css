@@ -83,3 +83,26 @@ main>header{display:none!important}
 .objectHeroCover812 .heroActions812 button:hover{background:rgba(12,48,74,.95)}
 .objectHeroCover812 .heroActions812 .heroMore812{width:32px;padding:0;font-size:15px}
 @media(max-width:900px){#view{padding-top:0}.objectHero770.objectHeroCover812{height:190px;min-height:190px}.objectHeroCover812 .heroContent812{width:72%}.objectHeroCover812 .heroActions812{top:10px;right:10px}}
+
+/* v8.0.5 — SVG и меню действий шапки */
+.objectHeroCover812 svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:block}
+.objectHeroCover812 .heroStatus812{gap:7px}
+.objectHeroCover812 .heroStatus812 svg{width:13px;height:13px;stroke-width:2.5}
+.objectHeroCover812 .heroSvg812{display:grid!important;place-items:center}
+.objectHeroCover812 .heroSvg812 svg{width:16px;height:16px}
+.objectHeroCover812 .heroActions812{align-items:flex-start}
+.objectHeroCover812 .heroActions812>button{display:flex;align-items:center;justify-content:center;gap:7px}
+.objectHeroCover812 .heroActions812>button svg{width:13px;height:13px}
+.objectHeroCover812 .heroActions812{position:absolute}
+.heroMenu812{display:none;position:absolute;right:0;top:39px;width:244px;padding:7px;background:#fff;border:1px solid #dbe3e9;border-radius:8px;box-shadow:0 14px 35px rgba(4,20,33,.24);color:#17364d;z-index:20}
+.heroMenu812.open{display:block}
+.heroMenuItem812{width:100%!important;min-height:36px!important;padding:0 9px!important;border:0!important;border-radius:5px!important;background:#fff!important;color:#17364d!important;box-shadow:none!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:9px!important;text-align:left!important;font-size:9px!important;font-weight:600!important;cursor:pointer}
+.heroMenuItem812:hover{background:#f1f5f8!important}
+.heroMenuItem812 svg{width:15px!important;height:15px!important;color:#45657c}
+.heroUpload812 input{display:none}
+.heroMenuPeriod812{margin:4px 0;padding:8px 9px;border-top:1px solid #edf1f4;border-bottom:1px solid #edf1f4}
+.heroMenuPeriod812>span{display:block;margin-bottom:5px;color:#6e8291;font-size:8px;font-weight:600}
+.heroMenuPeriod812 select,.heroMenuDates812 input{width:100%;height:29px;border:1px solid #d8e1e7;border-radius:5px;background:#fff;color:#17364d;padding:0 7px;font-size:9px}
+.heroMenuDates812{display:none;grid-template-columns:1fr auto 1fr;align-items:center;gap:5px;margin-top:6px}
+.heroMenuDates812.show{display:grid}
+.heroMenuDates812 input{min-width:0;padding:0 4px}
