@@ -1220,3 +1220,29 @@ main>header{display:none!important}
 .marksCard801 .dashBtn930{
   font-size:11px!important;
 }
+
+
+/* v8.0.68 — единая сетка 50/50 для пар блоков главной объекта */
+.objectOverview770 .homeWorkSchedule923,
+.objectOverview770 .homeMonthCalendar924,
+.objectOverview770 .homeLatest925.two925{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  gap:10px!important;
+  width:100%!important;
+}
+.objectOverview770 .homeReady923,
+.objectOverview770 .homeSchedule923,
+.objectOverview770 .monthGraph924,
+.objectOverview770 .calendar924,
+.objectOverview770 .homeLatest925.two925>.latestCard925{
+  min-width:0!important;
+  width:100%!important;
+}
+@media(max-width:1100px){
+  .objectOverview770 .homeWorkSchedule923,
+  .objectOverview770 .homeMonthCalendar924,
+  .objectOverview770 .homeLatest925.two925{
+    grid-template-columns:1fr!important;
+  }
+}
