@@ -1587,3 +1587,15 @@ main>header{display:none!important}
  .dailyListCard981{grid-template-columns:160px 120px 135px 125px 190px minmax(220px,1fr) 76px!important}
  .dailyListCard981>div{padding:12px!important}
 }
+
+/* v8.0.86 — ежедневные отчёты: отступ и кнопка нового отчёта */
+.objectOverview770 .toolbar:first-child{margin-top:14px!important}
+button[data-add="workDays"]{
+  min-height:38px!important;
+  padding:0 18px!important;
+  border:0!important;
+  border-radius:7px!important;
+  font:700 12px/38px Arial,sans-serif!important;
+  box-shadow:0 2px 7px rgba(24,93,126,.14)!important;
+}
+.dailyBrief981>span{width:100%!important}
