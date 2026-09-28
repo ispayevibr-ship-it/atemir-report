@@ -728,3 +728,12 @@ main>header{display:none!important}
 .marksMore944{display:flex!important;justify-content:center!important;padding:9px 8px!important;border-top:1px solid #e7edf1!important;background:#fbfcfd!important;min-width:850px!important}
 .marksMore944 button{height:28px!important;padding:0 16px!important;border:1px solid #cbd8e1!important;border-radius:5px!important;background:#fff!important;color:#35627e!important;font-size:7.5px!important;font-weight:650!important;cursor:pointer!important}
 .marksMore944 button:hover{background:#eef7fd!important;border-color:#8fc3e9!important;color:#1679c9!important}
+
+
+/* v8.0.45 — график за месяц: месяц в шапке, дни без месяца, % над колонками */
+.mcFilter924{position:relative!important}
+.mcMonth945{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;font-size:8px!important;font-weight:700!important;color:#526b7c!important;white-space:nowrap!important}
+.mcChart924{padding-top:16px!important}
+.mcBar924>div{position:relative!important;overflow:visible!important}
+.mcPct945{position:absolute!important;left:50%!important;top:-14px!important;transform:translateX(-50%)!important;font-size:6.5px!important;font-weight:650!important;color:#4f6879!important;white-space:nowrap!important;z-index:2!important}
+.mcBar924>small{font-size:6.5px!important}
