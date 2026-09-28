@@ -122,3 +122,18 @@ main>header{display:none!important}
 .heroMenu812{z-index:1000!important;max-height:none!important;overflow:visible!important}
 .objectOverview770{overflow:visible!important}
 #view,main,.shell{overflow:visible!important}
+
+/* v8.0.10 — фото шапки почти на всю ширину, до зоны названия */
+.objectHero770.objectHeroCover812{
+  background-size:cover!important;
+  background-position:center center!important;
+  background-repeat:no-repeat!important;
+}
+.objectHeroCover812 .heroShade812{
+  background:linear-gradient(90deg,
+    rgba(8,31,48,.94) 0%,
+    rgba(8,31,48,.88) 20%,
+    rgba(8,31,48,.64) 38%,
+    rgba(8,31,48,.28) 58%,
+    rgba(8,31,48,.08) 100%)!important;
+}
