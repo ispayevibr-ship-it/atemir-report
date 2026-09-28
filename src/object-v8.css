@@ -673,3 +673,48 @@ main>header{display:none!important}
 .homeLatest925.two925{align-items:start!important}
 .homeLatest925.two925 .latestCard925{height:auto!important;align-self:start!important}
 .homeLatest925.two925 .photos925{min-height:0!important}
+
+
+/* v8.0.43 — Ведомость / марки: компактная геометрия и единый стиль */
+.marksCard801>.card{padding:12px!important}
+.marksCard801>.card>h2{
+ display:block!important;min-height:0!important;font-size:11px!important;line-height:1.2!important;font-weight:700!important;
+ color:#17364d!important;margin:0 0 9px!important;padding:0 0 9px!important;border-bottom:1px solid #e7edf1!important
+}
+.marksCard801>.card>h2:before,.marksCard801>.card>h2:after{display:none!important;content:none!important}
+.marksTools927{display:grid!important;grid-template-columns:minmax(0,1fr) 330px!important;gap:10px!important;align-items:start!important;margin:0 0 7px!important}
+.marksTabs927{
+ display:flex!important;gap:6px!important;overflow-x:auto!important;overflow-y:hidden!important;padding:0 0 4px!important;
+ scrollbar-width:thin!important;scrollbar-color:#b8c5ce transparent!important
+}
+.marksTabs927::-webkit-scrollbar{height:4px!important}.marksTabs927::-webkit-scrollbar-thumb{background:#b8c5ce!important;border-radius:4px!important}
+.marksTabs927 button{height:31px!important;padding:0 10px!important;border-radius:5px!important;font-size:7.2px!important}
+.marksActions927{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:7px!important;width:330px!important}
+.marksSearchWrap931{width:auto!important;min-width:0!important;height:31px!important}
+.dashBtn930{height:31px!important;padding:0 12px!important;border-radius:5px!important;background:#2588e5!important;border-color:#2588e5!important;color:#fff!important;font-size:7.5px!important}
+.dashBtn930:hover{background:#1679c9!important;border-color:#1679c9!important;color:#fff!important}
+.marksCode931{margin:0 0 7px 1px!important;font-size:7px!important}
+.marksWorkspace927{display:grid!important;grid-template-columns:minmax(0,2.25fr) minmax(300px,1fr)!important;border-radius:6px!important}
+.marksDashTable927{overflow-x:auto!important;min-width:0!important}
+.marksDashLabels927,.marksDashRow927{
+ grid-template-columns:18px 110px minmax(160px,1.6fr) 55px 65px 75px 105px 80px 42px minmax(100px,.8fr) 24px!important;
+ min-width:850px!important
+}
+.marksDashLabels927{height:32px!important;align-items:center!important}
+.marksDashRow927{min-height:34px!important;align-items:center!important}
+.marksDashRow927>span,.marksDashRow927>b,.marksDashRow927>strong,.marksDashRow927>em{font-size:7.3px!important}
+.markCheck927{width:11px!important;height:11px!important}
+.marksPreview927{min-width:0!important;background:#fff!important}
+.previewTabs927{height:32px!important;align-items:stretch!important}
+.previewTabs927 button{font-size:7.2px!important;padding:0 8px!important;border-bottom:2px solid transparent!important}
+.previewTabs927 button.on{background:#f8fbfd!important;color:#1679c9!important;border-bottom-color:#2588e5!important;box-shadow:none!important}
+.previewTabs927 button:hover{background:#eef7fd!important}
+.previewBody927{height:250px!important;background:#f8fafc!important}
+.previewEmpty931{height:100%!important;min-height:250px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;background:linear-gradient(180deg,#fff,#f7fafc)!important}
+.previewSvg943{width:24px!important;height:24px!important;fill:none!important;stroke:#6f899a!important;stroke-width:1.5!important;stroke-linecap:round!important;stroke-linejoin:round!important;margin-bottom:8px!important}
+.previewEmpty931 strong{font-size:17px!important;margin:0 0 4px!important}.previewEmpty931 small{font-size:7px!important}
+.preview3d931{margin-bottom:7px!important}
+@media(max-width:1250px){
+ .marksTools927{grid-template-columns:1fr!important}.marksActions927{width:100%!important;grid-template-columns:minmax(180px,1fr) auto!important}
+ .marksWorkspace927{grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr)!important}
+}
