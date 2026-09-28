@@ -997,3 +997,24 @@ main>header{display:none!important}
 .scheduleRow923>div{height:24px!important}
 .plan923,.fact923{top:6px!important;height:12px!important}
 .today923{height:35px!important;top:-5px!important;bottom:-5px!important}
+
+
+/* v8.0.61 — Последние отчёты в том же умеренном масштабе */
+.latestCard925 .latestHead925 h3{font-size:15px!important}
+.latestCard925 .reportRow936,
+.latestCard925 .reportRow936 .reportDate936,
+.latestCard925 .reportRow936 strong,
+.latestCard925 .reportRow936 b{
+  font-size:11px!important;
+  line-height:1.4!important;
+}
+.latestCard925 .reportRow936 small{font-size:10px!important;line-height:1.35!important}
+.latestCard925 .reportRow936 svg{width:22px!important;height:22px!important}
+.latestCard925 .reportBrief936,
+.latestCard925 .reportBrief936 strong,
+.latestCard925 .reportBrief936 b{font-size:11px!important;line-height:1.45!important}
+.latestCard925 .reportExpanded936,
+.latestCard925 .reportExpanded936 table,
+.latestCard925 .reportExpanded936 td{font-size:11px!important;line-height:1.45!important}
+.latestCard925 .reportExpanded936 th{font-size:10px!important}
+.latestCard925 .reportOpen936,.latestCard925 .latestHead925 button{font-size:10px!important}
