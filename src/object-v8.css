@@ -876,3 +876,18 @@ main>header{display:none!important}
 .marksTable927 th{font-size:10.5px!important}
 .marksTable927 td{font-size:11px!important;line-height:1.45!important}
 .markStatus927,.markDetailTabs931 button,.markPreview931,.markPreview931 small{font-size:10.5px!important}
+
+
+/* v8.0.56 — календарь заполняет высоту карточки и читается крупнее */
+.homeMonthCalendar924{align-items:stretch!important}
+.monthGraph924,.calendar924{min-height:330px!important;box-sizing:border-box!important}
+.calendar924{display:flex!important;flex-direction:column!important}
+.calendar924>h3{flex:0 0 auto!important}
+.calWrap924{flex:1 1 auto!important;align-items:stretch!important;padding:14px 14px 8px!important;gap:28px!important}
+.calMonth924{display:flex!important;flex-direction:column!important;min-height:0!important}
+.calMonth924>strong{font-size:13px!important;margin-bottom:10px!important}
+.calMonth924>div{flex:1 1 auto!important;grid-template-rows:24px repeat(6,minmax(28px,1fr))!important;gap:4px!important}
+.calMonth924 b{font-size:11px!important;display:grid!important;place-items:center!important}
+.calMonth924 span{height:auto!important;min-height:28px!important;font-size:11px!important;border-radius:3px!important}
+.calLegend924{flex:0 0 auto!important;font-size:11px!important;gap:26px!important;margin:9px 0 2px!important}
+.calLegend924 span{font-size:11px!important}
