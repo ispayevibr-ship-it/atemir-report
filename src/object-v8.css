@@ -29,3 +29,23 @@ table{width:100%;border-collapse:collapse}
 th,td{padding:7px;border:1px solid #ddd;text-align:left}
 img{max-width:100%}
 @media(max-width:900px){.shell{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid #ddd}.objectKpis770,.objectMid770,.objectBottomTop773,.objectBottomData773,.objectSecondary770{grid-template-columns:1fr}}
+
+/* Sidebar v8.0.2 — по референсу */
+.shell{grid-template-columns:174px minmax(0,1fr)}
+.appSidebar{position:sticky;top:0;height:100vh;padding:0 9px 10px;background:linear-gradient(180deg,#14283c 0%,#0d2032 100%);border:0;display:flex;flex-direction:column;color:#d5dee7;overflow:hidden}
+.sidebarBrand{height:66px;display:flex;align-items:center;padding:9px 7px;border-bottom:1px solid rgba(255,255,255,.035)}
+#companyBrand641{width:100%;min-height:0;margin:0;display:flex;align-items:center}
+#companyBrand641 img{display:block;width:auto;max-width:142px;max-height:43px;object-fit:contain;object-position:left center}
+#companyBrand641:not(.hasLogo716){font-size:11px;font-weight:700;color:#fff}
+#nav{display:flex;flex-direction:column;gap:3px;padding:7px 0;overflow-y:auto;scrollbar-width:none}
+#nav::-webkit-scrollbar{display:none}
+#nav button{position:relative;width:100%;min-height:34px;padding:0 9px;border:0;border-radius:5px;background:transparent;color:#b9c6d2;display:flex;align-items:center;gap:9px;text-align:left;font-size:9px;font-weight:500;white-space:nowrap;cursor:pointer}
+#nav button:hover{background:rgba(255,255,255,.055);color:#fff}
+#nav button.on{background:#1e61b4;color:#fff;font-weight:700;box-shadow:inset 0 0 0 1px rgba(91,157,238,.15)}
+#nav .navIcon552{width:17px;min-width:17px;text-align:center;color:#c5d4df;font-size:13px;line-height:1}
+#nav button.on .navIcon552{color:#fff}
+.sidebarTop{margin-top:auto;width:100%;min-height:40px;padding:0 10px;border:0;border-top:1px solid rgba(255,255,255,.07);background:transparent;color:#c5d1db;display:flex;align-items:center;gap:9px;cursor:pointer;font-size:9px;text-align:left}
+.sidebarTop:hover{background:rgba(255,255,255,.05);color:#fff}
+.sidebarTop span{width:22px;height:22px;border:1px solid rgba(255,255,255,.22);border-radius:50%;display:grid;place-items:center;font-size:13px}
+.sidebarTop b{font-weight:500}
+@media(max-width:900px){.appSidebar{position:relative;height:auto;min-height:0}.sidebarTop{display:none}}
