@@ -635,3 +635,35 @@ main>header{display:none!important}
 }
 .previewTabs927 button:hover,.marksTabs927 button:hover{background:#eef7fd!important;color:#1679c9!important}
 .previewTabs927 button.on,.marksTabs927 button.on{box-shadow:inset 0 -2px #2588e5!important}
+
+
+/* v8.0.40 — Последние фото / объёмы: единые заголовки, карусель, одинаковая высота */
+.homeLatest925.two925{align-items:stretch!important}
+.homeLatest925.two925 .latestCard925{height:100%!important;box-sizing:border-box!important}
+.homeLatest925.two925 .latestHead925{
+ min-height:28px!important;margin:0 0 9px!important;padding:0 0 9px!important;border-bottom:1px solid #e7edf1!important
+}
+.homeLatest925.two925 .latestHead925 h3{
+ margin:0!important;font-size:11px!important;line-height:1.2!important;font-weight:700!important;color:#17364d!important
+}
+.homeLatest925.two925 .latestHead925 button{font-size:7px!important}
+.latestPhotosWrap940{position:relative!important;display:flex!important;align-items:stretch!important;min-width:0!important}
+.homeLatest925.two925 .latestPhotos925{
+ display:flex!important;flex:1 1 auto!important;gap:6px!important;height:155px!important;overflow-x:auto!important;overflow-y:hidden!important;
+ scroll-behavior:smooth!important;scrollbar-width:none!important;min-width:0!important
+}
+.homeLatest925.two925 .latestPhotos925::-webkit-scrollbar{display:none!important}
+.homeLatest925.two925 .latestPhoto925{flex:0 0 calc((100% - 30px)/6)!important;min-width:92px!important}
+.photoArrow940{
+ flex:0 0 28px!important;width:28px!important;border:0!important;background:#eef4f8!important;color:#345a73!important;
+ font-size:20px!important;cursor:pointer!important;transition:background-color .12s ease,color .12s ease!important
+}
+.photoArrow940:hover{background:#dcecf8!important;color:#1679c9!important}
+.photoArrow940.prev940{border-radius:5px 0 0 5px!important;margin-right:5px!important}
+.photoArrow940.next940{border-radius:0 5px 5px 0!important;margin-left:5px!important}
+.homeLatest925.two925 .volumes925{min-height:0!important}
+.homeLatest925.two925 .latestVol925{transition:background-color .12s ease!important}
+.homeLatest925.two925 .latestVol925:hover{background:#eef7fd!important}
+@media(max-width:900px){
+ .homeLatest925.two925 .latestPhoto925{flex-basis:calc((100% - 12px)/3)!important}
+}
