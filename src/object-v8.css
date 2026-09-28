@@ -137,3 +137,8 @@ main>header{display:none!important}
     rgba(8,31,48,.28) 58%,
     rgba(8,31,48,.08) 100%)!important;
 }
+
+/* v8.0.12 — логотип заполняет всю ширину меню как на примере */
+.sidebarBrand{height:auto!important;min-height:0!important;padding:0!important;margin:0 -9px 6px!important;width:calc(100% + 18px)!important;background:#fff!important;overflow:hidden!important}
+#companyBrand641{width:100%!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;display:block!important;background:#fff!important;overflow:hidden!important}
+#companyBrand641 img{display:block!important;width:100%!important;height:auto!important;max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;object-fit:contain!important;object-position:center!important}
