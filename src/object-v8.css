@@ -718,3 +718,13 @@ main>header{display:none!important}
  .marksTools927{grid-template-columns:1fr!important}.marksActions927{width:100%!important;grid-template-columns:minmax(180px,1fr) auto!important}
  .marksWorkspace927{grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr)!important}
 }
+
+
+/* v8.0.44 — одинаковая высота фото/объёмов + 20 марок */
+.homeLatest925.two925{align-items:stretch!important}
+.homeLatest925.two925 .latestCard925{height:100%!important;align-self:stretch!important}
+.homeLatest925.two925 .photos925{display:flex!important;flex-direction:column!important}
+.homeLatest925.two925 .latestPhotosWrap940{flex:1 1 auto!important;min-height:155px!important;align-items:flex-start!important}
+.marksMore944{display:flex!important;justify-content:center!important;padding:9px 8px!important;border-top:1px solid #e7edf1!important;background:#fbfcfd!important;min-width:850px!important}
+.marksMore944 button{height:28px!important;padding:0 16px!important;border:1px solid #cbd8e1!important;border-radius:5px!important;background:#fff!important;color:#35627e!important;font-size:7.5px!important;font-weight:650!important;cursor:pointer!important}
+.marksMore944 button:hover{background:#eef7fd!important;border-color:#8fc3e9!important;color:#1679c9!important}
