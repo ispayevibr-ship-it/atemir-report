@@ -114,3 +114,11 @@ main>header{display:none!important}
   background-position:right center!important;
   background-color:#102a3f!important;
 }
+
+/* v8.0.8 — popup экспорта не обрезается шапкой */
+.objectHero770.objectHeroCover812{overflow:visible!important;z-index:30!important}
+.objectHeroCover812 .heroShade812{overflow:hidden}
+.objectHeroCover812 .heroActions812{z-index:60!important}
+.heroMenu812{z-index:1000!important;max-height:none!important;overflow:visible!important}
+.objectOverview770{overflow:visible!important}
+#view,main,.shell{overflow:visible!important}
