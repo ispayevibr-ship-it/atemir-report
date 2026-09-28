@@ -1551,3 +1551,39 @@ main>header{display:none!important}
   pointer-events:none!important;
 }
 .mcTooltip976.show{display:block!important}
+
+
+/* v8.0.81 — Ежедневные отчёты в дизайне Последних отчётов */
+.dailyListCard981{
+  display:grid!important;
+  grid-template-columns:190px 150px 165px 160px 230px minmax(260px,1fr) 82px!important;
+  align-items:stretch!important;
+  min-height:94px!important;
+  margin:8px 0!important;
+  border:1px solid #dfe7ec!important;
+  border-radius:8px!important;
+  background:#fff!important;
+  overflow:hidden!important;
+}
+.dailyListCard981:hover,.dailyListCard981.active981{background:#f3f9fc!important;border-color:#b9d9e8!important}
+.dailyListCard981>div{min-width:0!important;padding:14px 18px!important;display:flex!important;align-items:center!important;border-right:1px solid #e5ebef!important}
+.dailyListCard981>div:last-child{border-right:0!important}
+.dailyDate981,.dailyMetric981,.dailyWeather981{gap:14px!important}
+.dailyListCard981 svg{width:25px!important;height:25px!important;fill:none!important;stroke:#2796d2!important;stroke-width:1.8!important;stroke-linecap:round!important;stroke-linejoin:round!important;flex:0 0 auto!important}
+.dailyDate981 b,.dailyMetric981 b,.dailyWeather981 b,.dailyBrief981 b{font:700 12px/1.4 Arial,sans-serif!important;color:#17364d!important}
+.dailyMetric981 span,.dailyWeather981 span,.dailyBrief981{display:flex!important;flex-direction:column!important;align-items:flex-start!important}
+.dailyMetric981 small,.dailyWeather981 small,.dailyBrief981>small{font:400 10px/1.35 Arial,sans-serif!important;color:#788a96!important}
+.dailyBrief981 span{gap:2px!important}
+.dailyBrief981 i{font-style:normal!important;color:#8a9aa5!important}
+.dailyActions981{justify-content:center!important;gap:7px!important;padding:12px!important}
+.dailyIconBtn981{
+  width:31px!important;height:31px!important;padding:0!important;border:1px solid #d7e1e7!important;border-radius:6px!important;background:#fff!important;display:grid!important;place-items:center!important;cursor:pointer!important
+}
+.dailyIconBtn981 svg{width:16px!important;height:16px!important}
+.dailyIconBtn981:hover{background:#edf7fc!important;border-color:#9fcfe5!important}
+.dailyIconBtn981.danger981 svg{stroke:#d45a5a!important}
+.dailyIconBtn981.danger981:hover{background:#fff2f2!important;border-color:#e4abab!important}
+@media(max-width:1250px){
+ .dailyListCard981{grid-template-columns:160px 120px 135px 125px 190px minmax(220px,1fr) 76px!important}
+ .dailyListCard981>div{padding:12px!important}
+}
