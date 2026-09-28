@@ -1442,3 +1442,24 @@ main>header{display:none!important}
   width:19px!important;
   height:19px!important;
 }
+
+
+/* v8.0.75 — нормальный отступ фильтра от месяца в графике выполнения */
+.monthGraph924 .mcFilter924{
+  display:grid!important;
+  grid-template-columns:minmax(240px,340px) auto 1fr!important;
+  align-items:center!important;
+  column-gap:16px!important;
+}
+.monthGraph924 .mcFilter924 #homeMonthFilter924{
+  width:100%!important;
+  margin:0!important;
+}
+.monthGraph924 .mcFilter924 .mcMonth945{
+  margin:0!important;
+  white-space:nowrap!important;
+}
+.monthGraph924 .mcFilter924>small{
+  justify-self:end!important;
+  white-space:nowrap!important;
+}
