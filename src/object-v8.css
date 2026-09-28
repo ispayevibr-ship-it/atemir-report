@@ -808,3 +808,7 @@ main>header{display:none!important}
 .markStatus927{font-size:8.5px!important}
 .markDetailTabs931 button{font-size:9px!important}
 .markPreview931,.markPreview931 small{font-size:9px!important}
+
+.latestVolumesScroll951{max-height:124px!important;overflow-y:auto!important;scrollbar-width:thin!important;scrollbar-color:#b9c7d0 transparent!important}
+.latestVolumesScroll951::-webkit-scrollbar{width:5px!important}.latestVolumesScroll951::-webkit-scrollbar-thumb{background:#b9c7d0!important;border-radius:5px!important}
+.homeLatest925.two925 .volumes925{max-height:none!important;overflow:visible!important}
