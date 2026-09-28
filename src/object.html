@@ -4,26 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>А-Темир Строй — Объект</title>
-<link rel="stylesheet" href="report-app.css">
 <link rel="stylesheet" href="object-v8.css">
 </head>
 <body class="objectV8">
 <div class="shell">
-  <aside class="v8Side">
-    <div class="brand" id="companyBrand641"></div>
+  <aside>
+    <div id="companyBrand641"></div>
+    <button onclick="location.href='index.html'">Все объекты</button>
     <nav id="nav"></nav>
-    <button class="v8AllObjects" onclick="location.href='index.html'">‹ Все объекты</button>
   </aside>
-  <main class="v8Main">
-    <header class="v8LegacyHeader">
-      <div class="headerInfo"><h1 id="pageTitle">Обзор</h1><p id="pageSub"></p></div>
-      <div class="headerActions">
-        <div class="exports">
-          <button id="clearReport">Очистить отчёт</button>
-          <button id="htmlExport">Выгрузить HTML</button>
-          <button id="pdfExport">Сохранить PDF</button>
-        </div>
-        <div id="saveState">Сохранено</div>
+  <main>
+    <header>
+      <div><h1 id="pageTitle">Обзор</h1><p id="pageSub"></p></div>
+      <div>
+        <button id="clearReport">Очистить отчёт</button>
+        <button id="htmlExport">HTML</button>
+        <button id="pdfExport">PDF</button>
+        <span id="saveState">Сохранено</span>
       </div>
     </header>
     <section id="view"></section>
