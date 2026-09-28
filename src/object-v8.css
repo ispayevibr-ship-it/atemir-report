@@ -1277,3 +1277,23 @@ main>header{display:none!important}
 .objectOverview770 .objectReports926 .reportsStandalone926 .rrWeather926>svg{
   width:31px!important;height:31px!important
 }
+
+
+/* v8.0.70 — фактические заголовки Последних фото / Последних объёмов */
+.objectOverview770 section.homeLatest925.two925 > .latestCard925 > .latestHead925 > h3{
+  margin:0!important;
+  padding:0!important;
+  font-family:Arial,sans-serif!important;
+  font-size:14px!important;
+  font-style:normal!important;
+  font-weight:700!important;
+  line-height:18px!important;
+  letter-spacing:0!important;
+  color:#172535!important;
+}
+.objectOverview770 section.homeLatest925.two925 > .latestCard925 > .latestHead925{
+  min-height:29px!important;
+  height:29px!important;
+  align-items:flex-start!important;
+  padding-bottom:8px!important;
+}
