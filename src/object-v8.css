@@ -1,41 +1,31 @@
-/* Object UI v8 — clean-room layout. Intentionally isolated from legacy report-app.css. */
-body.objectV8{margin:0;background:#f3f6f9;color:#17364d;font-family:Inter,"Segoe UI",Arial,sans-serif;overflow-x:hidden}
-.objectV8 .shell{display:grid!important;grid-template-columns:168px minmax(0,1fr)!important;width:100vw!important;max-width:none!important;min-height:100vh!important;background:#f3f6f9!important}
-.objectV8 .v8Side{position:fixed!important;inset:0 auto 0 0!important;width:168px!important;height:100vh!important;min-height:0!important;padding:0!important;display:flex!important;flex-direction:column!important;background:#102338!important;border:0!important;overflow:hidden!important;z-index:100!important}
-.objectV8 .v8Side .brand{height:62px!important;min-height:62px!important;padding:12px 14px!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;border-bottom:1px solid rgba(255,255,255,.07)!important;background:#102338!important;color:#fff!important;font-size:12px!important;font-weight:750!important}
-.objectV8 .v8Side .brand img{width:auto!important;max-width:138px!important;max-height:38px!important;object-fit:contain!important}
-.objectV8 #nav{flex:1 1 auto!important;min-height:0!important;padding:7px 0!important;overflow-y:auto!important}
-.objectV8 #nav button{width:100%!important;min-height:36px!important;margin:0!important;padding:0 14px!important;border:0!important;border-radius:0!important;border-left:3px solid transparent!important;background:transparent!important;color:#bdcbd6!important;display:flex!important;align-items:center!important;gap:9px!important;font-size:10px!important;font-weight:600!important;text-align:left!important}
-.objectV8 #nav button:hover{background:rgba(255,255,255,.05)!important;color:#fff!important}
-.objectV8 #nav button.on{background:#1d5ca8!important;border-left-color:#5ca4ff!important;color:#fff!important}
-.objectV8 #nav .navIcon552{width:17px!important;min-width:17px!important;color:#d7e6f1!important;text-align:center!important}
-.objectV8 .v8AllObjects{flex:0 0 auto!important;margin:8px!important;min-height:36px!important;border:1px solid rgba(255,255,255,.1)!important;border-radius:7px!important;background:rgba(255,255,255,.045)!important;color:#d7e4ed!important;font-size:10px!important}
-.objectV8 .v8Main{margin-left:168px!important;width:calc(100vw - 168px)!important;min-width:0!important;padding:0!important;background:#f3f6f9!important;overflow:visible!important}
-.objectV8 .v8LegacyHeader{display:none!important}
-.objectV8 #view{width:100%!important;max-width:none!important;min-width:0!important;padding:0!important;margin:0!important;overflow:visible!important;box-sizing:border-box!important}
-.objectV8 .objectOverview770{display:flex!important;flex-direction:column!important;gap:10px!important;width:100%!important;max-width:none!important;padding:0 12px 20px!important;margin:0!important;box-sizing:border-box!important;background:#f3f6f9!important;overflow:visible!important}
-.objectV8 .objectHero770.objectHeroCover812{order:-10!important;width:calc(100% + 24px)!important;margin:0 -12px!important;height:148px!important;min-height:148px!important;border-radius:0!important;box-shadow:none!important;background-position:center 43%!important}
-.objectV8 .objectHeroCover812 .heroShade812{background:linear-gradient(90deg,rgba(8,30,47,.91) 0%,rgba(8,30,47,.65) 38%,rgba(8,30,47,.20) 72%,rgba(8,30,47,.10) 100%)!important}
-.objectV8 .objectHeroCover812 .heroContent812{left:24px!important;top:13px!important;bottom:13px!important;width:min(680px,67%)!important}
-.objectV8 .objectHeroCover812 .heroCrumb812{margin-bottom:7px!important;font-size:8px!important;color:#b7c8d4!important}
-.objectV8 .objectHeroCover812 h1{font-size:22px!important;line-height:1.05!important}
-.objectV8 .objectHeroCover812 .heroParty812{margin-top:5px!important;font-size:8px!important}
-.objectV8 .objectHeroCover812 .heroFacts812{gap:20px!important}
-.objectV8 .objectHeroCover812 .heroFacts812 .heroStatus812{min-height:29px!important;padding:0 11px!important;font-size:8px!important}
-.objectV8 .objectHeroCover812 .heroFacts812 b{font-size:8px!important}.objectV8 .objectHeroCover812 .heroFacts812 small{font-size:7px!important}
-.objectV8 .objectHeroCover812 .heroActions812{right:12px!important;top:14px!important}
-.objectV8 .objectHeroCover812 .heroActions812 button{min-height:31px!important;font-size:8px!important}
-.objectV8 .objectKpis770.objectKpisSummary778{display:grid!important;grid-template-columns:1.35fr .95fr!important;gap:10px!important;margin-top:0!important}
-.objectV8 .objectKpisSummary778>.kpiGroup778{height:102px!important;min-height:102px!important;padding:11px 14px!important;border:1px solid #e1e8ed!important;border-radius:8px!important;background:#fff!important;box-shadow:0 1px 4px rgba(18,47,70,.035)!important}
-.objectV8 .objectKpisSummary778>.kpiGroup778:before{display:none!important}
-.objectV8 .objectKpisSummary778 .kpiGroup778:first-child{grid-template-columns:190px minmax(0,1fr)!important}
-.objectV8 .overall770 .ring770{width:58px!important;height:58px!important;flex-basis:58px!important}
-.objectV8 .overall770 span>b{font-size:14px!important}
-.objectV8 .kpiSplit778 strong,.objectV8 .kpiActivity778 strong{width:30px!important;height:30px!important;font-size:15px!important}
-.objectV8 .kpiSplit778 span>b,.objectV8 .kpiActivity778 span>b{font-size:14px!important}
-.objectV8 .card{border:1px solid #e1e8ed!important;border-radius:8px!important;background:#fff!important;box-shadow:0 1px 4px rgba(18,47,70,.035)!important}
-.objectV8 .card>h2,.objectV8 .card>h3{font-size:13px!important;color:#183b54!important}
-.objectV8 .objectMainChart770{order:4!important}
-.objectV8 .objectMid770{order:3!important;display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(280px,.75fr)!important;gap:10px!important}
-.objectV8 .objectBottomTop773{order:5!important}.objectV8 .objectBottomData773{order:6!important}.objectV8 .objectSecondary770{order:7!important}.objectV8 .monthlyCard801{order:8!important}
-@media(max-width:1050px){.objectV8 .shell{grid-template-columns:1fr!important}.objectV8 .v8Side{position:relative!important;width:100%!important;height:auto!important}.objectV8 .v8Main{margin-left:0!important;width:100%!important}.objectV8 .objectKpis770.objectKpisSummary778,.objectV8 .objectMid770{grid-template-columns:1fr!important}}
+/* А-Темир Строй — чистая база дизайна страницы объекта.
+   Здесь намеренно нет прежнего оформления. Все данные и логика остаются в report-app.js. */
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Arial,sans-serif;background:#fff;color:#111}
+button,input,select,textarea{font:inherit}
+.shell{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:100vh}
+aside{padding:16px;border-right:1px solid #ddd;background:#fff}
+#companyBrand641{min-height:48px;margin-bottom:12px}
+#companyBrand641 img{max-width:100%;max-height:48px;object-fit:contain}
+aside>button{width:100%;margin-bottom:12px;padding:8px}
+#nav{display:flex;flex-direction:column;gap:4px}
+#nav button{padding:8px;text-align:left;border:1px solid #ddd;background:#fff}
+#nav button.on{font-weight:700;background:#eee}
+main{min-width:0;background:#fff}
+main>header{min-height:56px;padding:10px 16px;border-bottom:1px solid #ddd;display:flex;align-items:center;justify-content:space-between;gap:16px}
+main>header h1{margin:0;font-size:18px}
+main>header p{margin:2px 0 0}
+main>header button{padding:7px 10px}
+#saveState{margin-left:8px}
+#view{padding:16px;min-width:0}
+.objectOverview770{display:flex;flex-direction:column;gap:12px}
+.objectHero770,.objectKpis770,.objectMainChart770,.objectMid770,.objectBottomTop773,.objectBottomData773,.objectSecondary770,.monthlyCard801{width:100%}
+.objectHero770{padding:16px;border:1px solid #ddd}
+.objectPhoto770 img,.objectHero770 img{max-width:100%;height:auto}
+.objectKpis770,.objectMid770,.objectBottomTop773,.objectBottomData773,.objectSecondary770{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card,.kpiGroup778{padding:16px;border:1px solid #ddd;background:#fff}
+.card h2,.card h3{margin-top:0}
+table{width:100%;border-collapse:collapse}
+th,td{padding:7px;border:1px solid #ddd;text-align:left}
+img{max-width:100%}
+@media(max-width:900px){.shell{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid #ddd}.objectKpis770,.objectMid770,.objectBottomTop773,.objectBottomData773,.objectSecondary770{grid-template-columns:1fr}}
