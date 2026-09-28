@@ -559,3 +559,22 @@ main>header{display:none!important}
  .recentReport722.mock926>summary{grid-template-columns:190px 335px 165px minmax(220px,1fr) 22px!important}
  .rrMetric926{padding:0 8px!important;grid-template-columns:27px auto!important}.rrMetric926 svg{width:22px!important;height:22px!important}
 }
+
+
+/* v8.0.36 — Последние отчёты: заголовок как у графика, дата справа от календаря, объёмы строками */
+.reportsStandalone926>.card>h2{
+ font-size:11px!important;line-height:1.2!important;font-weight:700!important;color:#17364d!important;
+ padding:0 0 9px!important;margin:0 0 9px!important;border-bottom:1px solid #e7edf1!important
+}
+.reportsStandalone926>.card>h2:before,.reportsStandalone926>.card>h2:after{display:none!important;content:none!important}
+.recentReport722.mock926>summary{grid-template-columns:185px 390px 190px minmax(300px,1fr) 24px!important}
+.rrDate926{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:10px!important;padding-left:4px!important}
+.rrDate926>b{font-size:11px!important;color:#17364d!important;white-space:nowrap!important}
+.rrDate926>span:last-child{display:contents!important}.rrDate926 small,.rrDate926 em{display:none!important}
+.rrDateIcon926{width:38px!important;height:38px!important;order:0!important}.rrDate926>b{order:1!important}
+.rrBrief926{display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;gap:4px!important;max-height:66px!important;overflow:hidden!important}
+.rrBrief926>small{font-size:7px!important;color:#81919d!important}
+.rrBriefLines935{display:flex!important;flex-direction:column!important;gap:2px!important;max-width:100%!important}
+.rrBriefLines935>b{font-size:8px!important;line-height:1.25!important;font-weight:650!important;color:#4d687a!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:100%!important}
+.rrBriefLines935 i{font-style:normal!important;color:#93a1aa!important;font-weight:400!important}
+@media(max-width:1300px){.recentReport722.mock926>summary{grid-template-columns:170px 335px 165px minmax(250px,1fr) 22px!important}}
