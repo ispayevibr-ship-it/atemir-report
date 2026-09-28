@@ -1169,3 +1169,54 @@ main>header{display:none!important}
 .objectOverview770 .marksCard801>.card>h2{
   margin-top:0!important;
 }
+
+
+/* v8.0.67 — увеличиваем внутренний текст Последних отчётов и Ведомости / марки */
+
+/* Последние отчёты */
+.reportsStandalone926 .rrDate926>b,
+.reportsStandalone926 .rrMetric926>b,
+.reportsStandalone926 .rrWeather926 b,
+.reportsStandalone926 .rrBriefLines935>b{
+  font-size:12px!important;
+  line-height:1.4!important;
+}
+.reportsStandalone926 .rrMetric926 small,
+.reportsStandalone926 .rrWeather926 small,
+.reportsStandalone926 .rrBrief926>small{
+  font-size:11px!important;
+  line-height:1.35!important;
+}
+.reportsStandalone926 .recentOpen722,
+.reportsStandalone926 .recentReportsToolbar797 button{
+  font-size:11px!important;
+}
+
+/* Ведомость / марки */
+.marksCard801 .marksDash927,
+.marksCard801 .marksDash927 button,
+.marksCard801 .marksDash927 input,
+.marksCard801 .marksDash927 select,
+.marksCard801 .marksDash927 table,
+.marksCard801 .marksDash927 td,
+.marksCard801 .marksDash927 b,
+.marksCard801 .marksDash927 strong,
+.marksCard801 .marksDash927 span{
+  font-size:11px!important;
+}
+.marksCard801 .marksDash927 th,
+.marksCard801 .marksDash927 small{
+  font-size:10px!important;
+}
+.marksCard801 .marksDashRow927{
+  min-height:37px!important;
+}
+.marksCard801 .marksDashRow927>div,
+.marksCard801 .marksDashRow927>span{
+  line-height:1.4!important;
+}
+.marksCard801 .marksTabs927 button,
+.marksCard801 .previewTabs927 button,
+.marksCard801 .dashBtn930{
+  font-size:11px!important;
+}
