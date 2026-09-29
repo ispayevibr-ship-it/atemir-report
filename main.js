@@ -135,7 +135,19 @@ ipcMain.handle("photos:get",(_e,key)=>{let dir=photoDir(key);if(!fs.existsSync(d
 ipcMain.handle("photos:remove",(_e,key)=>{fs.rmSync(photoDir(key),{recursive:true,force:true});return true});
 ipcMain.handle("photos:remove-prefix",(_e,prefix)=>{let root=photoRoot();if(!fs.existsSync(root))return 0;let p=safePhotoKey(prefix),n=0;for(let name of fs.readdirSync(root)){if(name.startsWith(p)){fs.rmSync(path.join(root,name),{recursive:true,force:true});n++}}return n});
 function kvParse164(row){if(!row)return null;try{return JSON.parse(row.value)}catch{return row.value}}
-function kvGet164(key){return kvParse164(sqliteDb163().prepare("SELECT value FROM kv WHERE key=?").get(String(key)))}
+function relationalGet169(key){
+ let db=sqliteDb163(),s=String(key),m=s.match(/^atemir_entity_(.+)_(task|bom|report|invoice)_([^_]+)$/);if(m){let kind=m[2],id=m[3];
+  if(kind==="task"){let r=db.prepare("SELECT raw_json FROM tasks WHERE id=?").get(id);return r?kvParseSafe165(r.raw_json,null):undefined}
+  if(kind==="bom"){let rows=db.prepare("SELECT raw_json FROM bom_marks WHERE task_id=? ORDER BY sort_order").all(id);return rows.length?rows.map(r=>kvParseSafe165(r.raw_json,{})):undefined}
+  if(kind==="report"){let r=db.prepare("SELECT raw_json FROM reports WHERE id=?").get(id);return r?kvParseSafe165(r.raw_json,null):undefined}
+  if(kind==="invoice"){let r=db.prepare("SELECT raw_json FROM invoices WHERE id=?").get(id);return r?kvParseSafe165(r.raw_json,null):undefined}
+ }
+ let a=s.match(/^atemir_entity_(.+)_(actedDays|penalties)$/);if(a){let oid=a[1];
+  if(a[2]==="actedDays"){let rows=db.prepare("SELECT raw_json FROM acted_days WHERE object_id=? ORDER BY day").all(oid);return rows.length?rows.map(r=>kvParseSafe165(r.raw_json,"")).filter(Boolean):undefined}
+  let rows=db.prepare("SELECT raw_json FROM penalties WHERE object_id=? ORDER BY sort_order").all(oid);return rows.length?rows.map(r=>kvParseSafe165(r.raw_json,{})):undefined
+ }
+}
+function kvGet164(key){let r=relationalGet169(key);if(r!==undefined)return r;return kvParse164(sqliteDb163().prepare("SELECT value FROM kv WHERE key=?").get(String(key)))}
 function kvAll164(){let out={};for(let row of sqliteDb163().prepare("SELECT key,value FROM kv").all())out[row.key]=kvParse164(row);return out}
 function kvPrefix164(prefix){let out={},p=String(prefix);for(let row of sqliteDb163().prepare("SELECT key,value FROM kv WHERE key LIKE ? ESCAPE '\\'").all(p.replace(/[\\%_]/g,x=>"\\"+x)+"%"))out[row.key]=kvParse164(row);return out}
 function syncRelational168(key,value){
@@ -157,7 +169,8 @@ ipcMain.on("db:all-sync",(e)=>{e.returnValue=kvAll164()});
 ipcMain.on("db:get-prefix-sync",(e,prefix)=>{e.returnValue=kvPrefix164(prefix)});
 ipcMain.on("db:set-sync",(e,key,value)=>{try{e.returnValue=kvSet164(key,value)}catch(err){console.error("DB sync save",err);e.returnValue=false}});
 ipcMain.handle("db:set",(_e,key,value)=>kvSet164(key,value));
-ipcMain.handle("db:remove",(_e,key)=>{sqliteDb163().prepare("DELETE FROM kv WHERE key=?").run(String(key));return true});
+function relationalRemove169(key){let db=sqliteDb163(),s=String(key),m=s.match(/^atemir_entity_(.+)_(task|bom|report|invoice)_([^_]+)$/);if(m){let kind=m[2],id=m[3];if(kind==="task")db.prepare("DELETE FROM tasks WHERE id=?").run(id);else if(kind==="bom")db.prepare("DELETE FROM bom_marks WHERE task_id=?").run(id);else if(kind==="report")db.prepare("DELETE FROM reports WHERE id=?").run(id);else if(kind==="invoice")db.prepare("DELETE FROM invoices WHERE id=?").run(id);return}let a=s.match(/^atemir_entity_(.+)_(actedDays|penalties)$/);if(a){db.prepare(a[2]==="actedDays"?"DELETE FROM acted_days WHERE object_id=?":"DELETE FROM penalties WHERE object_id=?").run(a[1])}}
+ipcMain.handle("db:remove",(_e,key)=>{let db=sqliteDb163();db.exec("BEGIN IMMEDIATE");try{db.prepare("DELETE FROM kv WHERE key=?").run(String(key));relationalRemove169(key);db.exec("COMMIT");return true}catch(e){try{db.exec("ROLLBACK")}catch{}throw e}});
 ipcMain.handle("db:migrate",(_e,entries={})=>{let db=sqliteDb163(),added=0,put=db.prepare("INSERT INTO kv(key,value,updated_at) VALUES(?,?,?) ON CONFLICT(key) DO NOTHING"),now=new Date().toISOString();db.exec("BEGIN IMMEDIATE");try{for(let [key,value] of Object.entries(entries||{})){let r=put.run(key,JSON.stringify(value),now);added+=Number(r.changes||0)}db.exec("COMMIT");return {ok:true,added,path:sqlitePath163()}}catch(e){try{db.exec("ROLLBACK")}catch{}throw e}});
 ipcMain.handle("db:info",()=>{let db=sqliteDb163(),row=db.prepare("SELECT COUNT(*) AS n FROM kv").get(),mig=db.prepare("SELECT value FROM meta WHERE key=?").get("json_migrated_v1");let at="";try{at=mig?JSON.parse(mig.value).at:""}catch{}return {path:sqlitePath163(),engine:"sqlite",keys:Number(row?.n||0),updatedAt:at}});
 ipcMain.handle("db:backup",async()=>{let db=dbRead(),dir=path.join(app.getPath("userData"),"backups");fs.mkdirSync(dir,{recursive:true});let stamp=new Date().toISOString().replace(/[:.]/g,"-"),jsonDest=path.join(dir,"atemir-data-"+stamp+".json"),sqlDest=path.join(dir,"atemir-"+stamp+".db");fs.writeFileSync(jsonDest,JSON.stringify(db),"utf8");sqliteDb163().exec("PRAGMA wal_checkpoint(FULL)");fs.copyFileSync(sqlitePath163(),sqlDest);return {ok:true,path:sqlDest,jsonPath:jsonDest}});
