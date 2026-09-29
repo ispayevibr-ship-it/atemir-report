@@ -42,8 +42,8 @@ async function saveEntities144(payload){try{
   ...Object.keys(window.atemirDesktop?.dbGetPrefixSync?.(entityPrefix144+"bom_")||{}).filter(k=>!bomWanted.has(k))
  ];
  if(stale.length)await window.atemirDesktop?.dbRemoveMany?.([...new Set(stale)]);
- await window.atemirDesktop?.dbRemoveMany?.([entityPrefix144+"reports",entityPrefix144+"invoices",entityPrefix144+"tasks"])
-}catch(e){console.error("Entity DB save",e)}}
+ await window.atemirDesktop?.dbRemoveMany?.([entityPrefix144+"reports",entityPrefix144+"invoices",entityPrefix144+"tasks"]);return true
+}catch(e){console.error("Entity DB save",e);return false}}
 async function retireLegacySnapshot145(){
  try{
   let meta=await window.atemirDesktop?.dbGet?.(entityPrefix144+"meta");
@@ -89,20 +89,51 @@ let hydrated151=hydrateEntities144();if(!hydrated151){let initial144={...d,repor
 let entityTimers148={};
 function saveState148(text){let el=$("#saveState");if(el)el.textContent=text}
 function writeEntity148(k,v){return window.atemirDesktop?.dbSet?.(k,v).catch?.(e=>console.error("Entity save",e))}
+async function writeEntities153(entries){
+ if(!entries||!Object.keys(entries).length)return true;
+ if(window.atemirDesktop?.dbWriteMany)return window.atemirDesktop.dbWriteMany(entries);
+ for(let [k,v] of Object.entries(entries))await writeEntity148(k,v);
+ return true
+}
 function saveEntity148(kind,index){
- let token=kind+":"+String(index??""),old=entityTimers148[token];if(old)clearTimeout(old);
+ let entityId="";
+ if(kind==="report"){let x=d.workDays?.[+index];if(x){if(!x.id)x.id=uid538();entityId=x.id}}
+ else if(kind==="invoice"){let x=d.invoices?.[+index];if(x){if(!x.id)x.id=uid538();entityId=x.id}}
+ else if(kind==="task"||kind==="bom"){let x=d.tasks?.[+index];if(x){if(!x.id)x.id=uid538();entityId=x.id}}
+ let token=kind+":"+(entityId||String(index??"")),old=entityTimers148[token];if(old)clearTimeout(old);
  saveState148("Сохраняю…");
  entityTimers148[token]=setTimeout(async()=>{
   try{
-   if(kind==="report"){let x=d.workDays?.[+index];if(x){if(!x.id)x.id=uid538();let clean={...x,photos:[],items:(x.items||[]).map(i=>({...i,photos:[]}))};await writeEntity148(entityPrefix144+"report_"+x.id,clean);let idx=window.atemirDesktop?.dbGetSync?.(entityPrefix144+"reportIndex")||[],cur=idx.find(z=>z.id===x.id);if(!cur||cur.date!==(x.date||"")||idx.length!==(d.workDays||[]).length)await writeEntity148(entityPrefix144+"reportIndex",(d.workDays||[]).map((z,sort)=>({id:z.id,date:z.date||"",sort})))}}
-   else if(kind==="invoice"){let x=d.invoices?.[+index];if(x){if(!x.id)x.id=uid538();await writeEntity148(entityPrefix144+"invoice_"+x.id,x);let idx=window.atemirDesktop?.dbGetSync?.(entityPrefix144+"invoiceIndex")||[],cur=idx.find(z=>z.id===x.id);if(!cur||cur.date!==(x.date||"")||cur.no!==(x.no||"")||idx.length!==(d.invoices||[]).length)await writeEntity148(entityPrefix144+"invoiceIndex",(d.invoices||[]).map((z,sort)=>({id:z.id,date:z.date||"",no:z.no||"",sort})))}}
-   else if(kind==="task"){let x=d.tasks?.[+index];if(x){if(!x.id)x.id=uid538();let taskRow={...x,bom:[]};delete taskRow.__bomLoaded152;await writeEntity148(entityPrefix144+"task_"+x.id,taskRow);let idx=window.atemirDesktop?.dbGetSync?.(entityPrefix144+"taskIndex")||[],cur=idx.find(z=>z.id===x.id);if(!cur||cur.type!==(x.type||"")||cur.code!==(x.code||"")||idx.length!==(d.tasks||[]).length)await writeEntity148(entityPrefix144+"taskIndex",(d.tasks||[]).map((z,sort)=>({id:z.id,type:z.type||"",code:z.code||"",sort})))}}
-   else if(kind==="bom"){let x=d.tasks?.[+index];if(x){if(!x.id)x.id=uid538();await writeEntity148(entityPrefix144+"bom_"+x.id,Array.isArray(x.bom)?x.bom:[]);let taskRow={...x,bom:[]};delete taskRow.__bomLoaded152;await writeEntity148(entityPrefix144+"task_"+x.id,taskRow)}}
-   else if(kind==="penalties")await writeEntity148(entityPrefix144+"penalties",d.penalties||[]);
-   else if(kind==="actedDays")await writeEntity148(entityPrefix144+"actedDays",d.actedDays||[]);
-   else {let base={...d};delete base.workDays;delete base.invoices;delete base.tasks;delete base.penalties;delete base.actedDays;delete base.reportPhotos;await writeEntity148(entityPrefix144+"base",base)}
-   saveState148("Сохранено")
+   let entries={};
+   if(kind==="report"){
+    let x=(d.workDays||[]).find(z=>String(z?.id)===String(entityId));if(x){
+     entries[entityPrefix144+"report_"+x.id]={...x,photos:[],items:(x.items||[]).map(i=>({...i,photos:[]}))};
+     let idx=window.atemirDesktop?.dbGetSync?.(entityPrefix144+"reportIndex")||[],cur=idx.find(z=>z.id===x.id);
+     if(!cur||cur.date!==(x.date||"")||idx.length!==(d.workDays||[]).length)entries[entityPrefix144+"reportIndex"]=(d.workDays||[]).map((z,sort)=>({id:z.id,date:z.date||"",sort}))
+    }
+   }else if(kind==="invoice"){
+    let x=(d.invoices||[]).find(z=>String(z?.id)===String(entityId));if(x){
+     entries[entityPrefix144+"invoice_"+x.id]=x;
+     let idx=window.atemirDesktop?.dbGetSync?.(entityPrefix144+"invoiceIndex")||[],cur=idx.find(z=>z.id===x.id);
+     if(!cur||cur.date!==(x.date||"")||cur.no!==(x.no||"")||idx.length!==(d.invoices||[]).length)entries[entityPrefix144+"invoiceIndex"]=(d.invoices||[]).map((z,sort)=>({id:z.id,date:z.date||"",no:z.no||"",sort}))
+    }
+   }else if(kind==="task"){
+    let x=(d.tasks||[]).find(z=>String(z?.id)===String(entityId));if(x){
+     let taskRow={...x,bom:[]};delete taskRow.__bomLoaded152;entries[entityPrefix144+"task_"+x.id]=taskRow;
+     let idx=window.atemirDesktop?.dbGetSync?.(entityPrefix144+"taskIndex")||[],cur=idx.find(z=>z.id===x.id);
+     if(!cur||cur.type!==(x.type||"")||cur.code!==(x.code||"")||idx.length!==(d.tasks||[]).length)entries[entityPrefix144+"taskIndex"]=(d.tasks||[]).map((z,sort)=>({id:z.id,type:z.type||"",code:z.code||"",sort}))
+    }
+   }else if(kind==="bom"){
+    let x=(d.tasks||[]).find(z=>String(z?.id)===String(entityId));if(x){
+     entries[entityPrefix144+"bom_"+x.id]=Array.isArray(x.bom)?x.bom:[];
+     let taskRow={...x,bom:[]};delete taskRow.__bomLoaded152;entries[entityPrefix144+"task_"+x.id]=taskRow
+    }
+   }else if(kind==="penalties")entries[entityPrefix144+"penalties"]=d.penalties||[];
+   else if(kind==="actedDays")entries[entityPrefix144+"actedDays"]=d.actedDays||[];
+   else {let base={...d};delete base.workDays;delete base.invoices;delete base.tasks;delete base.penalties;delete base.actedDays;delete base.reportPhotos;entries[entityPrefix144+"base"]=base}
+   await writeEntities153(entries);saveState148("Сохранено")
   }catch(e){console.error("Targeted save",e);saveState148("Ошибка сохранения")}
+  finally{delete entityTimers148[token]}
  },300)
 }
 function saveByCollection148(name,index){
@@ -132,7 +163,7 @@ async function ensureReportPhotos151(){
 }
 let active="home",timer;
 const sections=[["home","Обзор"],["works","Ежедневные отчёты"],["bom","Ведомости марок"],["schemeLab","Схема МК — тест"],["invoices","Поставки (накладные)"],["tasks","Виды работ / проекты"],["progress","Прогресс проекта"],["dynamics","Динамика"],["deadlines","Сроки"],["acted","Актированные дни"],["penalties","Замечания / штрафы"]];
-function save(){clearTimeout(timer);$("#saveState").textContent="Сохраняю…";timer=setTimeout(()=>{ensureBoms152();let payload={...d,reportPhotos:[],workDays:stripAllPhotos142()};saveEntities144(payload);$("#saveState").textContent="Сохранено"},450)}
+function save(){clearTimeout(timer);saveState148("Сохраняю…");timer=setTimeout(async()=>{ensureBoms152();let payload={...d,reportPhotos:[],workDays:stripAllPhotos142()},ok=await saveEntities144(payload);saveState148(ok?"Сохранено":"Ошибка сохранения")},450)}
 const photoDb=()=>new Promise((ok,no)=>{let r=indexedDB.open("ATemirReportPhotos",2);r.onupgradeneeded=()=>{let db=r.result;if(!db.objectStoreNames.contains("photos"))db.createObjectStore("photos")};r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
 async function loadPhotos(){try{let db=await photoDb(),tx=db.transaction("photos","readonly"),r=tx.objectStore("photos").get("object_"+id);r.onsuccess=()=>{d.reportPhotos=Array.isArray(r.result)?r.result:[];if(active==="photos")render()}}catch{}}
 async function savePhotos(){try{let db=await photoDb(),tx=db.transaction("photos","readwrite");tx.objectStore("photos").put(d.reportPhotos||[],"object_"+id)}catch{}}
