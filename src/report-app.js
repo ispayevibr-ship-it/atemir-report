@@ -22,7 +22,7 @@ function entityEntries144(payload){
  invoices.forEach(inv=>out[entityPrefix144+"invoice_"+inv.id]=inv);
  let tasks=(payload.tasks||[]);
  out[entityPrefix144+"taskIndex"]=tasks.map((t,sort)=>({id:t.id,type:t.type||"",code:t.code||"",sort}));
- tasks.forEach(t=>{let row={...t,bom:[]};out[entityPrefix144+"task_"+t.id]=row;out[entityPrefix144+"bom_"+t.id]=Array.isArray(t.bom)?t.bom:[]});
+ tasks.forEach(t=>{let row={...t,bom:[]};delete row.__bomLoaded152;out[entityPrefix144+"task_"+t.id]=row;out[entityPrefix144+"bom_"+t.id]=Array.isArray(t.bom)?t.bom:[]});
  out[entityPrefix144+"penalties"]=(payload.penalties||[]);
  out[entityPrefix144+"actedDays"]=(payload.actedDays||[]);
  out[entityPrefix144+"meta"]={schema:4,updatedAt:new Date().toISOString()};
@@ -34,6 +34,16 @@ async function saveEntities144(payload){try{
  invoiceWanted=new Set((entries[entityPrefix144+"invoiceIndex"]||[]).map(x=>entityPrefix144+"invoice_"+x.id)),
  taskWanted=new Set((entries[entityPrefix144+"taskIndex"]||[]).map(x=>entityPrefix144+"task_"+x.id)),
  bomWanted=new Set((entries[entityPrefix144+"taskIndex"]||[]).map(x=>entityPrefix144+"bom_"+x.id));
+ // Do not overwrite BOM records that were intentionally left unloaded.
+ (payload.tasks||[]).forEach(t=>{
+  let k=entityPrefix144+"bom_"+t.id;
+  if(t.__bomLoaded152!==true)delete entries[k]
+ });
+ // Never persist renderer-only lazy flags in task metadata.
+ (payload.tasks||[]).forEach(t=>{
+  let k=entityPrefix144+"task_"+t.id,row=entries[k];
+  if(row){row={...row};delete row.__bomLoaded152;entries[k]=row}
+ });
  await window.atemirDesktop?.dbWriteMany?.(entries);
  let stale=[
   ...Object.keys(window.atemirDesktop?.dbGetPrefixSync?.(entityPrefix144+"report_")||{}).filter(k=>!reportWanted.has(k)),
@@ -163,7 +173,7 @@ async function ensureReportPhotos151(){
 }
 let active="home",timer;
 const sections=[["home","Обзор"],["works","Ежедневные отчёты"],["bom","Ведомости марок"],["schemeLab","Схема МК — тест"],["invoices","Поставки (накладные)"],["tasks","Виды работ / проекты"],["progress","Прогресс проекта"],["dynamics","Динамика"],["deadlines","Сроки"],["acted","Актированные дни"],["penalties","Замечания / штрафы"]];
-function save(){clearTimeout(timer);saveState148("Сохраняю…");timer=setTimeout(async()=>{ensureBoms152();let payload={...d,reportPhotos:[],workDays:stripAllPhotos142()},ok=await saveEntities144(payload);saveState148(ok?"Сохранено":"Ошибка сохранения")},450)}
+function save(){clearTimeout(timer);saveState148("Сохраняю…");timer=setTimeout(async()=>{let payload={...d,reportPhotos:[],workDays:stripAllPhotos142()},ok=await saveEntities144(payload);saveState148(ok?"Сохранено":"Ошибка сохранения")},450)}
 const photoDb=()=>new Promise((ok,no)=>{let r=indexedDB.open("ATemirReportPhotos",2);r.onupgradeneeded=()=>{let db=r.result;if(!db.objectStoreNames.contains("photos"))db.createObjectStore("photos")};r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
 async function loadPhotos(){try{let db=await photoDb(),tx=db.transaction("photos","readonly"),r=tx.objectStore("photos").get("object_"+id);r.onsuccess=()=>{d.reportPhotos=Array.isArray(r.result)?r.result:[];if(active==="photos")render()}}catch{}}
 async function savePhotos(){try{let db=await photoDb(),tx=db.transaction("photos","readwrite");tx.objectStore("photos").put(d.reportPhotos||[],"object_"+id)}catch{}}
