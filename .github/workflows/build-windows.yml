@@ -79,11 +79,11 @@ jobs:
         shell: pwsh
         run: |
           $changed = @(git diff-tree --no-commit-id --name-only -r $env:GITHUB_SHA)
-          $release = if ($changed -contains "package.json") { "true" } else { "false" }
+          $release = if (($changed -contains "package.json") -or ($changed -contains "main.js") -or ($changed -contains "preload.js")) { "true" } else { "false" }
           "release=$release" >> $env:GITHUB_OUTPUT
           Write-Host "Full release required: $release"
       - name: Publish public auto-update release
-        if: github.event_name == 'push' && steps.version_bump.outputs.release == 'true'
+        if: github.event_name == 'push' && (steps.version_bump.outputs.release == 'true' || steps.core_change.outputs.core == 'true')
         shell: pwsh
         env:
           GH_TOKEN: ${{ secrets.UPDATE_REPO_TOKEN }}
