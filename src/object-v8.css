@@ -2424,3 +2424,17 @@ button[data-cancel-report720]:hover{background:#168dca!important;border-color:#1
 }
 .photoLightbox .photoClose:hover{background:#168dca!important;transform:scale(1.05)!important}
 @media(max-width:700px){.photoLightbox{padding:16px!important}.photoLightbox img{max-width:calc(100vw - 32px)!important;max-height:calc(100vh - 70px)!important}}
+
+
+/* v8.0.115 — поиск марок в выполненных работах */
+.markPicker115{display:flex!important;flex-direction:column!important;gap:6px!important}
+.markPicker115 .markSearch115{
+ width:100%!important;height:34px!important;box-sizing:border-box!important;
+ padding:0 10px!important;border:1px solid #b9d4e0!important;border-radius:6px!important;
+ background:#fff!important;color:#17364d!important;font:500 10.5px/1 Arial,sans-serif!important;
+ outline:none!important;transition:border-color .15s ease,box-shadow .15s ease!important
+}
+.markPicker115 .markSearch115:focus{border-color:#168dca!important;box-shadow:0 0 0 2px rgba(22,141,202,.10)!important}
+.markPicker115 select option.markDone115{background:#fde8e8!important;color:#b42318!important;font-weight:700!important}
+.markStatusStats111 span.done111{border-color:#f1b8b5!important;background:#fff0ef!important;color:#b42318!important}
+.markStatusStats111 span.done111 b{color:#9f1c14!important}
