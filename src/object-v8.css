@@ -2393,3 +2393,34 @@ button[data-cancel-report720]:hover{background:#168dca!important;border-color:#1
 /* v8.0.112 — завершённая марка */
 .markStatus111 .done111{border-color:#9fd6b0!important;background:#e9f8ee!important;color:#287344!important}
 .markStatus111 .done111 b{color:#176334!important}
+
+
+/* v8.0.114 — отступы страницы отчёта и модальный просмотр фото */
+.reportEditor994 .collapseBtn106,
+.reportEditor994 [data-report-section-toggle],
+.reportEditor994 .sectionToggle106{margin-bottom:12px!important}
+.toolbar:has(button[data-report-back718]){margin:14px 0 16px!important;padding:0!important}
+.reportView995 + .toolbar,.toolbar + .dailyListCard981{margin-top:14px!important}
+
+.photoLightbox{
+ position:fixed!important;inset:0!important;z-index:999999!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ padding:32px!important;background:rgba(8,24,36,.82)!important;
+ backdrop-filter:blur(3px)!important;
+}
+.photoLightbox img{
+ display:block!important;max-width:min(1100px,calc(100vw - 90px))!important;
+ max-height:calc(100vh - 90px)!important;width:auto!important;height:auto!important;
+ object-fit:contain!important;border-radius:8px!important;background:#fff!important;
+ box-shadow:0 18px 60px rgba(0,0,0,.35)!important;
+}
+.photoLightbox .photoClose{
+ position:fixed!important;top:18px!important;right:22px!important;
+ width:40px!important;height:40px!important;padding:0!important;
+ border:1px solid rgba(255,255,255,.5)!important;border-radius:50%!important;
+ background:rgba(10,35,50,.78)!important;color:#fff!important;
+ font:400 28px/36px Arial,sans-serif!important;cursor:pointer!important;
+ transition:background .15s ease,transform .15s ease!important;
+}
+.photoLightbox .photoClose:hover{background:#168dca!important;transform:scale(1.05)!important}
+@media(max-width:700px){.photoLightbox{padding:16px!important}.photoLightbox img{max-width:calc(100vw - 32px)!important;max-height:calc(100vh - 70px)!important}}
