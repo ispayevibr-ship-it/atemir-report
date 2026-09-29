@@ -12,21 +12,29 @@ function entityEntries144(payload){
  let base={...payload};delete base.workDays;delete base.invoices;delete base.tasks;delete base.penalties;delete base.actedDays;
  let out={};
  out[entityPrefix144+"base"]=base;
- out[entityPrefix144+"reports"]=(payload.workDays||[]);
+ let reports=(payload.workDays||[]).map(day=>{if(!day.id)day.id=uid538();return day});
+ out[entityPrefix144+"reportIndex"]=reports.map((day,sort)=>({id:day.id,date:day.date||"",sort}));
+ reports.forEach(day=>out[entityPrefix144+"report_"+day.id]=day);
  out[entityPrefix144+"invoices"]=(payload.invoices||[]);
  out[entityPrefix144+"tasks"]=(payload.tasks||[]);
  out[entityPrefix144+"penalties"]=(payload.penalties||[]);
  out[entityPrefix144+"actedDays"]=(payload.actedDays||[]);
- out[entityPrefix144+"meta"]={schema:2,updatedAt:new Date().toISOString()};
+ out[entityPrefix144+"meta"]={schema:3,updatedAt:new Date().toISOString()};
  return out
 }
-async function saveEntities144(payload){try{await window.atemirDesktop?.dbWriteMany?.(entityEntries144(payload))}catch(e){console.error("Entity DB save",e)}}
+async function saveEntities144(payload){try{
+ let entries=entityEntries144(payload),wanted=new Set((entries[entityPrefix144+"reportIndex"]||[]).map(x=>entityPrefix144+"report_"+x.id));
+ await window.atemirDesktop?.dbWriteMany?.(entries);
+ let existing=window.atemirDesktop?.dbGetPrefixSync?.(entityPrefix144+"report_")||{},stale=Object.keys(existing).filter(k=>!wanted.has(k));
+ if(stale.length)await window.atemirDesktop?.dbRemoveMany?.(stale);
+ await window.atemirDesktop?.dbRemoveMany?.([entityPrefix144+"reports"])
+}catch(e){console.error("Entity DB save",e)}}
 async function retireLegacySnapshot145(){
  try{
   let meta=await window.atemirDesktop?.dbGet?.(entityPrefix144+"meta");
-  let reports=await window.atemirDesktop?.dbGet?.(entityPrefix144+"reports");
+  let reports=await window.atemirDesktop?.dbGet?.(entityPrefix144+"reportIndex");
   let base=await window.atemirDesktop?.dbGet?.(entityPrefix144+"base");
-  if(meta&&Number(meta.schema)>=2&&base&&Array.isArray(reports)){
+  if(meta&&Number(meta.schema)>=3&&base&&Array.isArray(reports)){
     await window.atemirDesktop?.dbRemoveMany?.([key]);
     try{localStorage.removeItem(key)}catch{}
     return true
@@ -41,7 +49,10 @@ function hydrateEntities144(){
   if(!meta)return false;
   let base=window.atemirDesktop.dbGetSync(entityPrefix144+"base")||{};
   d=Object.assign(blank(),base);
-  d.workDays=window.atemirDesktop.dbGetSync(entityPrefix144+"reports")||[];
+  if(Number(meta.schema)>=3){
+   let idx=window.atemirDesktop.dbGetSync(entityPrefix144+"reportIndex")||[];
+   d.workDays=idx.sort((a,b)=>(a.sort??0)-(b.sort??0)).map(x=>window.atemirDesktop.dbGetSync(entityPrefix144+"report_"+x.id)).filter(Boolean)
+  }else d.workDays=window.atemirDesktop.dbGetSync(entityPrefix144+"reports")||[];
   d.invoices=window.atemirDesktop.dbGetSync(entityPrefix144+"invoices")||[];
   d.tasks=window.atemirDesktop.dbGetSync(entityPrefix144+"tasks")||[];
   d.penalties=window.atemirDesktop.dbGetSync(entityPrefix144+"penalties")||[];
@@ -451,7 +462,7 @@ function bind(){
  document.querySelectorAll("[data-field]").forEach(e=>e.oninput=()=>{let p=e.dataset.field.split("."),o=d;for(let i=0;i<p.length-1;i++)o=o[p[i]];o[p.at(-1)]=e.value;save()});
  document.querySelectorAll("[data-item]").forEach(e=>e.oninput=()=>{let [n,i,k]=e.dataset.item.split(":");d[n][+i][k]=e.value;save()});
  document.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>{let n=b.dataset.add;if(n==="workDays"){d.workDays=d.workDays.filter(x=>!x.isNewDraft720);d.workDays.forEach(x=>x.editing=false);let nw=makers.workDays();nw.metaCollapsed=false;d.workDays.unshift(nw)}else if(n==="penalties"){d.penalties.forEach(x=>x.collapsed=true);d.penalties.unshift(makers[n]())}else{let nw=makers[n]();if(n==="invoices")nw.no=String((d.invoices||[]).length+1);d[n].unshift(nw)}save();render()});
- document.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{let [n,i]=b.dataset.del.split(":");if(n==="workDays"){let day=d.workDays[+i];if(!day||!confirm("Удалить ежедневный отчёт за "+(day.date||"выбранный день")+"?\n\nБудут удалены все выполненные работы и фотографии этого отчёта."))return;try{let db=await photoDb(),tx=db.transaction("photos","readwrite"),store=tx.objectStore("photos");(day.items||[]).forEach((x,ii)=>store.delete(x.id?"work_"+id+"_item_"+x.id:"work_"+id+"_"+i+"_"+ii))}catch{}}d[n].splice(+i,1);save();render()});
+ document.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{let [n,i]=b.dataset.del.split(":");if(n==="workDays"){let day=d.workDays[+i];if(!day||!confirm("Удалить ежедневный отчёт за "+(day.date||"выбранный день")+"?\n\nБудут удалены все выполненные работы и фотографии этого отчёта."))return;try{let db=await photoDb(),tx=db.transaction("photos","readwrite"),store=tx.objectStore("photos");(day.items||[]).forEach((x,ii)=>store.delete(x.id?"work_"+id+"_item_"+x.id:"work_"+id+"_"+i+"_"+ii));store.delete(day.id?"day_"+id+"_report_"+day.id:"day_"+id+"_"+i)}catch{}}d[n].splice(+i,1);save();render()});
  document.querySelectorAll("[data-task-save]").forEach(b=>b.onclick=()=>{let t=d.tasks[+b.dataset.taskSave];t.editing=false;save();render()});
  document.querySelectorAll("[data-task-edit]").forEach(b=>b.onclick=()=>{d.tasks[+b.dataset.taskEdit].editing=true;render()});
  document.querySelectorAll("[data-task-unit]").forEach(e=>e.onchange=()=>{let t=d.tasks[+e.dataset.taskUnit];if(e.value==="__custom__"){t.unit="";save();render()}else{t.unit=e.value;save();render()}});
