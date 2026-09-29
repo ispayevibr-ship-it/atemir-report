@@ -4,8 +4,19 @@ ipcMain.handle("report:pdf",async(_e,arg={})=>{let file=await dialog.showSaveDia
 
 const DB_FILE_NAME="atemir-data-v1.json";
 function dbPath(){return path.join(app.getPath("userData"),DB_FILE_NAME)}
-function dbRead(){try{let x=JSON.parse(fs.readFileSync(dbPath(),"utf8"));return x&&typeof x==="object"?x:{version:1,kv:{}}}catch{return {version:1,kv:{}}}}
-function dbWrite(x){let file=dbPath(),tmp=file+".tmp";fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(tmp,JSON.stringify(x),"utf8");fs.renameSync(tmp,file)}
+let dbCache162=null,dbCachePath162="";
+function dbRead(){
+ let file=dbPath();
+ if(dbCache162&&dbCachePath162===file)return dbCache162;
+ try{let x=JSON.parse(fs.readFileSync(file,"utf8"));dbCache162=x&&typeof x==="object"?x:{version:1,kv:{}}}
+ catch{dbCache162={version:1,kv:{}}}
+ dbCachePath162=file;return dbCache162
+}
+function dbWrite(x){
+ let file=dbPath(),tmp=file+".tmp";fs.mkdirSync(path.dirname(file),{recursive:true});
+ fs.writeFileSync(tmp,JSON.stringify(x),"utf8");fs.renameSync(tmp,file);
+ dbCache162=x;dbCachePath162=file
+}
 function photoRoot(){return path.join(app.getPath("userData"),"photos")}
 function safePhotoKey(key){return String(key||"").replace(/[^a-zA-Z0-9_-]/g,"_")}
 function photoDir(key){return path.join(photoRoot(),safePhotoKey(key))}
