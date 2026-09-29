@@ -56,7 +56,7 @@ function migrateRelational165(){
  db.exec("BEGIN IMMEDIATE");
  try{
   for(let o of Array.isArray(list)?list:[]){
-   let oid=String(o?.id??"");if(!oid)continue,p="atemir_entity_"+oid+"_";
+   let oid=String(o?.id??"");if(!oid)continue;let p="atemir_entity_"+oid+"_";
    let base=kvParseSafe165(db.prepare("SELECT value FROM kv WHERE key=?").get(p+"base")?.value,{});
    putObj.run(oid,o.name||base.objectName||"",o.client||base.client||"",o.status||"В работе",o.address||base.address||"",base.participants||o.participants||"",base.notes||o.notes||"",base.heroPhoto||"",JSON.stringify({...o,base}),now);
    let ti=kvParseSafe165(db.prepare("SELECT value FROM kv WHERE key=?").get(p+"taskIndex")?.value,[]);
