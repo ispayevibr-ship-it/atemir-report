@@ -2438,3 +2438,13 @@ button[data-cancel-report720]:hover{background:#168dca!important;border-color:#1
 .markPicker115 select option.markDone115{background:#fde8e8!important;color:#b42318!important;font-weight:700!important}
 .markStatusStats111 span.done111{border-color:#f1b8b5!important;background:#fff0ef!important;color:#b42318!important}
 .markStatusStats111 span.done111 b{color:#9f1c14!important}
+
+
+/* v8.0.116 — вертикальные отступы в ежедневных отчётах */
+.reportEditor994 .reportSectionHead994{margin-bottom:16px!important}
+.reportEditor994 .reportSectionHead994 + .grid{margin-top:0!important}
+.reportEditor994 .reportSectionHead994 + .reportNotes108,
+.reportEditor994 .reportSectionHead994 + .reportSection998{margin-top:0!important}
+#main .toolbar:has(button[data-add="workDays"]){margin-bottom:18px!important}
+#main .toolbar:has(button[data-add="workDays"]) + .reportEditor994,
+#main .toolbar:has(button[data-add="workDays"]) + .dailyListCard981{margin-top:0!important}
