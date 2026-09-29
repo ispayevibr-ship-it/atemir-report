@@ -6,6 +6,15 @@ const DB_FILE_NAME="atemir-data-v1.json";
 function dbPath(){return path.join(app.getPath("userData"),DB_FILE_NAME)}
 function dbRead(){try{let x=JSON.parse(fs.readFileSync(dbPath(),"utf8"));return x&&typeof x==="object"?x:{version:1,kv:{}}}catch{return {version:1,kv:{}}}}
 function dbWrite(x){let file=dbPath(),tmp=file+".tmp";fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(tmp,JSON.stringify(x),"utf8");fs.renameSync(tmp,file)}
+function photoRoot(){return path.join(app.getPath("userData"),"photos")}
+function safePhotoKey(key){return String(key||"").replace(/[^a-zA-Z0-9_-]/g,"_")}
+function photoDir(key){return path.join(photoRoot(),safePhotoKey(key))}
+function dataUrlToBuffer(v){let m=String(v||"").match(/^data:([^;]+);base64,(.+)$/);if(!m)return null;return {mime:m[1],buf:Buffer.from(m[2],"base64")}}
+function extForMime(m){return /png/i.test(m)?".png":/webp/i.test(m)?".webp":".jpg"}
+ipcMain.handle("photos:set",(_e,key,items=[])=>{let dir=photoDir(key);fs.rmSync(dir,{recursive:true,force:true});fs.mkdirSync(dir,{recursive:true});let saved=[];(items||[]).forEach((v,i)=>{let x=dataUrlToBuffer(v);if(!x)return;let name=String(i+1).padStart(2,"0")+extForMime(x.mime);fs.writeFileSync(path.join(dir,name),x.buf);saved.push(name)});return {ok:true,count:saved.length}});
+ipcMain.handle("photos:get",(_e,key)=>{let dir=photoDir(key);if(!fs.existsSync(dir))return [];return fs.readdirSync(dir).sort().map(name=>{let file=path.join(dir,name),ext=path.extname(name).toLowerCase(),mime=ext===".png"?"image/png":ext===".webp"?"image/webp":"image/jpeg";return "data:"+mime+";base64,"+fs.readFileSync(file).toString("base64")})});
+ipcMain.handle("photos:remove",(_e,key)=>{fs.rmSync(photoDir(key),{recursive:true,force:true});return true});
+ipcMain.handle("photos:remove-prefix",(_e,prefix)=>{let root=photoRoot();if(!fs.existsSync(root))return 0;let p=safePhotoKey(prefix),n=0;for(let name of fs.readdirSync(root)){if(name.startsWith(p)){fs.rmSync(path.join(root,name),{recursive:true,force:true});n++}}return n});
 ipcMain.handle("db:get",(_e,key)=>{let db=dbRead();return Object.prototype.hasOwnProperty.call(db.kv||{},key)?db.kv[key]:null});
 ipcMain.on("db:get-sync",(e,key)=>{let db=dbRead();e.returnValue=Object.prototype.hasOwnProperty.call(db.kv||{},key)?db.kv[key]:null});
 ipcMain.on("db:all-sync",(e)=>{e.returnValue=dbRead().kv||{}});
