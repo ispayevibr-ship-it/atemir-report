@@ -16,6 +16,8 @@ ipcMain.handle("db:migrate",(_e,entries={})=>{let db=dbRead(),added=0;db.kv=db.k
 ipcMain.handle("db:info",()=>{let db=dbRead();return {path:dbPath(),keys:Object.keys(db.kv||{}).length,updatedAt:db.updatedAt||db.migratedAt||""}});
 ipcMain.handle("db:backup",async()=>{let db=dbRead(),dir=path.join(app.getPath("userData"),"backups");fs.mkdirSync(dir,{recursive:true});let stamp=new Date().toISOString().replace(/[:.]/g,"-"),dest=path.join(dir,"atemir-data-"+stamp+".json");fs.writeFileSync(dest,JSON.stringify(db),"utf8");return {ok:true,path:dest}});
 ipcMain.handle("db:write-many",(_e,entries={})=>{let db=dbRead();db.kv=db.kv||{};for(let [key,value] of Object.entries(entries||{}))db.kv[key]=value;db.updatedAt=new Date().toISOString();dbWrite(db);return true});
+ipcMain.handle("db:remove-prefix",(_e,prefix)=>{let db=dbRead(),n=0;db.kv=db.kv||{};for(let key of Object.keys(db.kv)){if(key.startsWith(prefix)){delete db.kv[key];n++}}if(n){db.updatedAt=new Date().toISOString();dbWrite(db)}return n});
+
 
 
 let win,hotUpdate=null;
