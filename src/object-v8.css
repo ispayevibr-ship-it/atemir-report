@@ -1750,3 +1750,8 @@ button[data-add="workDays"]:hover{
   color:#c54444!important;
   font-weight:700!important;
 }
+
+/* v8.0.93 — очистка отчёта в меню объекта */
+.heroMenu812 .heroClear991{margin-top:6px!important;border-top:1px solid #e6ecef!important;color:#c64c4c!important}
+.heroMenu812 .heroClear991 svg{stroke:#c64c4c!important}
+.heroMenu812 .heroClear991:hover{background:#fff1f1!important}
