@@ -2598,3 +2598,19 @@ button[data-cancel-report720]:hover{background:#168dca!important;border-color:#1
 
 /* v8.0.129 — количество и объём в сохранённой выполненной работе */
 .workSavedMeta129{margin-top:4px!important}
+
+
+/* v8.0.131 — фиксированные отступы панели ежедневных отчётов */
+#main .dailyReportToolbar131{
+ display:flex!important;
+ align-items:center!important;
+ justify-content:flex-start!important;
+ gap:16px!important;
+ column-gap:16px!important;
+ margin:0 0 20px 0!important;
+ padding:0!important;
+}
+#main .dailyReportToolbar131>button{
+ margin:0!important;
+ flex:0 0 auto!important;
+}
