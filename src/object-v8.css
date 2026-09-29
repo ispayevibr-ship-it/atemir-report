@@ -2529,3 +2529,26 @@ button[data-cancel-report720]:hover{background:#168dca!important;border-color:#1
  flex:0 0 100%!important;margin:10px 0 0!important
 }
 .reportEditor994 .reportSectionHead994.numbered106>div button{margin:0!important}
+
+
+/* v8.0.124 — полноценный просмотр ежедневного отчёта */
+.reportGrid124{grid-template-columns:minmax(0,2fr) minmax(300px,.75fr)!important;align-items:start!important}
+.reportSide124{display:grid!important;gap:14px!important}
+.reportWorkRow124{grid-template-columns:32px minmax(0,1fr) auto!important;align-items:center!important}
+.workMain124{display:flex!important;flex-direction:column!important;gap:6px!important;min-width:0!important}
+.workType124{font-size:9px!important;color:#7a8c97!important}
+.workMark124{display:grid!important;grid-template-columns:minmax(90px,auto) minmax(0,1fr)!important;gap:12px!important;align-items:baseline!important}
+.workMark124 b{font-size:12px!important;color:#147ba9!important}
+.workMark124 strong{font-size:11px!important;color:#17364d!important;font-weight:700!important}
+.workQty124{white-space:nowrap!important;font-size:11px!important}
+.reportResp124 span{display:flex!important;flex-direction:column!important;gap:3px!important}
+.reportResp124 span>b{font-size:10.5px!important;color:#17364d!important}
+.reportResp124 small{font-size:9px!important;color:#788b96!important}
+.weatherReport124{display:flex!important;align-items:flex-start!important;gap:12px!important}
+.weatherIcon124{width:34px!important;height:34px!important;display:flex!important;align-items:center!important;justify-content:center!important;color:#d69b17!important}
+.weatherIcon124 svg{width:28px!important;height:28px!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important}
+.weatherReport124>div:last-child{display:grid!important;gap:4px!important}
+.weatherReport124>div:last-child>b{font-size:11px!important;color:#17364d!important}
+.weatherReport124>div:last-child span{font-size:9.5px!important;color:#657985!important}
+@media(max-width:1050px){.reportGrid124{grid-template-columns:1fr!important}.reportSide124{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:700px){.reportSide124{grid-template-columns:1fr!important}.workMark124{grid-template-columns:1fr!important;gap:3px!important}}
