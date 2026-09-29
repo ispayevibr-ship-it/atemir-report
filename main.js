@@ -142,16 +142,29 @@ function relationalGet169(key){
   if(kind==="report"){let r=db.prepare("SELECT raw_json FROM reports WHERE id=?").get(id);return r?kvParseSafe165(r.raw_json,null):undefined}
   if(kind==="invoice"){let r=db.prepare("SELECT raw_json FROM invoices WHERE id=?").get(id);return r?kvParseSafe165(r.raw_json,null):undefined}
  }
- let a=s.match(/^atemir_entity_(.+)_(actedDays|penalties)$/);if(a){let oid=a[1];
-  if(a[2]==="actedDays"){let rows=db.prepare("SELECT raw_json FROM acted_days WHERE object_id=? ORDER BY day").all(oid);return rows.length?rows.map(r=>kvParseSafe165(r.raw_json,"")).filter(Boolean):undefined}
+ let a=s.match(/^atemir_entity_(.+)_(base|taskIndex|reportIndex|invoiceIndex|actedDays|penalties)$/);if(a){let oid=a[1],kind=a[2];
+  if(kind==="base"){let r=db.prepare("SELECT raw_json FROM objects WHERE id=?").get(oid);if(!r)return undefined;let x=kvParseSafe165(r.raw_json,{});return x.base||x}
+  if(kind==="taskIndex"){let rows=db.prepare("SELECT id,type,code,sort_order FROM tasks WHERE object_id=? ORDER BY sort_order").all(oid);return rows.length?rows.map(r=>({id:r.id,type:r.type||"",code:r.code||"",sort:r.sort_order||0})):undefined}
+  if(kind==="reportIndex"){let rows=db.prepare("SELECT id,report_date,sort_order FROM reports WHERE object_id=? ORDER BY sort_order").all(oid);return rows.length?rows.map(r=>({id:r.id,date:r.report_date||"",sort:r.sort_order||0})):undefined}
+  if(kind==="invoiceIndex"){let rows=db.prepare("SELECT id,invoice_date,number,sort_order FROM invoices WHERE object_id=? ORDER BY sort_order").all(oid);return rows.length?rows.map(r=>({id:r.id,date:r.invoice_date||"",no:r.number||"",sort:r.sort_order||0})):undefined}
+  if(kind==="actedDays"){let rows=db.prepare("SELECT raw_json FROM acted_days WHERE object_id=? ORDER BY day").all(oid);return rows.length?rows.map(r=>kvParseSafe165(r.raw_json,"")).filter(Boolean):undefined}
   let rows=db.prepare("SELECT raw_json FROM penalties WHERE object_id=? ORDER BY sort_order").all(oid);return rows.length?rows.map(r=>kvParseSafe165(r.raw_json,{})):undefined
  }
+ if(s==="atemir-company-objects-v1"){let rows=db.prepare("SELECT id,raw_json FROM objects ORDER BY rowid").all();if(rows.length)return rows.map(r=>{let x=kvParseSafe165(r.raw_json,{});if(x.base)delete x.base;return Object.assign({id:r.id},x)})}
 }
 function kvGet164(key){let r=relationalGet169(key);if(r!==undefined)return r;return kvParse164(sqliteDb163().prepare("SELECT value FROM kv WHERE key=?").get(String(key)))}
 function kvAll164(){let out={};for(let row of sqliteDb163().prepare("SELECT key,value FROM kv").all())out[row.key]=kvParse164(row);return out}
 function kvPrefix164(prefix){let out={},p=String(prefix);for(let row of sqliteDb163().prepare("SELECT key,value FROM kv WHERE key LIKE ? ESCAPE '\\'").all(p.replace(/[\\%_]/g,x=>"\\"+x)+"%"))out[row.key]=kvParse164(row);return out}
 function syncRelational168(key,value){
- let db=sqliteDb163(),s=String(key),now=new Date().toISOString(),x=value||{},mm=s.match(/^atemir_entity_(.+)_(task|bom|report|invoice)_([^_]+)$/);
+ let db=sqliteDb163(),s=String(key),now=new Date().toISOString(),x=value||{};
+ let bi=s.match(/^atemir_entity_(.+)_(base|taskIndex|reportIndex|invoiceIndex)$/);
+ if(bi){let oid=bi[1],kind=bi[2];
+  if(kind==="base"){let old=db.prepare("SELECT raw_json FROM objects WHERE id=?").get(oid),prev=old?kvParseSafe165(old.raw_json,{}):{},obj=prev.base?prev:{...prev,base:{}};obj.base=x;db.prepare("INSERT INTO objects(id,name,client,status,address,participants,notes,hero_photo,raw_json,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET name=excluded.name,client=excluded.client,address=excluded.address,participants=excluded.participants,notes=excluded.notes,hero_photo=excluded.hero_photo,raw_json=excluded.raw_json,updated_at=excluded.updated_at").run(oid,x.objectName||obj.name||"",x.client||obj.client||"",obj.status||"В работе",x.address||obj.address||"",x.participants||"",x.notes||"",x.heroPhoto||"",JSON.stringify(obj),now)}
+  else {let table=kind==="taskIndex"?"tasks":kind==="reportIndex"?"reports":"invoices",q=db.prepare("UPDATE "+table+" SET sort_order=? WHERE id=? AND object_id=?");(Array.isArray(x)?x:[]).forEach((v,i)=>q.run(Number(v.sort??i),String(v.id),oid))}
+  return
+ }
+ if(s==="atemir-company-objects-v1"){let q=db.prepare("UPDATE objects SET name=?,client=?,status=?,address=?,updated_at=? WHERE id=?");(Array.isArray(x)?x:[]).forEach(o=>q.run(o.name||"",o.client||"",o.status||"В работе",o.address||"",now,String(o.id)));return}
+ let mm=s.match(/^atemir_entity_(.+)_(task|bom|report|invoice)_([^_]+)$/);
  if(mm){let oid=mm[1],kind=mm[2],id=mm[3];
   if(kind==="task"){db.prepare("INSERT INTO tasks(id,object_id,type,code,unit,volume,start_date,end_date,bom_name,sort_order,raw_json,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET object_id=excluded.object_id,type=excluded.type,code=excluded.code,unit=excluded.unit,volume=excluded.volume,start_date=excluded.start_date,end_date=excluded.end_date,bom_name=excluded.bom_name,raw_json=excluded.raw_json,updated_at=excluded.updated_at").run(id,oid,x.type||"",x.code||"",x.unit||"",relNum165(x.volume),x.start||"",x.date||"",x.bomName||"",0,JSON.stringify(x),now)}
   else if(kind==="bom"){db.prepare("DELETE FROM bom_marks WHERE task_id=?").run(id);let q=db.prepare("INSERT INTO bom_marks(object_id,task_id,mark_key,mark,name,qty,unit,sort_order,raw_json,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?)");(Array.isArray(x)?x:[]).forEach((r,i)=>q.run(oid,id,String(r.id||r.mark||r.name||i),r.mark||"",r.name||r.title||"",relNum165(r.qty??r.count??r.volume),r.unit||"",i,JSON.stringify(r),now))}
