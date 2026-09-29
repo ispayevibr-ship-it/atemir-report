@@ -2614,3 +2614,14 @@ button[data-cancel-report720]:hover{background:#168dca!important;border-color:#1
  margin:0!important;
  flex:0 0 auto!important;
 }
+
+
+/* v8.0.134 — прямые отступы кнопок ежедневных отчётов */
+#main .dailyReportToolbar131{
+ gap:0!important;
+ column-gap:0!important;
+ margin:0 0 20px 0!important;
+}
+#main .dailyReportToolbar131>button+button{
+ margin-left:16px!important;
+}
