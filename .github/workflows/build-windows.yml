@@ -53,7 +53,7 @@ jobs:
           $changed = @(git diff-tree --no-commit-id --name-only -r $env:GITHUB_SHA)
           $core = $false
           foreach ($f in $changed) {
-            if ($f -eq "main.js" -or $f -eq "preload.js" -or $f -eq "package-lock.json") { $core = $true }
+            if ($f -eq "main.js" -or $f -eq "preload.js" -or $f -eq "package-lock.json" -or $f -like "build/*") { $core = $true }
           }
           if (-not $core -and ($changed -contains "package.json")) {
             $parent = git rev-parse "$env:GITHUB_SHA^"
