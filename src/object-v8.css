@@ -1599,3 +1599,22 @@ button[data-add="workDays"]{
   box-shadow:0 2px 7px rgba(24,93,126,.14)!important;
 }
 .dailyBrief981>span{width:100%!important}
+
+/* v8.0.87 — верх ежедневных отчётов */
+button[data-add="workDays"]{
+  margin-top:18px!important;
+  min-width:170px!important;
+  height:40px!important;
+  padding:0 20px!important;
+  border:1px solid #1688bd!important;
+  border-radius:6px!important;
+  background:#1688bd!important;
+  color:#fff!important;
+  font:700 12px/38px Arial,sans-serif!important;
+  box-shadow:none!important;
+}
+button[data-add="workDays"]:hover{
+  background:#1179aa!important;
+  border-color:#1179aa!important;
+}
+.dailyBrief981 b{white-space:normal!important;word-break:normal!important}
