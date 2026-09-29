@@ -1,21 +1,53 @@
-const {app,BrowserWindow,dialog,ipcMain}=require("electron");const fs=require("fs");const https=require("https");const {autoUpdater}=require("electron-updater");const path=require("path");ipcMain.handle("report:html",async(_e,arg={})=>{let file=await dialog.showSaveDialog(win,{title:"Выгрузить отчёт HTML",defaultPath:arg.filename||"А-Темир_Строй_отчет.html",filters:[{name:"HTML",extensions:["html"]}]});if(file.canceled||!file.filePath)return {canceled:true};fs.writeFileSync(file.filePath,String(arg.html||""),"utf8");return {ok:true,path:file.filePath}});
+const {app,BrowserWindow,dialog,ipcMain}=require("electron");const {DatabaseSync}=require("node:sqlite");const fs=require("fs");const https=require("https");const {autoUpdater}=require("electron-updater");const path=require("path");ipcMain.handle("report:html",async(_e,arg={})=>{let file=await dialog.showSaveDialog(win,{title:"Выгрузить отчёт HTML",defaultPath:arg.filename||"А-Темир_Строй_отчет.html",filters:[{name:"HTML",extensions:["html"]}]});if(file.canceled||!file.filePath)return {canceled:true};fs.writeFileSync(file.filePath,String(arg.html||""),"utf8");return {ok:true,path:file.filePath}});
 ipcMain.handle("report:pdf",async(_e,arg={})=>{let file=await dialog.showSaveDialog(win,{title:"Сохранить PDF",defaultPath:arg.filename||"А-Темир_Строй_отчет.pdf",filters:[{name:"PDF",extensions:["pdf"]}]});if(file.canceled||!file.filePath)return {canceled:true};let w=new BrowserWindow({show:false,webPreferences:{contextIsolation:true,nodeIntegration:false}}),tmp="";try{if(arg.html){tmp=path.join(app.getPath("temp"),"atemir-export-"+Date.now()+".html");fs.writeFileSync(tmp,String(arg.html),"utf8");await w.loadFile(tmp)}else await w.loadFile(runtimeFile(path.join("src","legacy-report.html")));await new Promise(r=>setTimeout(r,700));let buf=await w.webContents.printToPDF({printBackground:true,pageSize:"A4",margins:{top:0.25,bottom:0.25,left:0.2,right:0.2}});fs.writeFileSync(file.filePath,buf);return {ok:true,path:file.filePath}}finally{if(tmp)try{fs.unlinkSync(tmp)}catch{}if(!w.isDestroyed())w.destroy()}});
 
 
-const DB_FILE_NAME="atemir-data-v1.json";
+const DB_FILE_NAME="atemir-data-v1.json",SQLITE_FILE_NAME="atemir.db";
 function dbPath(){return path.join(app.getPath("userData"),DB_FILE_NAME)}
-let dbCache162=null,dbCachePath162="";
+function sqlitePath163(){return path.join(app.getPath("userData"),SQLITE_FILE_NAME)}
+let sqlite163=null;
+function sqliteDb163(){
+ if(sqlite163)return sqlite163;
+ let file=sqlitePath163();fs.mkdirSync(path.dirname(file),{recursive:true});
+ sqlite163=new DatabaseSync(file);
+ sqlite163.exec("PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL; PRAGMA foreign_keys=ON; CREATE TABLE IF NOT EXISTS kv (key TEXT PRIMARY KEY, value TEXT NOT NULL, updated_at TEXT NOT NULL); CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);");
+ migrateJsonToSqlite163();
+ return sqlite163
+}
+function migrateJsonToSqlite163(){
+ let db=sqlite163;if(!db)return;
+ let done=db.prepare("SELECT value FROM meta WHERE key=?").get("json_migrated_v1");
+ if(done)return;
+ let legacy={version:1,kv:{}};try{legacy=JSON.parse(fs.readFileSync(dbPath(),"utf8"))||legacy}catch{}
+ let entries=Object.entries(legacy.kv||{}),now=new Date().toISOString();
+ db.exec("BEGIN IMMEDIATE");
+ try{
+  let put=db.prepare("INSERT INTO kv(key,value,updated_at) VALUES(?,?,?) ON CONFLICT(key) DO NOTHING");
+  for(let [key,value] of entries)put.run(key,JSON.stringify(value),now);
+  db.prepare("INSERT INTO meta(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value").run("json_migrated_v1",JSON.stringify({at:now,keys:entries.length,source:dbPath()}));
+  db.exec("COMMIT");
+  if(fs.existsSync(dbPath())){
+   let dir=path.join(app.getPath("userData"),"backups");fs.mkdirSync(dir,{recursive:true});
+   let dest=path.join(dir,"pre-sqlite-"+now.replace(/[:.]/g,"-")+".json");
+   if(!fs.existsSync(dest))fs.copyFileSync(dbPath(),dest)
+  }
+ }catch(e){try{db.exec("ROLLBACK")}catch{}throw e}
+}
 function dbRead(){
- let file=dbPath();
- if(dbCache162&&dbCachePath162===file)return dbCache162;
- try{let x=JSON.parse(fs.readFileSync(file,"utf8"));dbCache162=x&&typeof x==="object"?x:{version:1,kv:{}}}
- catch{dbCache162={version:1,kv:{}}}
- dbCachePath162=file;return dbCache162
+ let db=sqliteDb163(),kv={};
+ for(let row of db.prepare("SELECT key,value FROM kv").all()){try{kv[row.key]=JSON.parse(row.value)}catch{kv[row.key]=row.value}}
+ let migrated=db.prepare("SELECT value FROM meta WHERE key=?").get("json_migrated_v1");
+ return {version:2,engine:"sqlite",kv,migratedAt:migrated?JSON.parse(migrated.value).at:""}
 }
 function dbWrite(x){
- let file=dbPath(),tmp=file+".tmp";fs.mkdirSync(path.dirname(file),{recursive:true});
- fs.writeFileSync(tmp,JSON.stringify(x),"utf8");fs.renameSync(tmp,file);
- dbCache162=x;dbCachePath162=file
+ let db=sqliteDb163(),wanted=x&&x.kv&&typeof x.kv==="object"?x.kv:{},now=new Date().toISOString();
+ db.exec("BEGIN IMMEDIATE");
+ try{
+  db.exec("DELETE FROM kv");
+  let put=db.prepare("INSERT INTO kv(key,value,updated_at) VALUES(?,?,?)");
+  for(let [key,value] of Object.entries(wanted))put.run(key,JSON.stringify(value),now);
+  db.exec("COMMIT")
+ }catch(e){try{db.exec("ROLLBACK")}catch{}throw e}
 }
 function photoRoot(){return path.join(app.getPath("userData"),"photos")}
 function safePhotoKey(key){return String(key||"").replace(/[^a-zA-Z0-9_-]/g,"_")}
@@ -35,8 +67,8 @@ ipcMain.on("db:set-sync",(e,key,value)=>{try{let db=dbRead();db.kv=db.kv||{};db.
 ipcMain.handle("db:set",(_e,key,value)=>{let db=dbRead();db.kv=db.kv||{};db.kv[key]=value;db.updatedAt=new Date().toISOString();dbWrite(db);return true});
 ipcMain.handle("db:remove",(_e,key)=>{let db=dbRead();if(db.kv)delete db.kv[key];db.updatedAt=new Date().toISOString();dbWrite(db);return true});
 ipcMain.handle("db:migrate",(_e,entries={})=>{let db=dbRead(),added=0;db.kv=db.kv||{};for(let [key,value] of Object.entries(entries||{})){if(!Object.prototype.hasOwnProperty.call(db.kv,key)){db.kv[key]=value;added++}}db.migratedAt=db.migratedAt||new Date().toISOString();dbWrite(db);return {ok:true,added,path:dbPath()}});
-ipcMain.handle("db:info",()=>{let db=dbRead();return {path:dbPath(),keys:Object.keys(db.kv||{}).length,updatedAt:db.updatedAt||db.migratedAt||""}});
-ipcMain.handle("db:backup",async()=>{let db=dbRead(),dir=path.join(app.getPath("userData"),"backups");fs.mkdirSync(dir,{recursive:true});let stamp=new Date().toISOString().replace(/[:.]/g,"-"),dest=path.join(dir,"atemir-data-"+stamp+".json");fs.writeFileSync(dest,JSON.stringify(db),"utf8");return {ok:true,path:dest}});
+ipcMain.handle("db:info",()=>{let db=dbRead();return {path:sqlitePath163(),engine:"sqlite",keys:Object.keys(db.kv||{}).length,updatedAt:db.updatedAt||db.migratedAt||""}});
+ipcMain.handle("db:backup",async()=>{let db=dbRead(),dir=path.join(app.getPath("userData"),"backups");fs.mkdirSync(dir,{recursive:true});let stamp=new Date().toISOString().replace(/[:.]/g,"-"),jsonDest=path.join(dir,"atemir-data-"+stamp+".json"),sqlDest=path.join(dir,"atemir-"+stamp+".db");fs.writeFileSync(jsonDest,JSON.stringify(db),"utf8");sqliteDb163().exec("PRAGMA wal_checkpoint(FULL)");fs.copyFileSync(sqlitePath163(),sqlDest);return {ok:true,path:sqlDest,jsonPath:jsonDest}});
 ipcMain.handle("db:write-many",(_e,entries={})=>{let db=dbRead();db.kv=db.kv||{};for(let [key,value] of Object.entries(entries||{}))db.kv[key]=value;db.updatedAt=new Date().toISOString();dbWrite(db);return true});
 ipcMain.handle("db:remove-prefix",(_e,prefix)=>{let db=dbRead(),n=0;db.kv=db.kv||{};for(let key of Object.keys(db.kv)){if(key.startsWith(prefix)){delete db.kv[key];n++}}if(n){db.updatedAt=new Date().toISOString();dbWrite(db)}return n});
 ipcMain.handle("db:remove-many",(_e,keys=[])=>{let db=dbRead(),n=0;db.kv=db.kv||{};for(let key of keys||[]){if(Object.prototype.hasOwnProperty.call(db.kv,key)){delete db.kv[key];n++}}if(n){db.updatedAt=new Date().toISOString();dbWrite(db)}return n});
