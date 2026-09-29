@@ -17,9 +17,10 @@ function sqliteDb163(){
  CREATE TABLE IF NOT EXISTS tasks (id TEXT PRIMARY KEY,object_id TEXT NOT NULL,type TEXT,code TEXT,unit TEXT,volume REAL,start_date TEXT,end_date TEXT,bom_name TEXT,sort_order INTEGER NOT NULL DEFAULT 0,raw_json TEXT NOT NULL,updated_at TEXT NOT NULL,FOREIGN KEY(object_id) REFERENCES objects(id) ON DELETE CASCADE);
  CREATE INDEX IF NOT EXISTS idx_tasks_object ON tasks(object_id,sort_order);
  CREATE TABLE IF NOT EXISTS bom_marks (object_id TEXT NOT NULL,task_id TEXT NOT NULL,mark_key TEXT NOT NULL,mark TEXT,name TEXT,qty REAL,unit TEXT,sort_order INTEGER NOT NULL DEFAULT 0,raw_json TEXT NOT NULL,updated_at TEXT NOT NULL,PRIMARY KEY(task_id,mark_key),FOREIGN KEY(task_id) REFERENCES tasks(id) ON DELETE CASCADE);
- CREATE INDEX IF NOT EXISTS idx_bom_object_task ON bom_marks(object_id,task_id,sort_order);`);
+ CREATE INDEX IF NOT EXISTS idx_bom_object_task ON bom_marks(object_id,task_id,sort_order); CREATE TABLE IF NOT EXISTS reports (id TEXT PRIMARY KEY,object_id TEXT NOT NULL,report_date TEXT,weather TEXT,notes TEXT,sort_order INTEGER NOT NULL DEFAULT 0,raw_json TEXT NOT NULL,updated_at TEXT NOT NULL,FOREIGN KEY(object_id) REFERENCES objects(id) ON DELETE CASCADE); CREATE INDEX IF NOT EXISTS idx_reports_object_date ON reports(object_id,report_date,sort_order); CREATE TABLE IF NOT EXISTS report_works (report_id TEXT NOT NULL,work_key TEXT NOT NULL,task_id TEXT,mark TEXT,name TEXT,qty REAL,unit TEXT,sort_order INTEGER NOT NULL DEFAULT 0,raw_json TEXT NOT NULL,PRIMARY KEY(report_id,work_key),FOREIGN KEY(report_id) REFERENCES reports(id) ON DELETE CASCADE); CREATE TABLE IF NOT EXISTS report_people (report_id TEXT NOT NULL,person_key TEXT NOT NULL,kind TEXT NOT NULL,role TEXT,name TEXT,qty REAL,sort_order INTEGER NOT NULL DEFAULT 0,raw_json TEXT NOT NULL,PRIMARY KEY(report_id,person_key),FOREIGN KEY(report_id) REFERENCES reports(id) ON DELETE CASCADE); CREATE TABLE IF NOT EXISTS report_equipment (report_id TEXT NOT NULL,equipment_key TEXT NOT NULL,type TEXT,name TEXT,qty REAL,sort_order INTEGER NOT NULL DEFAULT 0,raw_json TEXT NOT NULL,PRIMARY KEY(report_id,equipment_key),FOREIGN KEY(report_id) REFERENCES reports(id) ON DELETE CASCADE); CREATE INDEX IF NOT EXISTS idx_report_works_report ON report_works(report_id,sort_order); CREATE INDEX IF NOT EXISTS idx_report_people_report ON report_people(report_id,kind,sort_order); CREATE INDEX IF NOT EXISTS idx_report_equipment_report ON report_equipment(report_id,sort_order);`);
  migrateJsonToSqlite163();
  migrateRelational165();
+ migrateReports166();
  migrateJsonToSqlite163();
  return sqlite163
 }
@@ -71,6 +72,25 @@ function migrateRelational165(){
  }catch(e){try{db.exec("ROLLBACK")}catch{}throw e}
 }
 function kvParseSafe165(v,fallback){if(v==null)return fallback;try{return JSON.parse(v)}catch{return fallback}}
+function migrateReports166(){
+ let db=sqlite163;if(!db||db.prepare("SELECT value FROM meta WHERE key=?").get("relational_reports_v1"))return;
+ let objects=kvParseSafe165(db.prepare("SELECT value FROM kv WHERE key=?").get("atemir-company-objects-v1")?.value,[]),now=new Date().toISOString();
+ let pr=db.prepare("INSERT INTO reports(id,object_id,report_date,weather,notes,sort_order,raw_json,updated_at) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET object_id=excluded.object_id,report_date=excluded.report_date,weather=excluded.weather,notes=excluded.notes,sort_order=excluded.sort_order,raw_json=excluded.raw_json,updated_at=excluded.updated_at");
+ let pw=db.prepare("INSERT INTO report_works(report_id,work_key,task_id,mark,name,qty,unit,sort_order,raw_json) VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(report_id,work_key) DO UPDATE SET task_id=excluded.task_id,mark=excluded.mark,name=excluded.name,qty=excluded.qty,unit=excluded.unit,sort_order=excluded.sort_order,raw_json=excluded.raw_json");
+ let pp=db.prepare("INSERT INTO report_people(report_id,person_key,kind,role,name,qty,sort_order,raw_json) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(report_id,person_key) DO UPDATE SET kind=excluded.kind,role=excluded.role,name=excluded.name,qty=excluded.qty,sort_order=excluded.sort_order,raw_json=excluded.raw_json");
+ let pe=db.prepare("INSERT INTO report_equipment(report_id,equipment_key,type,name,qty,sort_order,raw_json) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(report_id,equipment_key) DO UPDATE SET type=excluded.type,name=excluded.name,qty=excluded.qty,sort_order=excluded.sort_order,raw_json=excluded.raw_json");
+ db.exec("BEGIN IMMEDIATE");try{
+  for(let o of (Array.isArray(objects)?objects:[])){let oid=String(o?.id??"");if(!oid)continue,p="atemir_entity_"+oid+"_",ri=kvParseSafe165(db.prepare("SELECT value FROM kv WHERE key=?").get(p+"reportIndex")?.value,[]);
+   for(let z of (Array.isArray(ri)?ri:[])){let r=kvParseSafe165(db.prepare("SELECT value FROM kv WHERE key=?").get(p+"report_"+z.id)?.value,null);if(!r)continue;let rid=String(r.id||z.id),weather=typeof r.weather==="string"?r.weather:JSON.stringify(r.weather||{});
+    pr.run(rid,oid,r.date||r.reportDate||"",weather,r.notes||r.info||r.additionalInfo||"",Number(z.sort||0),JSON.stringify(r),now);
+    let works=r.works||r.workItems||r.completedWorks||[];(Array.isArray(works)?works:[]).forEach((w,i)=>pw.run(rid,String(w.id||i),String(w.taskId||""),w.mark||"",w.name||w.title||"",relNum165(w.qty??w.count??w.volume),w.unit||"",i,JSON.stringify(w)));
+    for(let pair of [["worker",r.people||r.workers||[]],["responsible",r.responsibles||r.responsiblePersons||[]]]){let kind=pair[0],list=Array.isArray(pair[1])?pair[1]:[];list.forEach((x,i)=>pp.run(rid,kind+"_"+String(x.id||i),kind,x.role||x.position||"",x.name||"",relNum165(x.qty??x.count??1),i,JSON.stringify(x)))}
+    let eq=r.equipment||r.machinery||r.vehicles||[];(Array.isArray(eq)?eq:[]).forEach((x,i)=>pe.run(rid,String(x.id||i),x.type||x.name||"",x.name||"",relNum165(x.qty??x.count??1),i,JSON.stringify(x)))
+   }
+  }
+  db.prepare("INSERT INTO meta(key,value) VALUES(?,?)").run("relational_reports_v1",JSON.stringify({at:now,reports:db.prepare("SELECT COUNT(*) n FROM reports").get().n,works:db.prepare("SELECT COUNT(*) n FROM report_works").get().n,people:db.prepare("SELECT COUNT(*) n FROM report_people").get().n,equipment:db.prepare("SELECT COUNT(*) n FROM report_equipment").get().n}));db.exec("COMMIT")
+ }catch(e){try{db.exec("ROLLBACK")}catch{}throw e}
+}
 function dbRead(){
  let db=sqliteDb163(),kv={};
  for(let row of db.prepare("SELECT key,value FROM kv").all()){try{kv[row.key]=JSON.parse(row.value)}catch{kv[row.key]=row.value}}
