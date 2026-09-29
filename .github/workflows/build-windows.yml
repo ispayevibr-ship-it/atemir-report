@@ -83,7 +83,7 @@ jobs:
           "release=$release" >> $env:GITHUB_OUTPUT
           Write-Host "Full release required: $release"
       - name: Publish public auto-update release
-        if: github.event_name == 'push' && (steps.version_bump.outputs.release == 'true' || steps.core_change.outputs.core == 'true')
+        if: github.event_name == 'push'
         shell: pwsh
         env:
           GH_TOKEN: ${{ secrets.UPDATE_REPO_TOKEN }}
