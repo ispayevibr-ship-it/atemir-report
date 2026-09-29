@@ -2176,3 +2176,18 @@ button[data-add="workDays"]:hover{
   line-height:1.25!important;
   font-weight:700!important;
 }
+
+/* v8.0.105 — точный размер только объёма в колонке «За последние дни» */
+.latestCard925.volumes925 .latestVol925>span:nth-child(2){
+  font-size:11px!important;
+  line-height:1.4!important;
+  font-weight:400!important;
+  color:#496579!important
+}
+.latestCard925.volumes925 .latestVol925 .latestVolumeValue105{
+  font-size:12px!important;
+  line-height:1.25!important;
+  font-weight:700!important;
+  color:#294b62!important;
+  text-align:right!important
+}
