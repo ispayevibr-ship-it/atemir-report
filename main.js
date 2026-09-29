@@ -142,7 +142,6 @@ function relationalGet169(key){
  if(s==="atemir-company-objects-v1"){let rows=db.prepare("SELECT id,raw_json FROM objects ORDER BY rowid").all();if(rows.length)return rows.map(r=>{let x=kvParseSafe165(r.raw_json,{});if(x.base)delete x.base;return Object.assign({id:r.id},x)})}
 }
 function kvGet164(key){let r=relationalGet169(key);if(r!==undefined)return r;return kvParse164(sqliteDb163().prepare("SELECT value FROM kv WHERE key=?").get(String(key)))}
-function kvAll164(){let out={};for(let row of sqliteDb163().prepare("SELECT key,value FROM kv").all())out[row.key]=kvParse164(row);return out}
 function kvPrefix164(prefix){let out={},p=String(prefix);for(let row of sqliteDb163().prepare("SELECT key,value FROM kv WHERE key LIKE ? ESCAPE '\\'").all(p.replace(/[\\%_]/g,x=>"\\"+x)+"%"))out[row.key]=kvParse164(row);return out}
 function syncRelational168(key,value){
  let db=sqliteDb163(),s=String(key),now=new Date().toISOString(),x=value||{};
@@ -168,9 +167,7 @@ function kvSet164(key,value){let db=sqliteDb163(),rel=isRelationalEntity172(key)
 function kvWriteMany164(entries={}){let db=sqliteDb163(),put=db.prepare("INSERT INTO kv(key,value,updated_at) VALUES(?,?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value,updated_at=excluded.updated_at"),del=db.prepare("DELETE FROM kv WHERE key=?"),now=new Date().toISOString();db.exec("BEGIN IMMEDIATE");try{for(let [key,value] of Object.entries(entries||{})){let rel=isRelationalEntity172(key);if(!rel)put.run(key,JSON.stringify(value),now);syncRelational168(key,value);if(rel)del.run(String(key))}db.exec("COMMIT");return true}catch(e){try{db.exec("ROLLBACK")}catch{}throw e}}
 ipcMain.handle("db:get",(_e,key)=>kvGet164(key));
 ipcMain.on("db:get-sync",(e,key)=>{e.returnValue=kvGet164(key)});
-ipcMain.on("db:all-sync",(e)=>{e.returnValue=kvAll164()});
 ipcMain.on("db:get-prefix-sync",(e,prefix)=>{e.returnValue=kvPrefix164(prefix)});
-ipcMain.on("db:set-sync",(e,key,value)=>{try{e.returnValue=kvSet164(key,value)}catch(err){console.error("DB sync save",err);e.returnValue=false}});
 ipcMain.handle("db:set",(_e,key,value)=>kvSet164(key,value));
 function relationalRemove169(key){let db=sqliteDb163(),s=String(key),m=s.match(/^atemir_entity_(.+)_(task|bom|report|invoice)_(.+)$/);if(m){let kind=m[2],id=m[3];if(kind==="task")db.prepare("DELETE FROM tasks WHERE id=?").run(id);else if(kind==="bom")db.prepare("DELETE FROM bom_marks WHERE task_id=?").run(id);else if(kind==="report")db.prepare("DELETE FROM reports WHERE id=?").run(id);else if(kind==="invoice")db.prepare("DELETE FROM invoices WHERE id=?").run(id);return}let a=s.match(/^atemir_entity_(.+)_(actedDays|penalties)$/);if(a){db.prepare(a[2]==="actedDays"?"DELETE FROM acted_days WHERE object_id=?":"DELETE FROM penalties WHERE object_id=?").run(a[1])}}
 ipcMain.handle("db:remove",(_e,key)=>{let db=sqliteDb163();db.exec("BEGIN IMMEDIATE");try{db.prepare("DELETE FROM kv WHERE key=?").run(String(key));relationalRemove169(key);db.exec("COMMIT");return true}catch(e){try{db.exec("ROLLBACK")}catch{}throw e}});
