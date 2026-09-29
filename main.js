@@ -7,6 +7,9 @@ function dbPath(){return path.join(app.getPath("userData"),DB_FILE_NAME)}
 function dbRead(){try{let x=JSON.parse(fs.readFileSync(dbPath(),"utf8"));return x&&typeof x==="object"?x:{version:1,kv:{}}}catch{return {version:1,kv:{}}}}
 function dbWrite(x){let file=dbPath(),tmp=file+".tmp";fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(tmp,JSON.stringify(x),"utf8");fs.renameSync(tmp,file)}
 ipcMain.handle("db:get",(_e,key)=>{let db=dbRead();return Object.prototype.hasOwnProperty.call(db.kv||{},key)?db.kv[key]:null});
+ipcMain.on("db:get-sync",(e,key)=>{let db=dbRead();e.returnValue=Object.prototype.hasOwnProperty.call(db.kv||{},key)?db.kv[key]:null});
+ipcMain.on("db:all-sync",(e)=>{e.returnValue=dbRead().kv||{}});
+ipcMain.on("db:set-sync",(e,key,value)=>{try{let db=dbRead();db.kv=db.kv||{};db.kv[key]=value;db.updatedAt=new Date().toISOString();dbWrite(db);e.returnValue=true}catch(err){console.error("DB sync save",err);e.returnValue=false}});
 ipcMain.handle("db:set",(_e,key,value)=>{let db=dbRead();db.kv=db.kv||{};db.kv[key]=value;db.updatedAt=new Date().toISOString();dbWrite(db);return true});
 ipcMain.handle("db:remove",(_e,key)=>{let db=dbRead();if(db.kv)delete db.kv[key];db.updatedAt=new Date().toISOString();dbWrite(db);return true});
 ipcMain.handle("db:migrate",(_e,entries={})=>{let db=dbRead(),added=0;db.kv=db.kv||{};for(let [key,value] of Object.entries(entries||{})){if(!Object.prototype.hasOwnProperty.call(db.kv,key)){db.kv[key]=value;added++}}db.migratedAt=db.migratedAt||new Date().toISOString();dbWrite(db);return {ok:true,added,path:dbPath()}});
