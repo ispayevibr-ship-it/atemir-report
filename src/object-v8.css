@@ -2069,3 +2069,11 @@ button[data-add="workDays"]:hover{
 .codeStatRow100>span{display:flex!important;flex-direction:column!important;gap:2px!important}
 .codeStatRow100 small{font:400 9px/1.2 Arial,sans-serif!important;color:#8998a1!important}
 .codeStatRow100 strong{font:700 11px/1.25 Arial,sans-serif!important;color:#24485d!important}
+
+/* v8.0.101 — акцент шифра в последних объёмах */
+.latestCard925.volumes925 .latestVol925>span:nth-child(2){
+  font-size:13px!important;
+  line-height:1.25!important;
+  font-weight:700!important;
+  color:#18384d!important
+}
