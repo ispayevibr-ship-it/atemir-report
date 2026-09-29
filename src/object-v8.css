@@ -1990,3 +1990,8 @@ button[data-add="workDays"]:hover{
 .reportEditor994 .reportPhotoEditor223 .photoload{display:inline-flex!important;align-items:center!important;margin-top:8px!important}
 .reportEditor994 .reportPhotoEditor223>small{display:inline-block!important;margin-left:10px!important;font-size:9px!important;color:#82929c!important}
 @media(max-width:1200px){.reportStructured{grid-template-columns:1fr!important}.reportEditor994>.grid.g3{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+
+/* v8.0.98 — три действия в строке ежедневного отчёта */
+.dailyActions981{min-width:118px!important}
+.dailyListCard981{grid-template-columns:190px 150px 165px 160px 230px minmax(260px,1fr) 118px!important}
+@media(max-width:1250px){.dailyListCard981{grid-template-columns:160px 120px 135px 125px 190px minmax(220px,1fr) 112px!important}}
