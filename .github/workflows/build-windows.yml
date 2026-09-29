@@ -41,8 +41,20 @@ jobs:
         run: npm install
       - name: Build Windows installer
         run: npx electron-builder --win nsis --x64 --publish never
-      - name: Build lightweight update package
+      - name: Detect core runtime changes
+        id: core_change
         if: github.event_name == 'push'
+        shell: pwsh
+        run: |
+          $changed = @(git diff-tree --no-commit-id --name-only -r $env:GITHUB_SHA)
+          $core = $false
+          foreach ($f in $changed) {
+            if ($f -eq "main.js" -or $f -eq "preload.js" -or $f -eq "package.json") { $core = $true }
+          }
+          "core=$($core.ToString().ToLower())" >> $env:GITHUB_OUTPUT
+          Write-Host "Core runtime changed: $core"
+      - name: Build lightweight update package
+        if: github.event_name == 'push' && steps.core_change.outputs.core != 'true'
         shell: pwsh
         run: |
           $version = node -p "require('./package.json').version"
@@ -102,7 +114,7 @@ jobs:
           gh release upload $tag @files --repo $repo --clobber
           if ($LASTEXITCODE -ne 0) { throw "Could not upload release assets for $tag" }
       - name: Publish lightweight update files
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && steps.core_change.outputs.core != 'true'
         shell: pwsh
         env:
           GH_TOKEN: ${{ secrets.UPDATE_REPO_TOKEN }}
