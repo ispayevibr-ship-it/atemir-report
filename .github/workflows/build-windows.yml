@@ -75,7 +75,7 @@ jobs:
           Copy-Item src/*.js hot-publish/src/
           Copy-Item src/*.css hot-publish/src/
           $files = Get-ChildItem hot-publish/src -File | ForEach-Object {
-            @{ path = "src/" + $_.Name; size = $_.Length }
+            @{ path = "src/" + $_.Name; size = $_.Length; sha256 = (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant() }
           }
           $size = ($files | Measure-Object -Property size -Sum).Sum
           @{ version=$version; size=$size; files=$files } | ConvertTo-Json -Depth 5 | Set-Content hot-publish/latest.json -Encoding UTF8
