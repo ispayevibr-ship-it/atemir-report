@@ -41,8 +41,16 @@ jobs:
             node --check $path
             if ($LASTEXITCODE -ne 0) { throw "Syntax error in src/index.html inline script #$i" }
           }
-      - name: Install dependencies
-        run: npm install
+      - name: Generate dependency lock
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+      - name: Verify reproducible dependency install
+        run: npm ci
+      - name: Upload generated lock
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-lock
+          path: package-lock.json
+          if-no-files-found: error
       - name: Build Windows installer
         run: npx electron-builder --win nsis --x64 --publish never
       - name: Detect core runtime changes
