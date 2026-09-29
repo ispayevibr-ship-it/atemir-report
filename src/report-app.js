@@ -2,10 +2,10 @@
 const $=s=>document.querySelector(s),esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const id=new URLSearchParams(location.search).get("object")||"default";let objects=[];try{if(window.atemirDesktop?.dbGetSync){let dbo=window.atemirDesktop.dbGetSync("atemir-company-objects-v1");objects=Array.isArray(dbo)?dbo:[]}else objects=JSON.parse(localStorage.getItem("atemir-company-objects-v1")||"[]")}catch{objects=[]}const obj=objects.find(x=>String(x.id)===String(id))||{name:"Объект",address:"",client:""};
 const schemeKey="atemir_scheme155__object_"+id;let schemeState={drawingName:"",drawingType:"",drawingData:"",bomName:"",bom:[],filter:"all"};try{let ss=window.atemirDesktop?.dbGetSync?.(schemeKey);if(ss&&typeof ss==="object")schemeState=Object.assign(schemeState,ss)}catch{}function saveScheme(){window.atemirDesktop?.dbSet?.(schemeKey,schemeState).catch?.(e=>console.error("Scheme save",e))}function dateDmy756(v){if(!v)return "—";let p=String(v).slice(0,10).split("-");return p.length===3?p[2]+"."+p[1]+"."+p[0]:String(v)}
-function reportDateRu721(v){if(!v)return"без даты";let p=String(v).slice(0,10).split("-"),months=["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];if(p.length!==3)return v;return (+p[2])+" "+months[(+p[1])-1]+" "+p[0]+"г."}
+
 function schemeNorm(v){return String(v||"").trim().toUpperCase().replace(/[–—−]/g,"-").replace(/\s+/g,"").replace(/^K(?=\d)/,"К").replace(/^B(?=\d)/,"В")}function schemeMounted(){let m={};savedWorkDays574().forEach(day=>(day.items||[]).forEach(x=>{let parts=String(x.mark||"").split(/[,;\/\s]+/).map(schemeNorm).filter(Boolean),q=Number(x.qty)||1;parts.forEach(z=>{m[z]=(m[z]||0)+(parts.length>1?1:q)})}));return m}function parseSchemeBom(text){let rows=[],seen={};String(text||"").split(/\r?\n/).forEach(line=>{let p=line.trim().split(/[;\t,]+/).map(x=>x.trim()).filter(Boolean),mark="",qty=1;p.forEach(v=>{let z=schemeNorm(v);if(/^[А-ЯA-Z]{0,4}\d+(?:[А-ЯA-Z]+)?(?:-\d+)?$/.test(z)&&!mark)mark=z});for(let i=p.length-1;i>=0;i--){let n=Number(String(p[i]).replace(",","."));if(Number.isFinite(n)&&n>0){qty=n;break}}if(mark){if(seen[mark])seen[mark].qty+=qty;else{seen[mark]={mark,qty};rows.push(seen[mark])}}});return rows}
 const key="atemir_v9__object_"+id,blank=()=>({version:72,base:{objectName:obj.name||"",address:obj.address||"",client:obj.client||""},reportDate:"",weather:{location:"",temp:"",wind:"",precip:""},reportPhotos:[],actedDays:[],penalties:[],workTypes:[],tasks:[],deadlines:[],workDays:[],invoices:[],workers:[],responsibles:[{role:"",fio:"",collapsed:false}],equipment:[]});
-let d;try{if(window.atemirDesktop?.dbGetSync){let dbd=window.atemirDesktop.dbGetSync(key);d=Object.assign(blank(),dbd&&typeof dbd==="object"?dbd:{})}else d=Object.assign(blank(),JSON.parse(localStorage.getItem(key)||"{}"))}catch{d=blank()}function dbPut140(k,v){window.atemirDesktop?.dbSet?.(k,v).catch?.(e=>console.error("Local DB save",e))}
+let d;try{if(window.atemirDesktop?.dbGetSync){let dbd=window.atemirDesktop.dbGetSync(key);d=Object.assign(blank(),dbd&&typeof dbd==="object"?dbd:{})}else d=Object.assign(blank(),JSON.parse(localStorage.getItem(key)||"{}"))}catch{d=blank()}
 async function dbHydrate140(){if(!window.atemirDesktop?.dbGet||window.atemirDesktop?.dbGetSync?.(entityPrefix144+"meta"))return;try{let x=await window.atemirDesktop.dbGet(key);if(x&&typeof x==="object"){d=Object.assign(blank(),x);await saveEntities144({...d,reportPhotos:[],workDays:stripAllPhotos142()});await retireLegacySnapshot145();render()}}catch(e){console.error("Local DB load",e)}}
 const entityPrefix144="atemir_entity_"+id+"_";
 function entityEntries144(payload){
@@ -211,7 +211,7 @@ function stripAllPhotos142(){return (d.workDays||[]).map(day=>({...day,photos:[]
 function ensureStableIds538(){let changed=false;(d.workDays||[]).forEach(day=>{if(!day.id){day.id=uid538();changed=true}(day.items||[]).forEach(x=>{if(!x.id){x.id=uid538();changed=true}})});return changed}
 async function loadWorkPhotos530(doRender=true){try{let idsChanged=ensureStableIds538();idsChanged=ensureInvoiceIds575()||idsChanged;idsChanged=ensureTaskLinks580()||idsChanged;let db=await photoDb(),tx=db.transaction("photos","readwrite"),store=tx.objectStore("photos"),pending=[],migrated=false;(d.workDays||[]).forEach((day,di)=>(day.items||[]).forEach((x,ii)=>{pending.push(new Promise(done=>{let stable=workPhotoKey530(di,ii),legacy="work_"+id+"_"+di+"_"+ii,r=store.get(stable);r.onsuccess=()=>{if(Array.isArray(r.result)){x.photos=r.result;done();return}let lr=store.get(legacy);lr.onsuccess=()=>{if(Array.isArray(lr.result)&&lr.result.length){x.photos=lr.result;let w=store.put([...lr.result],stable);w.onsuccess=()=>{migrated=true;done()};w.onerror=()=>done();return}if(Array.isArray(x.photos)&&x.photos.length){let photos=[...x.photos],w=store.put(photos,stable);w.onsuccess=()=>{x.photos=photos;migrated=true;done()};w.onerror=()=>done()}else done()};lr.onerror=()=>done()};r.onerror=()=>done()}))}));await Promise.all(pending);if(migrated||idsChanged){let payload={...d,reportPhotos:[],workDays:stripAllPhotos142()},ok=await saveEntities144(payload);if(!ok)console.error("Photo migration entity save failed")}if(doRender)render()}catch(e){console.error("Work photo load",e)}}
 async function saveWorkPhotos530(di,ii){try{let db=await photoDb(),tx=db.transaction("photos","readwrite"),x=d.workDays?.[di]?.items?.[ii];tx.objectStore("photos").put(Array.isArray(x?.photos)?x.photos:[],workPhotoKey530(di,ii))}catch{}}
-function stripWorkPhotos530(){return (d.workDays||[]).map(day=>({...day,items:(day.items||[]).map(x=>({...x,photos:[]}))}))}
+
 function savedWorkDays574(){return (d.workDays||[]).filter(day=>day&&day.editing===false&&(day.items||[]).every(x=>x.editing===false))}
 function seq764(arr,item){let i=(arr||[]).indexOf(item);return i<0?"—":String((arr||[]).length-i)}
 function taskSeq764(t){let i=(d.tasks||[]).indexOf(t);return i<0?"—":String(i+1)}
@@ -220,12 +220,12 @@ function ensureTaskLinks580(){let changed=false,link=x=>{if(x.taskId&&d.tasks.so
 
 function compressPhoto(file){return new Promise((ok,no)=>{let im=new Image(),u=URL.createObjectURL(file),done=false,finish=(v,e)=>{if(done)return;done=true;URL.revokeObjectURL(u);e?no(e):ok(v)};im.onload=()=>{try{let scale=Math.min(1,2560/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.width*scale));c.height=Math.max(1,Math.round(im.height*scale));let ctx=c.getContext("2d");ctx.drawImage(im,0,0,c.width,c.height);finish(c.toDataURL("image/jpeg",.82))}catch(e){finish(null,e)}};im.onerror=e=>finish(null,e);im.src=u})}
 
-function workPhotosHtml(x,di,ii,show){if(!show)return "";x.photos=Array.isArray(x.photos)?x.photos:[];return '<div class="workphotos"><div class="photohead"><b>Фотографии</b><span>'+x.photos.length+'/12</span></div><div class="photogrid">'+x.photos.map((p,pi)=>'<div class="photothumb"><img src="'+p+'" alt="Фото"><button type="button" data-work-photo-del="'+di+':'+ii+':'+pi+'">×</button></div>').join("")+'</div><label class="primary photoload">Загрузить до 12 фото<input type="file" accept="image/*" multiple data-work-photo="'+di+':'+ii+'"></label><small>К каждой выполненной работе можно загрузить до 12 фото. Новые фотографии добавляются к уже загруженным для этой работы.</small></div>'}
+
 function field(label,path,type="text"){let v=path.reduce((o,k)=>o?.[k],d)??"";return '<div><label>'+label+'</label><input data-field="'+path.join(".")+'" type="'+type+'" value="'+esc(v)+'"></div>'}
 function card(title,body){return '<div class="card"><h2>'+title+'</h2>'+body+'</div>'}
 const UNITS=["тн","м2","м3","кг","шт","м","компл."];
 function canonUnit690(v){return String(v||"").trim().replace(/м²/gi,"м2").replace(/м³/gi,"м3").replace(/м\^2/gi,"м2").replace(/м\^3/gi,"м3")}
-function selectHtml(values,current,attr,placeholder="— выберите —"){let a=[...new Set((values||[]).filter(Boolean))];return '<select '+attr+'>'+(placeholder?'<option value="">'+placeholder+'</option>':'')+a.map(v=>'<option value="'+esc(v)+'"'+(String(v)===String(current)?' selected':'')+'>'+esc(v)+'</option>').join("")+'</select>'}
+
 function unitHtml(current,attr){current=canonUnit690(current);let custom=current&&!UNITS.includes(current);return '<select '+attr+'>'+UNITS.map(v=>'<option value="'+v+'"'+(v===current?' selected':'')+'>'+v+'</option>').join("")+'<option value="__custom__"'+(custom?' selected':'')+'>Другая</option></select><input '+attr.replace("data-work=","data-work-custom=").replace("data-inv=","data-inv-custom=")+' value="'+(custom?esc(current):"")+'" placeholder="Своя единица измерения" style="margin-top:4px;'+(custom?"":"display:none")+'">'}
 
 function rows(name,title,fields,maker){let arr=d[name]||[],h='<div class="toolbar"><button class="primary" data-add="'+name+'">+ Добавить</button></div>';if(!arr.length)return h+'<div class="empty">Пока нет данных</div>';arr.forEach((x,i)=>{h+='<div class="card"><div class="rowhead"><b>'+title+' '+(i+1)+'</b><button class="danger" data-del="'+name+':'+i+'">Удалить</button></div><div class="grid g3">';fields.forEach(f=>{h+='<div><label>'+f[0]+'</label><input data-item="'+name+':'+i+':'+f[1]+'" type="'+(f[2]||"text")+'" value="'+esc(x[f[1]]??"")+'"></div>'});h+='</div></div>'});return h}
@@ -268,7 +268,7 @@ function renderDeadlines(){
  const bottom='<div class="deadlineBottom766"><div><h3>Готовность по видам работ</h3><div class="tablewrap"><table><thead><tr><th>Вид работ</th><th>План</th><th>Факт</th><th>Завезено</th><th>Готовность</th><th>Осталось</th></tr></thead><tbody>'+table+'</tbody></table></div></div><div class="deadlineInfo766"><h3>Ключевые даты</h3><p><span>Начало работ</span><b>'+dateDmy756(projectStart.toISOString().slice(0,10))+'</b></p><p><span>Плановое завершение</span><b>'+dateDmy756(projectEnd.toISOString().slice(0,10))+'</b></p><p><span>До завершения</span><b class="'+(leftDays<0?'bad766':'good766')+'">'+leftDays+' дней</b></p><p><span>Работ с отставанием</span><b class="bad766">'+late+'</b></p><p><span>В срок / опережение</span><b class="good766">'+ok+'</b></p><p><span>Завершено</span><b>'+finished+'</b></p></div></div>';
  return '<div class="deadlinePage766"><div class="toolbar"><button class="primary" data-edit-task-deadlines537>Редактировать сроки</button></div>'+kpi+'<div class="card deadlineMain766"><div class="rowhead"><div><b>График выполнения работ</b><div class="muted">План, факт и поставки по каждому виду работ</div></div><b>Сегодня '+dateDmy756(todayIso)+'</b></div><div class="deadlineMonth766"><div></div><div class="deadlineMonths766">'+monthHead+'</div><div>Готовность</div><div>Отклонение</div></div>'+rows+'<div class="deadlineLegend766"><span class="p766">План</span><span class="f766">Факт</span><span class="s766">Завезено по накладным</span><span class="t766">Сегодня</span></div></div>'+bottom+'</div>';
 }
-function workCalendarHtml(){let workDates=savedWorkDays574().filter(x=>x.date&&x.items&&x.items.some(q=>(parseFloat(String(q.qty||0).replace(",","."))||0)*(parseFloat(String(q.per||1).replace(",","."))||1)>0)).map(x=>x.date),actDates=(d.actedDays||[]).filter(x=>x.date).map(x=>x.date),allDates=[...workDates,...actDates];if(!allDates.length)return '<div class="empty">Календарь появится после добавления выполненных или актированных дней.</div>';let ws=new Set(workDates),as=new Set(actDates),months=["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],keys=[...new Set(allDates.map(x=>(+x.slice(0,4))*12+(+x.slice(5,7)-1)))].sort((a,b)=>a-b).slice(-3),renderMonth=key=>{let y=Math.floor(key/12),m=key%12,off=(new Date(y,m,1).getDay()+6)%7,days=new Date(y,m+1,0).getDate(),cells=["Пн","Вт","Ср","Чт","Пт","Сб","Вс"].map(n=>'<div class="calHead">'+n+'</div>');for(let z=0;z<off;z++)cells.push('<div class="calDay empty"></div>');for(let n=1;n<=days;n++){let ds=y+"-"+String(m+1).padStart(2,"0")+"-"+String(n).padStart(2,"0"),w=ws.has(ds),aa=as.has(ds),cl=w&&aa?"both":w?"work":aa?"acted":"";cells.push('<div class="calDay '+cl+'"><b>'+n+'</b></div>')}return '<div class="monthCard"><div class="monthTitle">'+months[m]+' '+y+'</div><div class="workCalendar">'+cells.join("")+'</div></div>'};return '<div class="calendarLegend512"><span><i class="lgWork512"></i>Рабочий день</span><span><i class="lgAct512"></i>Актированный день</span></div><div class="multiCalendar calendarActiveMonths753">'+keys.map(renderMonth).join("")+'</div>'}
+
 function deadlineAlerts528(){
   const today=d.reportDate||new Date().toISOString().slice(0,10);
   const td=new Date(today+"T12:00:00");
@@ -353,8 +353,8 @@ function deadlineAlerts528(){
       '<div><small>Темп выполнения</small><b>'+qtyFmt723(actualRate,2)+' / '+qtyFmt723(requiredRate,2)+' '+esc(unit)+'/день</b><span>Факт / необходимо</span></div>'+
     '</div></div></div>';
 }
-function objectSchedule248(){let today=d.reportDate||new Date().toISOString().slice(0,10),num=v=>parseFloat(String(v??"").replace(",","."))||0,total=(q,p)=>num(q)*(num(p)||1),done=t=>savedWorkDays574().reduce((s,day)=>s+(day.items||[]).filter(x=>((x.taskId&&t.id)?String(x.taskId)===String(t.id):(String(x.type||"")===String(t.type||"")&&String(x.code||"")===String(t.code||"")&&(!t.unit||!x.unit||String(x.unit)===String(t.unit))))).reduce((a,x)=>a+total(x.qty,x.per),0),0),rows=d.tasks.filter(t=>t.start&&t.date&&num(t.volume)>0).map(t=>{let st=new Date(t.start+"T12:00:00"),en=new Date(t.date+"T12:00:00"),td=new Date(today+"T12:00:00"),days=Math.max(1,Math.floor((en-st)/86400000)+1),elapsed=td<st?0:td>en?days:Math.floor((td-st)/86400000)+1,plan=Math.min(num(t.volume),num(t.volume)/days*elapsed),fact=done(t),delta=fact-plan,pct=num(t.volume)?Math.max(0,Math.min(100,fact/num(t.volume)*100)):0,rate=num(t.volume)/days,dayDelta=rate?delta/rate:0,status=Math.abs(delta)<.0001?"По плану":delta<0?"Отставание":"Опережение",dayText=Math.abs(dayDelta)<.05?"":" · "+Math.round(Math.abs(dayDelta))+" дн.";return '<div class="schedule248"><div><b>'+esc(t.type||"Работа")+'</b><small>'+esc(t.code||"Без шифра")+' · '+esc(dateDmy756(t.start))+' → '+esc(dateDmy756(t.date))+'</small></div><div class="scheduleTrack248"><i style="width:'+pct+'%"></i></div><div class="scheduleNums248"><b>'+pct.toFixed(1)+'%</b><span class="'+(delta<-.0001?'late248':delta>.0001?'ahead248':'')+'">'+status+(status==="По плану"?"":" "+qtyFmt723(Math.abs(delta),2)+" "+esc(t.unit||"")+dayText)+'</span><small>План на '+esc(today)+': '+qtyFmt723(plan,2)+' · факт: '+qtyFmt723(fact,2)+' '+esc(t.unit||"")+'</small></div></div>'}).join("");return rows||'<div class="empty">Чтобы увидеть график, задайте для вида работ проектный объём, дату начала и дату окончания.</div>'}
-function monthlyDynamics248(){let days=[...savedWorkDays574()].filter(x=>x.date).sort((a,b)=>String(a.date).localeCompare(String(b.date)));if(!days.length)return '<div class="empty">График появится после ежедневных отчётов.</div>';let today=new Date(),ym=today.getFullYear()+"-"+String(today.getMonth()+1).padStart(2,"0"),months=[...new Set(days.map(x=>String(x.date).slice(0,7)))],month=months.includes(ym)?ym:months.at(-1),inMonth=days.filter(x=>String(x.date).startsWith(month)),num=v=>parseFloat(String(v??"").replace(",","."))||0,total=(q,p)=>num(q)*(num(p)||1),groups={};inMonth.forEach(day=>(day.items||[]).forEach(x=>{let k=(x.type||"Работа")+"|||"+(x.code||"")+"|||"+(x.unit||"");if(!groups[k])groups[k]={type:x.type||"Работа",code:x.code||"",unit:x.unit||"",days:{},sum:0};let v=total(x.qty,x.per);groups[k].days[day.date]=(groups[k].days[day.date]||0)+v;groups[k].sum+=v}));let monthNames=["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"],palette=["barA719","barB719","barC719","barD719","barE719"],rows=Object.values(groups).map(g=>{let dates=Object.keys(g.days).sort(),max=Math.max(1,...dates.map(dt=>g.days[dt])),bars=dates.map((dt,i)=>{let v=g.days[dt],h=Math.max(v?3:0,v/max*100),label=(Math.round(v*1000)/1000).toLocaleString("ru-RU",{maximumFractionDigits:3});return '<div class="monthBar719" title="'+esc(dateDmy756(dt))+' · '+esc(label)+' '+esc(g.unit)+'"><b>'+esc(label)+'</b><div class="barSlot719"><i class="'+palette[i%palette.length]+'" style="height:'+h+'%"></i></div><small>'+esc(dt.slice(8))+'.'+esc(dt.slice(5,7))+'</small></div>'}).join("");return '<div class="monthPanel719"><div class="monthTitle719"><b>'+esc(g.type)+' · '+esc(g.code||"Без шифра")+'</b><small>'+monthNames[+month.slice(5,7)-1]+' '+month.slice(0,4)+' г. · '+esc(g.unit)+' · за месяц '+g.sum.toLocaleString("ru-RU",{maximumFractionDigits:3})+'</small></div><div class="monthScroll719"><div class="monthChart719">'+bars+'</div></div></div>'}).join("");return rows||'<div class="empty">В этом месяце выполненных объёмов нет.</div>'}
+
+
 function homeCodeStats100(){const num=v=>parseFloat(String(v??"").replace(",","."))||0,groups={};(d.tasks||[]).forEach(t=>{let code=String(t?.code||"").trim();if(!code)return;let key=code+"|||"+String(t.unit||"");groups[key]||(groups[key]={code,unit:t.unit||"",delivered:0,done:0,days:new Set(),months:new Set()})});(d.invoices||[]).forEach(inv=>(inv?.items||[]).forEach(x=>{let code=String(x?.code||"").trim();if(!code)return;let key=code+"|||"+String(x.unit||""),g=groups[key]||(groups[key]={code,unit:x.unit||"",delivered:0,done:0,days:new Set(),months:new Set()});g.delivered+=num(x.qty)*(num(x.per)||1)}));(d.workDays||[]).filter(x=>x&&x.editing!==true).forEach(day=>(day.items||[]).forEach(x=>{let code=String(x?.code||"").trim();if(!code)return;let key=code+"|||"+String(x.unit||""),g=groups[key]||(groups[key]={code,unit:x.unit||"",delivered:0,done:0,days:new Set(),months:new Set()}),v=num(x.qty)*(num(x.per)||1);g.done+=v;if(v>0&&day.date){g.days.add(day.date);g.months.add(String(day.date).slice(0,7))}}));let rows=Object.values(groups).sort((a,b)=>a.code.localeCompare(b.code,"ru")).map(g=>{let avgDay=g.days.size?g.done/g.days.size:0,avgMonth=g.months.size?g.done/g.months.size:0;return '<div class="codeStatRow100"><b>'+esc(g.code)+'</b><span><small>Поставлено</small><strong>'+qtyFmt723(g.delivered)+' '+esc(g.unit)+'</strong></span><span><small>Среднее выполнено за рабочий день</small><strong>'+qtyFmt723(avgDay)+' '+esc(g.unit)+'</strong></span><span><small>Среднее выполнено за месяц</small><strong>'+qtyFmt723(avgMonth)+' '+esc(g.unit)+'</strong></span></div>'}).join("");return '<section class="homeCodeStats100"><div class="latestHead925"><h3>Объёмы по шифрам</h3><small>По сохранённым отчётам и накладным</small></div><div class="codeStatHead100"><span>Шифр</span><span>По накладным</span><span>Среднее выполнено / день</span><span>Среднее выполнено / месяц</span></div><div class="codeStatRows100">'+(rows||'<div class="empty">Нет данных по шифрам.</div>')+'</div></section>'}
 function homeInvoices988(){const num=v=>parseFloat(String(v??"").replace(",","."))||0,arr=[...(d.invoices||[])].filter(Boolean).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))).slice(0,8);let head='<div class="invoiceHead988"><span>№ накладной</span><span>Дата</span><span>Шифр</span><span>Общий объём</span></div>';if(!arr.length)return '<section class="homeInvoices988"><div class="latestHead925"><h3>Накладные</h3><button data-home-nav="invoices">Все накладные</button></div><div class="invoiceList988">'+head+'<div class="invoiceRows988"><div class="empty">Накладных пока нет.</div></div></div></section>';let rows=arr.map(inv=>{let invIndex=(d.invoices||[]).indexOf(inv),items=Array.isArray(inv.items)?inv.items:[],codes=[...new Set(items.map(x=>String(x?.code||"").trim()).filter(Boolean))],byUnit={};items.forEach(x=>{if(!x)return;let u=String(x.unit||"").trim()||"ед.",v=num(x.qty)*(num(x.per)||1);byUnit[u]=(byUnit[u]||0)+v});let totals=Object.entries(byUnit).map(([u,v])=>'<span class="invoiceUnit988"><b>'+qtyFmt723(v)+'</b> '+esc(u)+'</span>').join("");return '<button type="button" class="invoiceRow988 invoiceLink989" data-home-invoice989="'+invIndex+'"><span class="invoiceNo989"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v5h5M9 12h7M9 16h7"/></svg><b>№ '+esc(inv.no||inv.number||seq764(d.invoices,inv))+'</b></span><span>'+esc(inv.date?dateDmy756(inv.date):"—")+'</span><span class="invoiceCodes988">'+(codes.length?codes.map(esc).join(", "):"—")+'</span><strong class="invoiceTotals988">'+(totals||"—")+'</strong></button>'}).join("");return '<section class="homeInvoices988"><div class="latestHead925"><h3>Накладные</h3><button data-home-nav="invoices">Все накладные</button></div><div class="invoiceList988">'+head+'<div class="invoiceRows988">'+rows+'</div></div></section>'}
 function homeLatestRow925(reports,latestPhotos){
@@ -409,134 +409,7 @@ function homeNextBlock923(){
  const ds=x=>new Date(x+"T12:00:00"),min=new Date(Math.min(...timed.map(t=>ds(t.start)))),max=new Date(Math.max(...timed.map(t=>ds(t.date)))),span=Math.max(1,(max-min)/ms+1),left=x=>Math.max(0,(x-min)/ms/span*100),width=(a,b)=>Math.max(.8,((b-a)/ms+1)/span*100),today=new Date(),months=[];let m=new Date(min.getFullYear(),min.getMonth(),1,12);while(m<=max&&months.length<24){let n=new Date(m.getFullYear(),m.getMonth()+1,1,12),a=m<min?min:m,b=n>max?new Date(max.getTime()+ms):n;months.push({d:new Date(m),w:Math.max(3,(b-a)/ms/span*100)});m=n}let mn=["Янв","Фев","Мар","Апр","Май","Июн","Июл","Авг","Сен","Окт","Ноя","Дек"],mh=months.map(x=>'<span style="width:'+x.w+'%">'+mn[x.d.getMonth()]+'</span>').join(""),todayLine=today>=min&&today<=max?'<i class="today923" style="left:'+left(today)+'%"></i>':"",bars=timed.map((t,i)=>{let st=ds(t.start),en=ds(t.date),fact=done(t),pct=Math.min(100,num(t.volume)?fact/num(t.volume)*100:0),factEnd=pct<=0?st:new Date(Math.min(en.getTime(),st.getTime()+Math.max(0,pct/100*((en-st)/ms+1)-1)*ms));return '<div class="scheduleRow923"><span title="'+esc(t.type||"Работа")+'">'+esc(t.type||"Работа")+'</span><div><i class="plan923" style="left:'+left(st)+'%;width:'+width(st,en)+'%"></i>'+(pct>0?'<i class="fact923 '+colors[i%colors.length]+'" style="left:'+left(st)+'%;width:'+width(st,factEnd)+'%"></i>':'')+todayLine+'</div></div>'}).join("");
  return '<section class="homeWorkSchedule923"><div class="homeReady923"><h3>Готовность по видам работ</h3><div class="readyHead923"><span>Вид работ</span><span>Шифр</span><span>Ед. изм.</span><span>План</span><span>Факт</span><span>%</span><span>Готовность</span></div>'+rows+'</div><div class="homeSchedule923"><div class="scheduleTitle923"><h3>График сроков по видам работ</h3><div><span class="lgPlan923">План</span><span class="lgFact923">Факт</span><span class="lgToday923">Сегодня</span></div></div><div class="scheduleMonths923"><span></span><div>'+mh+'</div></div>'+bars+'</div></section>';
 }
-function planFactChart737(){
-  const num=v=>parseFloat(String(v??"").replace(",","."))||0;
-  const all=(d.tasks||[]).filter(t=>t.start&&(t.date||t.end)&&num(t.volume)>0);
-  if(!all.length)return '<div class="empty">Чтобы построить график, задайте даты начала, окончания и проектные объёмы.</div>';
 
-  let sel=window.planFactFilter739||"all";
-  const pairs=[...new Map(all.map(t=>[
-    (t.type||"—")+"|||"+(t.code||"—"),
-    {type:t.type||"—",code:t.code||"—"}
-  ])).values()];
-  let tasks=sel==="all"?all:all.filter(t=>((t.type||"—")+"|||"+(t.code||"—"))===sel);
-  if(!tasks.length){sel="all";tasks=all}
-  const selected=sel==="all"?null:pairs.find(x=>(x.type+"|||"+x.code)===sel);
-  const opts='<option value="all"'+(sel==="all"?' selected':'')+'>Весь объект</option>'+
-    pairs.map(x=>{
-      const v=x.type+"|||"+x.code;
-      return '<option value="'+esc(v)+'"'+(v===sel?' selected':'')+'>'+esc(x.type)+' — '+esc(x.code)+'</option>';
-    }).join('');
-
-  const start=new Date(Math.min(...tasks.map(t=>new Date(t.start+"T12:00:00"))));
-  const end=new Date(Math.max(...tasks.map(t=>new Date(t.date+"T12:00:00"))));
-  const monthKey=x=>x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0");
-  const monthName=x=>["Янв","Фев","Мар","Апр","Май","Июн","Июл","Авг","Сен","Окт","Ноя","Дек"][x.getMonth()];
-  const months=[];
-  let cur=new Date(start.getFullYear(),start.getMonth(),1,12);
-  while(cur<=end&&months.length<36){
-    months.push(new Date(cur));
-    cur=new Date(cur.getFullYear(),cur.getMonth()+1,1,12);
-  }
-  if(!months.some(x=>monthKey(x)===monthKey(end)))months.push(new Date(end.getFullYear(),end.getMonth(),1,12));
-
-  const workDays=savedWorkDays574();
-  const matchesTask=(x,t)=>((x.taskId&&t.id)
-    ?String(x.taskId)===String(t.id)
-    :(String(x.type||"")===String(t.type||"")&&String(x.code||"")===String(t.code||"")));
-  const workDone=(t,date)=>workDays
-    .filter(day=>day.date&&new Date(day.date+"T12:00:00")<=date)
-    .reduce((sum,day)=>sum+(day.items||[])
-      .filter(x=>matchesTask(x,t))
-      .reduce((z,x)=>z+num(x.qty)*(num(x.per)||1),0),0);
-
-  const totalProject=tasks.reduce((sum,t)=>sum+num(t.volume),0);
-  const pts=months.map((m,i)=>{
-    const pointEnd=new Date(m.getFullYear(),m.getMonth()+1,0,23,59,59);
-    const planDone=tasks.reduce((sum,t)=>{
-      const ts=new Date(t.start+"T12:00:00");
-      const te=new Date((t.date||t.end)+"T12:00:00");
-      const vol=num(t.volume);
-      if(pointEnd<ts)return sum;
-      if(pointEnd>=te)return sum+vol;
-      const share=Math.min(1,Math.max(0,pointEnd-ts)/Math.max(1,te-ts));
-      return sum+vol*share;
-    },0);
-    const factDone=tasks.reduce((sum,t)=>sum+Math.min(num(t.volume),workDone(t,pointEnd)),0);
-    return {
-      x:months.length===1?50:8+i*(84/(months.length-1)),
-      plan:totalProject?Math.min(100,planDone/totalProject*100):0,
-      fact:totalProject?Math.min(100,factDone/totalProject*100):0,
-      label:monthName(m)
-    };
-  });
-
-  let lastFactMonth=-1;
-  workDays.forEach(day=>{
-    if(!day.date)return;
-    const dm=new Date(day.date+"T12:00:00");
-    const hasSelectedWork=(day.items||[]).some(x=>tasks.some(t=>matchesTask(x,t)));
-    if(!hasSelectedWork)return;
-    const idx=months.findIndex(m=>m.getFullYear()===dm.getFullYear()&&m.getMonth()===dm.getMonth());
-    if(idx>lastFactMonth)lastFactMonth=idx;
-  });
-  const startMonthIndex=months.findIndex(m=>m.getFullYear()===start.getFullYear()&&m.getMonth()===start.getMonth());
-  const startMonthDays=Math.max(1,new Date(start.getFullYear(),start.getMonth()+1,0).getDate());
-  const startX=startMonthIndex<0?8:(months.length===1?8:8+(startMonthIndex+Math.max(0,(start.getDate()-1)/startMonthDays))*(84/(months.length-1)));
-  const planPts=[{x:startX,plan:0,fact:0},...pts.slice(Math.max(0,startMonthIndex)).filter(p=>p.x>startX)];
-  const factPts=lastFactMonth>=0?[{x:startX,plan:0,fact:0},...pts.slice(Math.max(0,startMonthIndex),lastFactMonth+1).filter(p=>p.x>startX)]:[];
-  const chartPts=k=>(k==="fact"?factPts:planPts);
-  const poly=k=>chartPts(k).map(p=>p.x+","+(92-p[k]*.72)).join(" ");
-  const dots=k=>chartPts(k).map(p=>'<circle cx="'+p.x+'" cy="'+(92-p[k]*.72)+'" r="1.15" vector-effect="non-scaling-stroke"></circle>').join("");
-  const labels=pts.map(p=>'<span style="left:'+p.x+'%">'+p.label+'</span>').join("");
-  const current=factPts.at(-1)||pts.at(0)||{plan:0,fact:0};
-  const delta=current.fact-current.plan;
-  const deltaText=Math.abs(delta)<.5?"По плану":delta>0
-    ?"Опережение "+qtyFmt723(Math.abs(delta),1)+"%"
-    :"Отставание "+qtyFmt723(Math.abs(delta),1)+"%";
-  const title=selected?selected.type+" — "+selected.code:"Весь объект";
-  const factArea=factPts.length?'8,92 '+poly("fact")+' '+factPts.at(-1).x+',92':'';
-  if(sel==="all"){
-    const invoices=d.invoices||[];
-    const norm761=v=>String(v||"").toUpperCase().replace(/[–—−]/g,"-").replace(/\s+/g,"").trim();
-    const invoiceMatches=(x,t)=>{if(x.taskId&&t.id)return String(x.taskId)===String(t.id);return norm761(x.code)===norm761(t.code)&&(!x.type||!t.type||norm761(x.type)===norm761(t.type));};
-    const delivered=t=>invoices.reduce((sum,inv)=>sum+(inv.items||[]).filter(x=>invoiceMatches(x,t)).reduce((z,x)=>z+num(x.qty)*(num(x.per)||1),0),0);
-    const now=new Date();
-    const rows=pairs.map(pair=>{
-      const group=all.filter(t=>String(t.type||"—")===String(pair.type)&&String(t.code||"—")===String(pair.code));
-      const total=group.reduce((s,t)=>s+num(t.volume),0);
-      const mounted=group.reduce((s,t)=>s+Math.min(num(t.volume),workDone(t,new Date(8640000000000000))),0);
-      const supplied=group.reduce((s,t)=>s+Math.min(num(t.volume),delivered(t)),0);
-      const planned=group.reduce((s,t)=>{
-        const v=num(t.volume),a=new Date(t.start+"T12:00:00"),b=new Date((t.date||t.end)+"T12:00:00");
-        if(!v||!a||!b)return s;
-        const den=Math.max(1,b-a),p=now<=a?0:now>=b?1:Math.max(0,Math.min(1,(now-a)/den));
-        return s+v*p;
-      },0);
-      return {pair,total,pp:total?Math.min(100,planned/total*100):0,mp:total?Math.min(100,mounted/total*100):0,sp:total?Math.min(100,supplied/total*100):0};
-    });
-    const bars=rows.map(r=>'<div class="stateRow761"><div class="stateName761"><b>'+esc(r.pair.type)+'</b><small>'+esc(r.pair.code)+'</small></div><div class="stateBars761"><div class="stateTrack761"><i class="plan761" style="width:'+r.pp+'%"></i><span>'+qtyFmt723(r.pp,1)+'%</span></div><div class="stateTrack761"><i class="fact761" style="width:'+r.mp+'%"></i><span>'+qtyFmt723(r.mp,1)+'%</span></div><div class="stateTrack761"><i class="supply761" style="width:'+r.sp+'%"></i><span>'+qtyFmt723(r.sp,1)+'%</span></div></div></div>').join("");
-    return '<div class="planFact737 planFactPro738 stateChart761"><div class="planFactFilter739"><label>Показать график по</label><select id="planFactFilter739">'+opts+'</select></div><div class="planFactHead738"><div><b>Состояние работ по объекту</b><small>План на текущую дату, фактический монтаж и завезённые материалы</small></div></div><div class="stateLegend761"><span><i class="plan761"></i>План на сегодня</span><span><i class="fact761"></i>Смонтировано</span><span><i class="supply761"></i>Завезено</span></div><div class="stateScale761"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div><div class="stateRows761">'+bars+'</div></div>';
-  }
-
-  return '<div class="planFact737 planFactPro738">'+
-    '<div class="planFactFilter739"><label>Показать график по</label><select id="planFactFilter739">'+opts+'</select></div>'+
-    '<div class="planFactHead738"><div><b>'+esc(title)+'</b><small>План и фактическое выполнение · накопительная готовность</small></div>'+
-    '<div class="planFactStats738"><span class="planStat738">План <b>'+qtyFmt723(current.plan,1)+'%</b></span>'+
-    '<span class="factStat738">Факт <b>'+qtyFmt723(current.fact,1)+'%</b></span>'+
-    '<span class="'+(delta<-.5?"lateStat738":delta>.5?"aheadStat738":"evenStat738")+'">'+deltaText+'</span></div></div>'+
-    '<div class="chartLegend737"><span class="plan737">● План</span><span class="fact737">● Факт</span></div>'+
-    '<div class="chartArea737"><div class="yLabels737"><span>100%</span><span>75%</span><span>50%</span><span>25%</span><span>0%</span></div>'+
-    '<svg viewBox="0 0 100 100" preserveAspectRatio="none"><g class="grid737">'+
-    '<line x1="8" y1="20" x2="92" y2="20"/><line x1="8" y1="38" x2="92" y2="38"/>'+
-    '<line x1="8" y1="56" x2="92" y2="56"/><line x1="8" y1="74" x2="92" y2="74"/>'+
-    '<line x1="8" y1="92" x2="92" y2="92"/></g>'+
-    '<polygon class="areaPlan738" points="8,92 '+poly("plan")+' 92,92"/>'+
-    '<polyline class="linePlan737" points="'+poly("plan")+'"/><g class="dotsPlan737">'+dots("plan")+'</g>'+
-    '<polygon class="areaFact738" points="'+factArea+'"/>'+
-    '<polyline class="lineFact737" points="'+poly("fact")+'"/><g class="dotsFact737">'+dots("fact")+'</g></svg>'+
-    '<div class="xLabels737">'+labels+'</div></div></div>';
-}
 function marksSummary523(){
  let norm=v=>String(v||"").trim().toUpperCase().replace(/^K(?=\\d)/,"К").replace(/^B(?=\\d)/,"В").replace(/\\s+/g,""),num=v=>parseFloat(String(v??"").replace(",", "."))||0,groups={};
  (d.tasks||[]).forEach(t=>{let key=(t.type||"—")+"|||"+(t.code||"—"),g=groups[key]||(groups[key]={key,type:t.type||"—",code:t.code||"—",rows:[]});(t.bom||[]).forEach(r=>{let total=num(r.qty),mounted=savedWorkDays574().reduce((a,day)=>a+(day.items||[]).filter(x=>((x.taskId&&t.id)?String(x.taskId)===String(t.id):(String(x.code||"")===String(t.code||"")&&(!x.type||!t.type||String(x.type)===String(t.type))))&&norm(x.mark)===norm(r.mark)&&(!t.unit||!x.unit||String(x.unit)===String(t.unit))).reduce((q,x)=>q+num(x.qty),0),0),done=Math.min(total,mounted),pct=total?Math.min(100,done/total*100):0;g.rows.push({mark:r.mark||"Без марки",name:r.name||"",total,done,pct,weight:num(r.weight||r.weightUnit||0),weightTotal:num(r.weightTotal||0)})})});
@@ -548,7 +421,7 @@ function marksSummary523(){
  let docIcon931='<svg class="previewSvg943" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v5h5M9 12h6M9 16h6"/></svg>',photoIcon931='<svg class="previewSvg943" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m5 17 4-4 3 3 2-2 5 3"/></svg>',pv=preview==="drawing"?'<div class="previewEmpty931">'+docIcon931+'<strong>'+esc(mark)+'</strong><small>Чертёж марки</small></div>':preview==="3d"?'<div class="previewEmpty931"><span class="preview3d931">3D</span><strong>'+esc(mark)+'</strong><small>Просмотр модели</small></div>':preview==="photo"?(photos.length?'<div class="markPhotos931">'+photos.map(p=>'<img src="'+p+'" alt="Фото '+esc(mark)+'">').join("")+'</div>':'<div class="previewEmpty931">'+photoIcon931+'<strong>'+esc(mark)+'</strong><small>Фото по этой марке пока нет</small></div>'):'<div class="previewEmpty931">'+docIcon931+'<strong>'+esc(mark)+'</strong><small>Документы по этой марке пока не добавлены</small></div>';
  return '<div class="marksDash927"><div class="marksTools927"><div class="marksTabs927">'+tabs+'</div><div class="marksActions927"><label class="marksSearchWrap931"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path></svg><input id="marksSearch927" value="'+esc(window.marksDashQuery927||"")+'" placeholder="Поиск по маркам..."></label><button type="button" class="dashBtn930" data-marks-open927>Открыть ведомость</button></div></div><div class="marksCode931">Шифр проекта: <b>'+esc(g.code)+'</b></div><div class="marksWorkspace927"><div class="marksDashTable927"><div class="marksDashLabels927"><span></span><span>Марка</span><span>Наименование</span><span>Кол-во</span><span>Масса ед.</span><span>Общая масса</span><span>Статус</span><span>Факт монтаж</span><span>%</span><span></span><span></span></div>'+rows+moreMarks944+(filtered.length?'':'<div class="marksNoRows927">Ничего не найдено</div>')+'</div><div class="marksPreview927"><div class="previewTabs927"><button class="'+(preview==="drawing"?'on':'')+'" data-preview-tab927="drawing">Чертёж</button><button class="'+(preview==="3d"?'on':'')+'" data-preview-tab927="3d">3D</button><button class="'+(preview==="photo"?'on':'')+'" data-preview-tab927="photo">Фото</button><button class="'+(preview==="docs"?'on':'')+'" data-preview-tab927="docs">Документы</button></div><div class="previewBody927">'+pv+'</div></div></div></div>'
 }
-function latestVolumes58(){let days=[...savedWorkDays574()].filter(x=>x.date&&(x.items||[]).length).sort((a,b)=>String(b.date).localeCompare(String(a.date))).slice(0,6),num=v=>parseFloat(String(v??"").replace(",","."))||0;if(!days.length)return '<div class="empty">Последние объёмы появятся после заполнения ежедневных отчётов.</div>';let groups={};days.forEach(day=>(day.items||[]).forEach(x=>{let k=(x.type||"—")+"|||"+(x.code||"—")+"|||"+(x.unit||"");if(!groups[k])groups[k]={type:x.type||"—",code:x.code||"—",unit:x.unit||"",total:0,last:day.date,days:{}};let v=num(x.qty)*(num(x.per)||1);groups[k].total+=v;groups[k].days[day.date]=(groups[k].days[day.date]||0)+v;if(day.date>groups[k].last)groups[k].last=day.date}));let rows=Object.values(groups).sort((a,b)=>String(b.last).localeCompare(String(a.last))).map(g=>'<tr><td><b>'+esc(g.type)+'</b></td><td>'+esc(g.code)+'</td><td>'+qtyFmt723(g.total)+' '+esc(g.unit)+'</td><td>'+Object.keys(g.days).sort().reverse().map(dt=>esc(dateDmy756(dt))+' — '+qtyFmt723(g.days[dt])).join('<br>')+'</td></tr>').join("");return '<div class="tablewrap"><table><thead><tr><th>Вид работ</th><th>Шифр</th><th>За последние дни</th><th>По датам</th></tr></thead><tbody>'+rows+'</tbody></table></div><div class="muted" style="margin-top:8px">Показаны объёмы из последних 6 рабочих дней. Разные единицы измерения считаются отдельно.</div>'}
+
 function fullDate660(v){if(!v)return "";let z=new Date(v+"T12:00:00");return Number.isNaN(z.getTime())?String(v):z.toLocaleDateString("ru-RU",{day:"numeric",month:"long",year:"numeric"})+"г."}
 function render(){
  if((active==="home"||active==="bom"||active==="schemeLab"||active==="progress"||active==="dynamics")&&d.tasks.some(t=>t.__bomLoaded152!==true))ensureBoms152();
@@ -664,7 +537,7 @@ document.querySelector("[data-cancel-report720]")?.addEventListener("click",()=>
  document.querySelectorAll("[data-bom]").forEach(inp=>inp.onchange=async()=>{let f=inp.files&&inp.files[0];if(!f)return;let idx=+inp.dataset.bom,label=inp.closest(".bomUploadRow")?.querySelector(".bomLoadState");if(label)label.textContent="Загрузка 0%";try{let buf=await new Promise((ok,no)=>{let r=new FileReader();r.onprogress=e=>{if(label&&e.lengthComputable)label.textContent="Загрузка "+Math.round(e.loaded/e.total*70)+"%"};r.onload=()=>ok(r.result);r.onerror=()=>no(r.error);r.readAsArrayBuffer(f)});if(label)label.textContent="Обработка 80%";let bom;if(/\.xlsx$/i.test(f.name)){let blob=new File([buf],f.name,{type:f.type});bom=await parseXlsx(blob)}else{let text=new TextDecoder().decode(buf),lines=text.split(/\r?\n/).filter(x=>x.trim()),sep=(lines[0]||"").includes(";")?";":(lines[0]||"").includes("\t")?"\t":",";bom=rowsToBom(lines.map(x=>x.split(sep).map(v=>v.trim().replace(/^"|"$/g,""))))}if(!bom.length)throw Error("Не найдены строки с колонкой «Марка»");let t=d.tasks[idx];t.bom=bom;t.bomName=f.name;if(label)label.textContent="Готово — 100% · "+bom.length+" марок";saveEntity148("bom",idx);setTimeout(render,700)}catch(e){console.error(e);if(label)label.textContent="Ошибка: "+(e.message||"не удалось прочитать файл");inp.value=""}});
 
 }
-function exportName(){return "А-Темир_Строй_отчет_"+(d.reportDate||new Date().toISOString().slice(0,10))+".html"}
+
 function objectExportPeriod610(){
  let mode=document.getElementById("objectExportPeriod610")?.value||"all",today=new Date(),ym=today.toISOString().slice(0,7);
  if(mode==="month")return {mode,from:ym+"-01",to:ym+"-31",label:"текущий месяц"};

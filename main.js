@@ -114,16 +114,7 @@ function dbRead(){
  for(let name of ["objects","tasks","bom_marks","reports","report_works","report_people","report_equipment","invoices","invoice_items","acted_days","penalties"])tables[name]=db.prepare("SELECT * FROM "+name).all().map(r=>{let x={...r};if("raw_json" in x)x.raw_json=kvParseSafe165(x.raw_json,x.raw_json);return x});
  return {version:3,engine:"sqlite-relational",kv,tables,migratedAt:migrated?kvParseSafe165(migrated.value,{}).at||"":""}
 }
-function dbWrite(x){
- let db=sqliteDb163(),wanted=x&&x.kv&&typeof x.kv==="object"?x.kv:{},now=new Date().toISOString();
- db.exec("BEGIN IMMEDIATE");
- try{
-  db.exec("DELETE FROM kv");
-  let put=db.prepare("INSERT INTO kv(key,value,updated_at) VALUES(?,?,?)");
-  for(let [key,value] of Object.entries(wanted))put.run(key,JSON.stringify(value),now);
-  db.exec("COMMIT")
- }catch(e){try{db.exec("ROLLBACK")}catch{}throw e}
-}
+
 function photoRoot(){return path.join(app.getPath("userData"),"photos")}
 function safePhotoKey(key){return String(key||"").replace(/[^a-zA-Z0-9_-]/g,"_")}
 function photoDir(key){return path.join(photoRoot(),safePhotoKey(key))}
