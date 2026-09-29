@@ -1,6 +1,17 @@
 const {app,BrowserWindow,dialog,ipcMain}=require("electron");const fs=require("fs");const https=require("https");const {autoUpdater}=require("electron-updater");const path=require("path");ipcMain.handle("report:html",async(_e,arg={})=>{let file=await dialog.showSaveDialog(win,{title:"Выгрузить отчёт HTML",defaultPath:arg.filename||"А-Темир_Строй_отчет.html",filters:[{name:"HTML",extensions:["html"]}]});if(file.canceled||!file.filePath)return {canceled:true};fs.writeFileSync(file.filePath,String(arg.html||""),"utf8");return {ok:true,path:file.filePath}});
 ipcMain.handle("report:pdf",async(_e,arg={})=>{let file=await dialog.showSaveDialog(win,{title:"Сохранить PDF",defaultPath:arg.filename||"А-Темир_Строй_отчет.pdf",filters:[{name:"PDF",extensions:["pdf"]}]});if(file.canceled||!file.filePath)return {canceled:true};let w=new BrowserWindow({show:false,webPreferences:{contextIsolation:true,nodeIntegration:false}}),tmp="";try{if(arg.html){tmp=path.join(app.getPath("temp"),"atemir-export-"+Date.now()+".html");fs.writeFileSync(tmp,String(arg.html),"utf8");await w.loadFile(tmp)}else await w.loadFile(runtimeFile(path.join("src","legacy-report.html")));await new Promise(r=>setTimeout(r,700));let buf=await w.webContents.printToPDF({printBackground:true,pageSize:"A4",margins:{top:0.25,bottom:0.25,left:0.2,right:0.2}});fs.writeFileSync(file.filePath,buf);return {ok:true,path:file.filePath}}finally{if(tmp)try{fs.unlinkSync(tmp)}catch{}if(!w.isDestroyed())w.destroy()}});
 
+
+const DB_FILE_NAME="atemir-data-v1.json";
+function dbPath(){return path.join(app.getPath("userData"),DB_FILE_NAME)}
+function dbRead(){try{let x=JSON.parse(fs.readFileSync(dbPath(),"utf8"));return x&&typeof x==="object"?x:{version:1,kv:{}}}catch{return {version:1,kv:{}}}}
+function dbWrite(x){let file=dbPath(),tmp=file+".tmp";fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(tmp,JSON.stringify(x),"utf8");fs.renameSync(tmp,file)}
+ipcMain.handle("db:get",(_e,key)=>{let db=dbRead();return Object.prototype.hasOwnProperty.call(db.kv||{},key)?db.kv[key]:null});
+ipcMain.handle("db:set",(_e,key,value)=>{let db=dbRead();db.kv=db.kv||{};db.kv[key]=value;db.updatedAt=new Date().toISOString();dbWrite(db);return true});
+ipcMain.handle("db:remove",(_e,key)=>{let db=dbRead();if(db.kv)delete db.kv[key];db.updatedAt=new Date().toISOString();dbWrite(db);return true});
+ipcMain.handle("db:migrate",(_e,entries={})=>{let db=dbRead(),added=0;db.kv=db.kv||{};for(let [key,value] of Object.entries(entries||{})){if(!Object.prototype.hasOwnProperty.call(db.kv,key)){db.kv[key]=value;added++}}db.migratedAt=db.migratedAt||new Date().toISOString();dbWrite(db);return {ok:true,added,path:dbPath()}});
+ipcMain.handle("db:info",()=>{let db=dbRead();return {path:dbPath(),keys:Object.keys(db.kv||{}).length,updatedAt:db.updatedAt||db.migratedAt||""}});
+
 let win,hotUpdate=null;
 const HOT_OWNER="ispayevibr-ship-it",HOT_REPO="atemir-report-updates";
 function hotRoot(){let p=path.join(app.getPath("userData"),"hot-update");try{fs.mkdirSync(p,{recursive:true})}catch{}return p}
