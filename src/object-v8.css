@@ -2513,24 +2513,6 @@ button[data-cancel-report720]:hover{background:#168dca!important;border-color:#1
 .reportEditor994 .reportSectionHead994.numbered106>div{margin-top:10px!important}
 
 
-/* v8.0.123 — компоновка ежедневного отчёта как на согласованном скриншоте */
-#main .toolbar:has(button[data-add="workDays"]){
- display:flex!important;align-items:center!important;gap:1px!important;
- margin:0 0 18px!important;padding:0!important
-}
-.reportEditor994{margin:0!important;padding-top:0!important}
-.reportEditor994 .reportEditorHead994{margin:0!important}
-.reportEditor994 .reportEditorHead994 + .reportSectionHead994{margin-top:0!important}
-.reportEditor994 .reportSectionHead994.numbered106{
- display:flex!important;flex-wrap:wrap!important;align-items:center!important;
- margin:0!important;padding-top:11px!important;padding-bottom:10px!important
-}
-.reportEditor994 .reportSectionHead994.numbered106>div{
- flex:0 0 100%!important;margin:10px 0 0!important
-}
-.reportEditor994 .reportSectionHead994.numbered106>div button{margin:0!important}
-
-
 /* v8.0.124 — полноценный просмотр ежедневного отчёта */
 .reportGrid124{grid-template-columns:minmax(0,2fr) minmax(300px,.75fr)!important;align-items:start!important}
 .reportSide124{display:grid!important;gap:14px!important}
@@ -2564,12 +2546,6 @@ button[data-cancel-report720]:hover{background:#168dca!important;border-color:#1
 .workerCustom125:focus{outline:none!important;border-color:#168dca!important;box-shadow:0 0 0 2px rgba(22,141,202,.1)!important}
 
 
-/* v8.0.126 — отступ верхних кнопок ежедневного отчёта */
-#main .toolbar:has(button[data-add="workDays"]){
- display:flex!important;align-items:center!important;gap:12px!important
-}
-
-
 /* v8.0.127 — другая должность ответственного лица */
 .respEdit127{display:grid!important;gap:6px!important}
 .respCustom127{
@@ -2600,70 +2576,23 @@ button[data-cancel-report720]:hover{background:#168dca!important;border-color:#1
 .workSavedMeta129{margin-top:4px!important}
 
 
-/* v8.0.131 — фиксированные отступы панели ежедневных отчётов */
+
+
+/* v8.0.137 — единое правило панели ежедневных отчётов */
 #main .dailyReportToolbar131{
  display:flex!important;
  align-items:center!important;
  justify-content:flex-start!important;
  gap:16px!important;
- column-gap:16px!important;
  margin:0 0 20px 0!important;
  padding:0!important;
+ width:auto!important;
+ height:auto!important;
+ min-height:0!important;
 }
 #main .dailyReportToolbar131>button{
  margin:0!important;
  flex:0 0 auto!important;
 }
-
-
-/* v8.0.134 — прямые отступы кнопок ежедневных отчётов */
-#main .dailyReportToolbar131{
- gap:0!important;
- column-gap:0!important;
- margin:0 0 20px 0!important;
-}
-#main .dailyReportToolbar131>button+button{
- margin-left:16px!important;
-}
-
-
-/* v8.0.135 — физические разделители панели ежедневных отчётов */
-#main .dailyReportToolbar131{
- display:flex!important;align-items:center!important;justify-content:flex-start!important;
- gap:0!important;column-gap:0!important;margin:0!important;padding:0!important
-}
-#main .dailyReportToolbar131>button{margin:0!important}
-#main .dailyReportToolbar131>button+button{margin-left:0!important}
-#main .dailyToolbarSpacer135{
- display:block!important;visibility:hidden!important;
- flex:0 0 16px!important;width:16px!important;min-width:16px!important;height:1px!important
-}
-#main .dailyToolbarBottom135{
- display:block!important;clear:both!important;width:100%!important;height:20px!important;
- min-height:20px!important;flex:0 0 20px!important;pointer-events:none!important
-}
-
-
-/* v8.0.136 — дополнительная информация и фотографии отдельными блоками под выполненными работами */
-.reportEditor994 .reportWorksEditor998,
-.reportEditor994 .reportNotes108,
-.reportEditor994 .reportPhoto108{
- display:block!important;
- width:100%!important;
- max-width:none!important;
- box-sizing:border-box!important;
- clear:both!important;
- float:none!important;
- grid-column:1/-1!important;
-}
-.reportEditor994 .reportNotes108{
- margin:14px 0 0!important;
-}
-.reportEditor994 .reportPhoto108{
- margin:14px 0 0!important;
-}
-.reportEditor994 .reportNotesBody108,
-.reportEditor994 .photoGrid108{
- width:100%!important;
- box-sizing:border-box!important;
-}
+#main .dailyToolbarSpacer135{display:none!important}
+#main .dailyToolbarBottom135{display:none!important}
