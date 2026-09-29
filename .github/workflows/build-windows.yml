@@ -49,7 +49,15 @@ jobs:
           $changed = @(git diff-tree --no-commit-id --name-only -r $env:GITHUB_SHA)
           $core = $false
           foreach ($f in $changed) {
-            if ($f -eq "main.js" -or $f -eq "preload.js") { $core = $true }
+            if ($f -eq "main.js" -or $f -eq "preload.js" -or $f -eq "package-lock.json") { $core = $true }
+          }
+          if (-not $core -and ($changed -contains "package.json")) {
+            $parent = git rev-parse "$env:GITHUB_SHA^"
+            $oldPkg = git show "${parent}:package.json" | ConvertFrom-Json
+            $newPkg = Get-Content package.json -Raw | ConvertFrom-Json
+            $oldComparable = [ordered]@{ main=$oldPkg.main; dependencies=$oldPkg.dependencies; devDependencies=$oldPkg.devDependencies; build=$oldPkg.build; scripts=$oldPkg.scripts } | ConvertTo-Json -Depth 20 -Compress
+            $newComparable = [ordered]@{ main=$newPkg.main; dependencies=$newPkg.dependencies; devDependencies=$newPkg.devDependencies; build=$newPkg.build; scripts=$newPkg.scripts } | ConvertTo-Json -Depth 20 -Compress
+            if ($oldComparable -ne $newComparable) { $core = $true }
           }
           "core=$($core.ToString().ToLower())" >> $env:GITHUB_OUTPUT
           Write-Host "Core runtime changed: $core"
