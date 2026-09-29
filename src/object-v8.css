@@ -2511,3 +2511,21 @@ button[data-cancel-report720]:hover{background:#168dca!important;border-color:#1
 /* Основные данные -> Свернуть */
 .reportEditor994 .reportSectionHead994.numbered106{align-items:flex-start!important}
 .reportEditor994 .reportSectionHead994.numbered106>div{margin-top:10px!important}
+
+
+/* v8.0.123 — компоновка ежедневного отчёта как на согласованном скриншоте */
+#main .toolbar:has(button[data-add="workDays"]){
+ display:flex!important;align-items:center!important;gap:1px!important;
+ margin:0 0 18px!important;padding:0!important
+}
+.reportEditor994{margin:0!important;padding-top:0!important}
+.reportEditor994 .reportEditorHead994{margin:0!important}
+.reportEditor994 .reportEditorHead994 + .reportSectionHead994{margin-top:0!important}
+.reportEditor994 .reportSectionHead994.numbered106{
+ display:flex!important;flex-wrap:wrap!important;align-items:center!important;
+ margin:0!important;padding-top:11px!important;padding-bottom:10px!important
+}
+.reportEditor994 .reportSectionHead994.numbered106>div{
+ flex:0 0 100%!important;margin:10px 0 0!important
+}
+.reportEditor994 .reportSectionHead994.numbered106>div button{margin:0!important}
