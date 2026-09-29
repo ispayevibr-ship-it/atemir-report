@@ -2488,3 +2488,12 @@ button[data-cancel-report720]:hover{background:#168dca!important;border-color:#1
 .dailyListCard981[data-report-row119]:hover{border-color:#9fcfe2!important;background:#f7fcfe!important;box-shadow:0 3px 12px rgba(18,91,125,.08)!important}
 .dailyListCard981[data-report-row119]:focus-visible{outline:2px solid #168dca!important;outline-offset:2px!important}
 .dailyListCard981[data-report-row119] .dailyActions981{cursor:default!important}
+
+
+/* v8.0.120 — явные зазоры ежедневного отчёта, не зависят от margin карточек */
+.reportGap120{display:block!important;width:100%!important;flex:0 0 auto!important;pointer-events:none!important}
+.reportGap120.top120{height:26px!important}
+.reportGap120.hero120{height:24px!important}
+.reportGap120.section120{height:22px!important}
+.dailyDate981{cursor:inherit!important}
+.dailyDate981 b{color:inherit!important;text-decoration:none!important}
