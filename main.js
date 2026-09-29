@@ -14,6 +14,9 @@ ipcMain.handle("db:set",(_e,key,value)=>{let db=dbRead();db.kv=db.kv||{};db.kv[k
 ipcMain.handle("db:remove",(_e,key)=>{let db=dbRead();if(db.kv)delete db.kv[key];db.updatedAt=new Date().toISOString();dbWrite(db);return true});
 ipcMain.handle("db:migrate",(_e,entries={})=>{let db=dbRead(),added=0;db.kv=db.kv||{};for(let [key,value] of Object.entries(entries||{})){if(!Object.prototype.hasOwnProperty.call(db.kv,key)){db.kv[key]=value;added++}}db.migratedAt=db.migratedAt||new Date().toISOString();dbWrite(db);return {ok:true,added,path:dbPath()}});
 ipcMain.handle("db:info",()=>{let db=dbRead();return {path:dbPath(),keys:Object.keys(db.kv||{}).length,updatedAt:db.updatedAt||db.migratedAt||""}});
+ipcMain.handle("db:backup",async()=>{let db=dbRead(),dir=path.join(app.getPath("userData"),"backups");fs.mkdirSync(dir,{recursive:true});let stamp=new Date().toISOString().replace(/[:.]/g,"-"),dest=path.join(dir,"atemir-data-"+stamp+".json");fs.writeFileSync(dest,JSON.stringify(db),"utf8");return {ok:true,path:dest}});
+ipcMain.handle("db:write-many",(_e,entries={})=>{let db=dbRead();db.kv=db.kv||{};for(let [key,value] of Object.entries(entries||{}))db.kv[key]=value;db.updatedAt=new Date().toISOString();dbWrite(db);return true});
+
 
 let win,hotUpdate=null;
 const HOT_OWNER="ispayevibr-ship-it",HOT_REPO="atemir-report-updates";
