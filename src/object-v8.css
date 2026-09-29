@@ -2077,3 +2077,17 @@ button[data-add="workDays"]:hover{
   font-weight:700!important;
   color:#18384d!important
 }
+
+/* v8.0.102 — последние объёмы: акцент на значении объёма, не на шифре */
+.latestCard925.volumes925 .latestVol925>span:nth-child(2){
+  font-size:inherit!important;
+  line-height:inherit!important;
+  font-weight:inherit!important;
+  color:inherit!important
+}
+.latestCard925.volumes925 .latestVol925>b{
+  font-size:14px!important;
+  line-height:1.25!important;
+  font-weight:700!important;
+  color:#18384d!important
+}
