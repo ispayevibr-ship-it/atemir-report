@@ -2388,3 +2388,8 @@ button[data-cancel-report720]:hover{background:#168dca!important;border-color:#1
 .reportViewTitle995>div:last-child button.primary{border:1px solid #168dca!important;background:#168dca!important;color:#fff!important}
 .reportViewTitle995>div:last-child button.primary:hover{border-color:#0d76aa!important;background:#0d76aa!important;transform:translateY(-1px)!important}
 @media(max-width:900px){.markStatus111{align-items:flex-start!important;flex-direction:column!important}.markStatusStats111{justify-content:flex-start!important}.reportViewTitle995{align-items:flex-start!important;flex-direction:column!important}.reportViewTitle995>div:last-child{flex-wrap:wrap!important}}
+
+
+/* v8.0.112 — завершённая марка */
+.markStatus111 .done111{border-color:#9fd6b0!important;background:#e9f8ee!important;color:#287344!important}
+.markStatus111 .done111 b{color:#176334!important}
