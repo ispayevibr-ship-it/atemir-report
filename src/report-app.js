@@ -9,32 +9,47 @@ let d;try{let dbd=window.atemirDesktop?.dbGetSync?.(key);d=Object.assign(blank()
 async function dbHydrate140(){if(!window.atemirDesktop?.dbGet||window.atemirDesktop?.dbGetSync?.(entityPrefix144+"meta"))return;try{let x=await window.atemirDesktop.dbGet(key);if(x&&typeof x==="object"){d=Object.assign(blank(),x);await saveEntities144({...d,reportPhotos:[],workDays:stripAllPhotos142()});await retireLegacySnapshot145();render()}}catch(e){console.error("Local DB load",e)}}
 const entityPrefix144="atemir_entity_"+id+"_";
 function entityEntries144(payload){
+ (payload.tasks||[]).forEach(t=>{if(!t.id)t.id=uid538()});
+ (payload.invoices||[]).forEach(inv=>{if(!inv.id)inv.id=uid538()});
  let base={...payload};delete base.workDays;delete base.invoices;delete base.tasks;delete base.penalties;delete base.actedDays;
  let out={};
  out[entityPrefix144+"base"]=base;
  let reports=(payload.workDays||[]).map(day=>{if(!day.id)day.id=uid538();return day});
  out[entityPrefix144+"reportIndex"]=reports.map((day,sort)=>({id:day.id,date:day.date||"",sort}));
  reports.forEach(day=>out[entityPrefix144+"report_"+day.id]=day);
- out[entityPrefix144+"invoices"]=(payload.invoices||[]);
- out[entityPrefix144+"tasks"]=(payload.tasks||[]);
+ let invoices=(payload.invoices||[]);
+ out[entityPrefix144+"invoiceIndex"]=invoices.map((inv,sort)=>({id:inv.id,date:inv.date||"",no:inv.no||"",sort}));
+ invoices.forEach(inv=>out[entityPrefix144+"invoice_"+inv.id]=inv);
+ let tasks=(payload.tasks||[]);
+ out[entityPrefix144+"taskIndex"]=tasks.map((t,sort)=>({id:t.id,type:t.type||"",code:t.code||"",sort}));
+ tasks.forEach(t=>{let row={...t,bom:[]};out[entityPrefix144+"task_"+t.id]=row;out[entityPrefix144+"bom_"+t.id]=Array.isArray(t.bom)?t.bom:[]});
  out[entityPrefix144+"penalties"]=(payload.penalties||[]);
  out[entityPrefix144+"actedDays"]=(payload.actedDays||[]);
- out[entityPrefix144+"meta"]={schema:3,updatedAt:new Date().toISOString()};
+ out[entityPrefix144+"meta"]={schema:4,updatedAt:new Date().toISOString()};
  return out
 }
 async function saveEntities144(payload){try{
- let entries=entityEntries144(payload),wanted=new Set((entries[entityPrefix144+"reportIndex"]||[]).map(x=>entityPrefix144+"report_"+x.id));
+ let entries=entityEntries144(payload),
+ reportWanted=new Set((entries[entityPrefix144+"reportIndex"]||[]).map(x=>entityPrefix144+"report_"+x.id)),
+ invoiceWanted=new Set((entries[entityPrefix144+"invoiceIndex"]||[]).map(x=>entityPrefix144+"invoice_"+x.id)),
+ taskWanted=new Set((entries[entityPrefix144+"taskIndex"]||[]).map(x=>entityPrefix144+"task_"+x.id)),
+ bomWanted=new Set((entries[entityPrefix144+"taskIndex"]||[]).map(x=>entityPrefix144+"bom_"+x.id));
  await window.atemirDesktop?.dbWriteMany?.(entries);
- let existing=window.atemirDesktop?.dbGetPrefixSync?.(entityPrefix144+"report_")||{},stale=Object.keys(existing).filter(k=>!wanted.has(k));
- if(stale.length)await window.atemirDesktop?.dbRemoveMany?.(stale);
- await window.atemirDesktop?.dbRemoveMany?.([entityPrefix144+"reports"])
+ let stale=[
+  ...Object.keys(window.atemirDesktop?.dbGetPrefixSync?.(entityPrefix144+"report_")||{}).filter(k=>!reportWanted.has(k)),
+  ...Object.keys(window.atemirDesktop?.dbGetPrefixSync?.(entityPrefix144+"invoice_")||{}).filter(k=>!invoiceWanted.has(k)),
+  ...Object.keys(window.atemirDesktop?.dbGetPrefixSync?.(entityPrefix144+"task_")||{}).filter(k=>!taskWanted.has(k)),
+  ...Object.keys(window.atemirDesktop?.dbGetPrefixSync?.(entityPrefix144+"bom_")||{}).filter(k=>!bomWanted.has(k))
+ ];
+ if(stale.length)await window.atemirDesktop?.dbRemoveMany?.([...new Set(stale)]);
+ await window.atemirDesktop?.dbRemoveMany?.([entityPrefix144+"reports",entityPrefix144+"invoices",entityPrefix144+"tasks"])
 }catch(e){console.error("Entity DB save",e)}}
 async function retireLegacySnapshot145(){
  try{
   let meta=await window.atemirDesktop?.dbGet?.(entityPrefix144+"meta");
   let reports=await window.atemirDesktop?.dbGet?.(entityPrefix144+"reportIndex");
-  let base=await window.atemirDesktop?.dbGet?.(entityPrefix144+"base");
-  if(meta&&Number(meta.schema)>=3&&base&&Array.isArray(reports)){
+  let base=await window.atemirDesktop?.dbGet?.(entityPrefix144+"base"),invoices=await window.atemirDesktop?.dbGet?.(entityPrefix144+"invoiceIndex"),tasks=await window.atemirDesktop?.dbGet?.(entityPrefix144+"taskIndex");
+  if(meta&&Number(meta.schema)>=4&&base&&Array.isArray(reports)&&Array.isArray(invoices)&&Array.isArray(tasks)){
     await window.atemirDesktop?.dbRemoveMany?.([key]);
     try{localStorage.removeItem(key)}catch{}
     return true
@@ -53,8 +68,15 @@ function hydrateEntities144(){
    let idx=window.atemirDesktop.dbGetSync(entityPrefix144+"reportIndex")||[];
    d.workDays=idx.sort((a,b)=>(a.sort??0)-(b.sort??0)).map(x=>window.atemirDesktop.dbGetSync(entityPrefix144+"report_"+x.id)).filter(Boolean)
   }else d.workDays=window.atemirDesktop.dbGetSync(entityPrefix144+"reports")||[];
-  d.invoices=window.atemirDesktop.dbGetSync(entityPrefix144+"invoices")||[];
-  d.tasks=window.atemirDesktop.dbGetSync(entityPrefix144+"tasks")||[];
+  if(Number(meta.schema)>=4){
+   let ii=window.atemirDesktop.dbGetSync(entityPrefix144+"invoiceIndex")||[];
+   d.invoices=ii.sort((a,b)=>(a.sort??0)-(b.sort??0)).map(x=>window.atemirDesktop.dbGetSync(entityPrefix144+"invoice_"+x.id)).filter(Boolean);
+   let ti=window.atemirDesktop.dbGetSync(entityPrefix144+"taskIndex")||[];
+   d.tasks=ti.sort((a,b)=>(a.sort??0)-(b.sort??0)).map(x=>{let t=window.atemirDesktop.dbGetSync(entityPrefix144+"task_"+x.id);if(!t)return null;t.bom=window.atemirDesktop.dbGetSync(entityPrefix144+"bom_"+x.id)||[];return t}).filter(Boolean)
+  }else{
+   d.invoices=window.atemirDesktop.dbGetSync(entityPrefix144+"invoices")||[];
+   d.tasks=window.atemirDesktop.dbGetSync(entityPrefix144+"tasks")||[]
+  }
   d.penalties=window.atemirDesktop.dbGetSync(entityPrefix144+"penalties")||[];
   d.actedDays=window.atemirDesktop.dbGetSync(entityPrefix144+"actedDays")||[];
   return true
@@ -97,7 +119,7 @@ function selectHtml(values,current,attr,placeholder="— выберите —"){
 function unitHtml(current,attr){current=canonUnit690(current);let custom=current&&!UNITS.includes(current);return '<select '+attr+'>'+UNITS.map(v=>'<option value="'+v+'"'+(v===current?' selected':'')+'>'+v+'</option>').join("")+'<option value="__custom__"'+(custom?' selected':'')+'>Другая</option></select><input '+attr.replace("data-work=","data-work-custom=").replace("data-inv=","data-inv-custom=")+' value="'+(custom?esc(current):"")+'" placeholder="Своя единица измерения" style="margin-top:4px;'+(custom?"":"display:none")+'">'}
 
 function rows(name,title,fields,maker){let arr=d[name]||[],h='<div class="toolbar"><button class="primary" data-add="'+name+'">+ Добавить</button></div>';if(!arr.length)return h+'<div class="empty">Пока нет данных</div>';arr.forEach((x,i)=>{h+='<div class="card"><div class="rowhead"><b>'+title+' '+(i+1)+'</b><button class="danger" data-del="'+name+':'+i+'">Удалить</button></div><div class="grid g3">';fields.forEach(f=>{h+='<div><label>'+f[0]+'</label><input data-item="'+name+':'+i+':'+f[1]+'" type="'+(f[2]||"text")+'" value="'+esc(x[f[1]]??"")+'"></div>'});h+='</div></div>'});return h}
-const makers={tasks:()=>({type:"",code:"",volume:"",unit:"тн",start:"",date:"",editing:true,axisMin:"",axisMax:"",levelMin:"",levelMax:"",bom:[],bomName:""}),deadlines:()=>({type:"",code:"",start:"",date:"",collapsed:false}),actedDays:()=>({date:"",reason:"Ветер",value:"",from:"",to:"",collapsed:false}),workers:()=>({name:"",qty:1}),responsibles:()=>({role:"",fio:"",collapsed:false}),equipment:()=>({type:"Автокран 25 т",custom:"",qty:1}),penalties:()=>({date:"",amount:"",responsible:"",reason:"",collapsed:false}),invoices:()=>({id:uid538(),date:"",no:"",items:[],collapsed:false,editing:true}),workDays:()=>({id:uid538(),date:"",temp:"",wind:"",precip:"",workerCount:"",responsible:"",equipmentText:"",workers:[],responsibles:[],equipment:[],photos:[],photosMigrated:true,notes:"",notesCollapsed:true,items:[],editing:true,isNewDraft720:true,collapsed:false,metaCollapsed:false})};
+const makers={tasks:()=>({id:uid538(),type:"",code:"",volume:"",unit:"тн",start:"",date:"",editing:true,axisMin:"",axisMax:"",levelMin:"",levelMax:"",bom:[],bomName:""}),deadlines:()=>({type:"",code:"",start:"",date:"",collapsed:false}),actedDays:()=>({date:"",reason:"Ветер",value:"",from:"",to:"",collapsed:false}),workers:()=>({name:"",qty:1}),responsibles:()=>({role:"",fio:"",collapsed:false}),equipment:()=>({type:"Автокран 25 т",custom:"",qty:1}),penalties:()=>({date:"",amount:"",responsible:"",reason:"",collapsed:false}),invoices:()=>({id:uid538(),date:"",no:"",items:[],collapsed:false,editing:true}),workDays:()=>({id:uid538(),date:"",temp:"",wind:"",precip:"",workerCount:"",responsible:"",equipmentText:"",workers:[],responsibles:[],equipment:[],photos:[],photosMigrated:true,notes:"",notesCollapsed:true,items:[],editing:true,isNewDraft720:true,collapsed:false,metaCollapsed:false})};
 async function unzipXlsx(buf){let u=new Uint8Array(buf),dv=new DataView(buf),sig=0x06054b50,e=-1;for(let i=u.length-22;i>=Math.max(0,u.length-65557);i--)if(dv.getUint32(i,true)===sig){e=i;break}if(e<0)throw Error("ZIP");let count=dv.getUint16(e+10,true),off=dv.getUint32(e+16,true),files={};for(let k=0;k<count;k++){if(dv.getUint32(off,true)!==0x02014b50)break;let method=dv.getUint16(off+10,true),cs=dv.getUint32(off+20,true),nl=dv.getUint16(off+28,true),xl=dv.getUint16(off+30,true),cl=dv.getUint16(off+32,true),lo=dv.getUint32(off+42,true),name=new TextDecoder().decode(u.slice(off+46,off+46+nl)),ln=dv.getUint16(lo+26,true),le=dv.getUint16(lo+28,true),data=u.slice(lo+30+ln+le,lo+30+ln+le+cs);if(method===8){let ds=new DecompressionStream("deflate-raw"),ab=await new Response(new Blob([data]).stream().pipeThrough(ds)).arrayBuffer();files[name]=new TextDecoder().decode(ab)}else if(method===0)files[name]=new TextDecoder().decode(data);off+=46+nl+xl+cl}return files}
 function rowsToBom(rows){rows=(rows||[]).filter(r=>r.some(v=>String(v||"").trim()));let hi=rows.findIndex(r=>r.some(v=>/марка/i.test(String(v||""))));if(hi<0)hi=0;let h=rows[hi]||[],vals=h.map(v=>String(v||"").toLowerCase().replace(/ё/g,"е").replace(/\s+/g," ").trim()),find=names=>vals.findIndex(v=>names.some(n=>v.includes(n))),im=find(["марка"]),ina=find(["наименование"]),iq=find(["кол-во","количество","кол."]),iw=find(["вес 1","масса 1","вес ед","масса ед"]),it=find(["общий вес","масса всего","вес всего","всего, кг"]),num=v=>parseFloat(String(v??"").replace(/\s/g,"").replace(",","."))||0;return rows.slice(hi+1).map(r=>{let q=num(r[iq]),w=num(r[iw]),wt=num(r[it]);if(!q&&w&&wt)q=Math.round(wt/w*1000)/1000;if(!wt&&q&&w)wt=q*w;return{mark:String(r[im]||"").trim().toUpperCase().replace(/^K(?=\d)/,"К"),name:String(r[ina]||"").trim(),qty:q,weight1:w,weightTotal:wt}}).filter(r=>r.mark)}
 async function parseXlsx(file){let files=await unzipXlsx(await file.arrayBuffer()),ss=[];if(files["xl/sharedStrings.xml"]){let doc=new DOMParser().parseFromString(files["xl/sharedStrings.xml"],"application/xml");ss=[...doc.querySelectorAll("si")].map(si=>[...si.querySelectorAll("t")].map(t=>t.textContent).join(""))}let sheet=files["xl/worksheets/sheet1.xml"]||Object.entries(files).find(([k])=>/^xl\/worksheets\/sheet\d+\.xml$/.test(k))?.[1];if(!sheet)throw Error("SHEET");let doc=new DOMParser().parseFromString(sheet,"application/xml"),rows=[];[...doc.querySelectorAll("row")].forEach(row=>{let arr=[];[...row.querySelectorAll("c")].forEach(c=>{let ref=c.getAttribute("r")||"",col=(ref.match(/[A-Z]+/)||["A"])[0],ci=0;for(let ch of col)ci=ci*26+ch.charCodeAt(0)-64;ci--;let typ=c.getAttribute("t"),v=c.querySelector("v")?.textContent??"",val=typ==="s"?(ss[+v]??""):typ==="inlineStr"?(c.querySelector("is")?.textContent??""):v;arr[ci]=val});rows.push(arr)});return rowsToBom(rows)}
