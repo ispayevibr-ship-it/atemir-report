@@ -2191,3 +2191,70 @@ button[data-add="workDays"]:hover{
   color:#294b62!important;
   text-align:right!important
 }
+
+/* v8.0.106 — новый дизайн добавления / редактирования ежедневного отчёта */
+.reportEditor106{padding:0!important;border:0!important;background:#f3f7fa!important;border-radius:0!important}
+.reportEditorHero106{
+  margin:0 0 10px!important;padding:18px 20px!important;
+  background:linear-gradient(110deg,#f7fbff,#edf5fa)!important;
+  border:1px solid #dce7ed!important;border-radius:8px!important
+}
+.reportEditorHero106 small{display:block!important;margin-bottom:5px!important;color:#278fc0!important;font:700 9px/1.2 Arial,sans-serif!important;letter-spacing:.7px!important}
+.reportEditorHero106 h2{font-size:18px!important;color:#142f43!important}
+.reportEditorHero106 p{font-size:10px!important}
+.reportHeroActions106{display:flex!important;align-items:center!important;gap:7px!important}
+.reportHeroActions106 .danger{height:31px!important;min-height:31px!important;padding:0 10px!important;line-height:29px!important}
+.reportEditor106 .numbered106{position:relative!important;justify-content:flex-start!important;gap:8px!important}
+.reportEditor106 .numbered106>div:last-child{margin-left:auto!important}
+.sectionNo106{display:grid!important;place-items:center!important;width:23px!important;height:23px!important;flex:0 0 23px!important;border-radius:7px!important;background:#2d94d1!important;color:#fff!important;font:700 10px Arial,sans-serif!important}
+.reportEditor106>.reportSectionHead994{
+  min-height:42px!important;margin:0!important;padding:8px 12px!important;
+  border:1px solid #dfe8ed!important;border-radius:8px 8px 0 0!important;background:#fff!important
+}
+.reportEditor106>.grid.g3{
+  margin:0 0 10px!important;padding:13px 14px!important;
+  border:1px solid #dfe8ed!important;border-top:0!important;border-radius:0 0 8px 8px!important;
+  background:#fff!important
+}
+.reportEditor106>.grid.g3 label{font-size:9px!important;color:#637984!important}
+.reportEditor106>.grid.g3 input{height:34px!important;background:#fbfdfe!important}
+.reportEditor106 .reportStructured{
+  grid-template-columns:1fr 1fr 1fr!important;gap:10px!important;margin:10px 0!important
+}
+.reportEditor106 .reportStructBlock997{border-radius:8px!important;border-color:#dfe8ed!important}
+.reportEditor106 .reportStructHead997{min-height:45px!important;padding:8px 12px!important;background:#f7fafc!important}
+.reportEditor106 .reportStructHead997 h3{font-size:11px!important}
+.reportEditor106 .reportStructBody997{padding:9px 11px!important;min-height:74px!important}
+.reportEditor106 .reportStructBody997 .minirow{grid-template-columns:minmax(0,1fr) 88px 30px!important}
+.reportEditor106 .reportWorksEditor998,
+.reportEditor106 .reportSection998,
+.reportEditor106 .reportPhotoEditor223{border-radius:8px!important;border-color:#dfe8ed!important}
+.reportEditor106 .reportWorksHead998,
+.reportEditor106 .reportSection998>.rowhead,
+.reportEditor106 .reportPhotoEditor223>.photohead{min-height:45px!important;background:#f7fafc!important}
+.reportEditor106 .reportWorksList998{padding:0!important}
+.reportEditor106 .reportWorksList998>.workSaved{
+  margin:0!important;padding:10px 13px!important;border:0!important;border-bottom:1px solid #e7edf0!important;border-radius:0!important
+}
+.reportEditor106 .reportWorksList998>.workSaved:last-child{border-bottom:0!important}
+.reportEditor106 .reportWorksList998>.workSaved:hover{background:#f5faff!important}
+.reportEditor106 .reportWorksList998>.workSaved>.rowhead>div:first-child{
+  display:grid!important;grid-template-columns:minmax(240px,1.5fr) minmax(180px,1fr)!important;align-items:center!important;gap:12px!important
+}
+.reportEditor106 .reportWorksList998>.workSaved b{font-size:10.5px!important}
+.reportEditor106 .reportWorksList998>.workSaved .muted{margin:0!important;font-size:10px!important}
+.reportEditor106 .reportWorksList998 button{font-size:9.5px!important}
+.reportEditor106 .reportPhotoEditor223>.photogrid{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important}
+.reportEditor106 .reportPhotoEditor223>.photogrid img{border-radius:6px!important}
+.reportEditor106 .reportSaveBar{
+  position:sticky!important;bottom:0!important;z-index:8!important;
+  margin:12px 0 0!important;padding:10px 12px!important;
+  border:1px solid #dbe6ec!important;border-radius:8px!important;background:rgba(255,255,255,.96)!important;
+  box-shadow:0 -3px 12px rgba(29,67,88,.05)!important
+}
+.reportEditor106 .reportSaveBar .primary{height:38px!important;min-width:200px!important;background:#168dca!important;border-color:#168dca!important}
+.reportEditor106 .reportSaveBar .primary:hover{background:#117caf!important}
+@media(max-width:1150px){
+ .reportEditor106 .reportStructured{grid-template-columns:1fr!important}
+ .reportEditor106 .reportWorksList998>.workSaved>.rowhead>div:first-child{grid-template-columns:1fr!important}
+}
