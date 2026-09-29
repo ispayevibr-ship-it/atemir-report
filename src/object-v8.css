@@ -2562,3 +2562,9 @@ button[data-cancel-report720]:hover{background:#168dca!important;border-color:#1
  background:#fff!important;color:#17364d!important;font:500 10.5px Arial,sans-serif!important
 }
 .workerCustom125:focus{outline:none!important;border-color:#168dca!important;box-shadow:0 0 0 2px rgba(22,141,202,.1)!important}
+
+
+/* v8.0.126 — отступ верхних кнопок ежедневного отчёта */
+#main .toolbar:has(button[data-add="workDays"]){
+ display:flex!important;align-items:center!important;gap:12px!important
+}
