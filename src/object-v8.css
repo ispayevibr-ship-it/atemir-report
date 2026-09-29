@@ -2334,3 +2334,39 @@ button[data-add="workDays"]:hover{
 .reportEditor106 .reportWorksList998>.workSaved>.rowhead>div:last-child .white:hover{background:#e8f5fb!important;border-color:#78bddd!important;color:#0d6f9b!important}
 .reportEditor106 .reportWorksList998>.workSaved>.rowhead>div:last-child .danger:hover{background:#fff0f0!important;border-color:#d98181!important;color:#a73535!important}
 .workEdit107 .workEditActions107 .primary:hover{background:#0d76aa!important;border-color:#0d76aa!important}
+
+/* v8.0.110 — реальные селекторы редактора: без зависимости от родителя reportEditor106 */
+.reportWorksEditor998 .reportWorksHead998{display:flex!important;align-items:center!important;gap:8px!important;min-height:48px!important;padding:8px 12px!important;background:#f4f9fc!important;border-bottom:1px solid #dce8ee!important}
+.reportWorksEditor998 .reportWorksHead998>b{font:700 12px/1.3 Arial,sans-serif!important;color:#17364d!important}
+.reportWorksEditor998 .reportWorksHead998>.primary{margin-left:auto!important;height:32px!important;padding:0 13px!important;border:1px solid #168dca!important;border-radius:5px!important;background:#168dca!important;color:#fff!important;font:700 10px/30px Arial,sans-serif!important;cursor:pointer!important;transition:.16s!important}
+.reportWorksEditor998 .reportWorksHead998>.primary:hover{background:#0d76aa!important;border-color:#0d76aa!important}
+.reportWorksEditor998 .reportWorksList998>.workSaved{margin:0!important;padding:0!important;border:0!important;border-bottom:1px solid #e4ebef!important;border-radius:0!important;background:#fff!important}
+.reportWorksEditor998 .reportWorksList998>.workSaved:last-child{border-bottom:0!important}
+.reportWorksEditor998 .reportWorksList998>.workSaved>.rowhead{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:14px!important;min-height:62px!important;padding:10px 13px!important;margin:0!important;transition:background .16s ease!important}
+.reportWorksEditor998 .reportWorksList998>.workSaved>.rowhead:hover{background:#f1f9fc!important}
+.reportWorksEditor998 .reportWorksList998>.workSaved>.rowhead>div:first-child{display:block!important}
+.reportWorksEditor998 .reportWorksList998>.workSaved b{display:block!important;margin:0 0 3px!important;font:700 11px/1.3 Arial,sans-serif!important;color:#17364d!important}
+.reportWorksEditor998 .reportWorksList998>.workSaved .muted{margin:0!important;font:400 10px/1.35 Arial,sans-serif!important;color:#637984!important}
+.reportWorksEditor998 .reportWorksList998>.workSaved>.rowhead>div:last-child{display:flex!important;align-items:center!important;gap:6px!important}
+.reportWorksEditor998 .reportWorksList998>.workSaved button{height:30px!important;min-height:30px!important;padding:0 10px!important;border-radius:5px!important;font:600 9.5px/28px Arial,sans-serif!important;cursor:pointer!important;transition:.16s!important}
+.reportWorksEditor998 .reportWorksList998>.workSaved button.white{border:1px solid #a9d1e3!important;background:#fff!important;color:#147ba9!important}
+.reportWorksEditor998 .reportWorksList998>.workSaved button.white:hover{border-color:#168dca!important;background:#168dca!important;color:#fff!important}
+.reportWorksEditor998 .reportWorksList998>.workSaved button.danger{border:1px solid #e0b7b7!important;background:#fff!important;color:#bd4d4d!important}
+.reportWorksEditor998 .reportWorksList998>.workSaved button.danger:hover{border-color:#cc6868!important;background:#cc5555!important;color:#fff!important}
+.workEdit107 .workEditActions107 .primary{border:1px solid #168dca!important;background:#168dca!important;color:#fff!important;cursor:pointer!important;transition:.16s!important}
+.workEdit107 .workEditActions107 .primary:hover{background:#0d76aa!important;border-color:#0d76aa!important}
+.workEdit107 .workEditTitle107 .danger{border:1px solid #e0b7b7!important;background:#fff!important;color:#bd4d4d!important;cursor:pointer!important}
+.workEdit107 .workEditTitle107 .danger:hover{background:#cc5555!important;border-color:#cc5555!important;color:#fff!important}
+.reportNotes108{display:block!important;width:100%!important;margin:12px 0!important;border:1px solid #dfe8ed!important;border-radius:8px!important;background:#fff!important;overflow:hidden!important}
+.reportNotes108>.rowhead{display:flex!important;align-items:center!important;gap:8px!important;min-height:46px!important;margin:0!important;padding:9px 13px!important;background:#f4f9fc!important;border-bottom:1px solid #dfe8ed!important}
+.reportNotes108>.rowhead>b{font:700 12px/1.3 Arial,sans-serif!important;color:#17364d!important}
+.reportNotes108 .reportNotesBody108{padding:12px!important}
+.reportNotes108 textarea{width:100%!important;min-height:110px!important;margin:0!important;padding:10px 12px!important;box-sizing:border-box!important;border:1px solid #d7e3e9!important;border-radius:6px!important;background:#fbfdfe!important;font:400 10px/1.45 Arial,sans-serif!important}
+.reportPhoto108{display:block!important;width:100%!important;margin:12px 0!important;border:1px solid #dfe8ed!important;border-radius:8px!important;background:#fff!important;overflow:hidden!important}
+.reportPhoto108>.photohead{display:flex!important;align-items:center!important;gap:8px!important;min-height:46px!important;margin:0!important;padding:9px 13px!important;background:#f4f9fc!important;border-bottom:1px solid #dfe8ed!important}
+.reportPhoto108 .photoAdd108{margin-left:4px!important;height:31px!important;padding:0 11px!important;border:1px solid #168dca!important;border-radius:5px!important;background:#168dca!important;color:#fff!important;font:700 9px/29px Arial,sans-serif!important;cursor:pointer!important;transition:.16s!important}
+.reportPhoto108 .photoAdd108:hover{background:#0d76aa!important;border-color:#0d76aa!important}
+.reportSaveBar .primary{height:38px!important;min-width:210px!important;padding:0 18px!important;border:1px solid #168dca!important;border-radius:5px!important;background:#168dca!important;color:#fff!important;font:700 11px/36px Arial,sans-serif!important;cursor:pointer!important;transition:.16s!important}
+.reportSaveBar .primary:hover{background:#0d76aa!important;border-color:#0d76aa!important}
+button[data-cancel-report720]{height:40px!important;padding:0 15px!important;border:1px solid #a9d1e3!important;border-radius:6px!important;background:#fff!important;color:#147ba9!important;font:600 11px/38px Arial,sans-serif!important;cursor:pointer!important;transition:.16s!important}
+button[data-cancel-report720]:hover{background:#168dca!important;border-color:#168dca!important;color:#fff!important}
