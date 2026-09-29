@@ -1694,3 +1694,27 @@ button[data-add="workDays"]:hover{
   font:600 10px/1.2 Arial,sans-serif!important;
 }
 .invoiceUnit988 b{font-size:12px!important;color:#17364d!important}
+
+/* v8.0.90 — накладная как ссылка + иконка */
+.invoiceRow988.invoiceLink989{
+  width:100%!important;
+  border:0!important;
+  border-top:1px solid #edf1f3!important;
+  border-radius:0!important;
+  background:#fff!important;
+  text-align:left!important;
+  cursor:pointer!important;
+}
+.invoiceRow988.invoiceLink989:hover{background:#eef8fc!important}
+.invoiceNo989{display:flex!important;align-items:center!important;gap:9px!important;min-width:0!important}
+.invoiceNo989 svg{
+  width:19px!important;height:19px!important;flex:0 0 auto!important;
+  fill:none!important;stroke:#2796d2!important;stroke-width:1.7!important;
+  stroke-linecap:round!important;stroke-linejoin:round!important
+}
+.homeInvoices988 .invoiceUnit988,
+.homeInvoices988 .invoiceUnit988 b{
+  font-size:9px!important;
+  line-height:1.2!important;
+}
+.homeInvoices988 .invoiceUnit988{padding:3px 6px!important}
