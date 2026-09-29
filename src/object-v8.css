@@ -1718,3 +1718,35 @@ button[data-add="workDays"]:hover{
   line-height:1.2!important;
 }
 .homeInvoices988 .invoiceUnit988{padding:3px 6px!important}
+
+/* v8.0.92 — цветовая индикация погоды в отчётах */
+.rrWeather926.weather-clear990>svg,
+.dailyWeather981.weather-clear990>svg{stroke:#e5aa18!important}
+.rrWeather926.weather-rain990>svg,
+.dailyWeather981.weather-rain990>svg{stroke:#2389c9!important}
+.rrWeather926.weather-snow990>svg,
+.dailyWeather981.weather-snow990>svg{stroke:#66bfe5!important}
+.rrWeather926.weather-cloud990>svg,
+.dailyWeather981.weather-cloud990>svg{stroke:#7c96a6!important}
+.rrWeather926.weather-fog990>svg,
+.dailyWeather981.weather-fog990>svg{stroke:#8aa0ad!important}
+.rrWeather926.weather-storm990>svg,
+.dailyWeather981.weather-storm990>svg{stroke:#7965b2!important}
+.weatherWind990{
+  display:inline-block!important;
+  margin-left:5px!important;
+  padding:2px 5px!important;
+  border-radius:4px!important;
+  font-style:normal!important;
+  color:#617784!important;
+}
+.weatherWind990.windWarn990{
+  background:#fff3d8!important;
+  color:#b27612!important;
+  font-weight:700!important;
+}
+.weatherWind990.windDanger990{
+  background:#ffeded!important;
+  color:#c54444!important;
+  font-weight:700!important;
+}
