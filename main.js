@@ -58,20 +58,25 @@ ipcMain.handle("photos:set",(_e,key,items=[])=>{let dir=photoDir(key);fs.rmSync(
 ipcMain.handle("photos:get",(_e,key)=>{let dir=photoDir(key);if(!fs.existsSync(dir))return [];return fs.readdirSync(dir).sort().map(name=>{let file=path.join(dir,name),ext=path.extname(name).toLowerCase(),mime=ext===".png"?"image/png":ext===".webp"?"image/webp":"image/jpeg";return "data:"+mime+";base64,"+fs.readFileSync(file).toString("base64")})});
 ipcMain.handle("photos:remove",(_e,key)=>{fs.rmSync(photoDir(key),{recursive:true,force:true});return true});
 ipcMain.handle("photos:remove-prefix",(_e,prefix)=>{let root=photoRoot();if(!fs.existsSync(root))return 0;let p=safePhotoKey(prefix),n=0;for(let name of fs.readdirSync(root)){if(name.startsWith(p)){fs.rmSync(path.join(root,name),{recursive:true,force:true});n++}}return n});
-ipcMain.handle("db:get",(_e,key)=>{let db=dbRead();return Object.prototype.hasOwnProperty.call(db.kv||{},key)?db.kv[key]:null});
-ipcMain.on("db:get-sync",(e,key)=>{let db=dbRead();e.returnValue=Object.prototype.hasOwnProperty.call(db.kv||{},key)?db.kv[key]:null});
-ipcMain.on("db:all-sync",(e)=>{e.returnValue=dbRead().kv||{}});
-ipcMain.on("db:get-prefix-sync",(e,prefix)=>{let db=dbRead(),out={};for(let [key,value] of Object.entries(db.kv||{}))if(key.startsWith(prefix))out[key]=value;e.returnValue=out});
-
-ipcMain.on("db:set-sync",(e,key,value)=>{try{let db=dbRead();db.kv=db.kv||{};db.kv[key]=value;db.updatedAt=new Date().toISOString();dbWrite(db);e.returnValue=true}catch(err){console.error("DB sync save",err);e.returnValue=false}});
-ipcMain.handle("db:set",(_e,key,value)=>{let db=dbRead();db.kv=db.kv||{};db.kv[key]=value;db.updatedAt=new Date().toISOString();dbWrite(db);return true});
-ipcMain.handle("db:remove",(_e,key)=>{let db=dbRead();if(db.kv)delete db.kv[key];db.updatedAt=new Date().toISOString();dbWrite(db);return true});
-ipcMain.handle("db:migrate",(_e,entries={})=>{let db=dbRead(),added=0;db.kv=db.kv||{};for(let [key,value] of Object.entries(entries||{})){if(!Object.prototype.hasOwnProperty.call(db.kv,key)){db.kv[key]=value;added++}}db.migratedAt=db.migratedAt||new Date().toISOString();dbWrite(db);return {ok:true,added,path:dbPath()}});
-ipcMain.handle("db:info",()=>{let db=dbRead();return {path:sqlitePath163(),engine:"sqlite",keys:Object.keys(db.kv||{}).length,updatedAt:db.updatedAt||db.migratedAt||""}});
+function kvParse164(row){if(!row)return null;try{return JSON.parse(row.value)}catch{return row.value}}
+function kvGet164(key){return kvParse164(sqliteDb163().prepare("SELECT value FROM kv WHERE key=?").get(String(key)))}
+function kvAll164(){let out={};for(let row of sqliteDb163().prepare("SELECT key,value FROM kv").all())out[row.key]=kvParse164(row);return out}
+function kvPrefix164(prefix){let out={},p=String(prefix);for(let row of sqliteDb163().prepare("SELECT key,value FROM kv WHERE key LIKE ? ESCAPE '\\'").all(p.replace(/[\\%_]/g,x=>"\\"+x)+"%"))out[row.key]=kvParse164(row);return out}
+function kvSet164(key,value){sqliteDb163().prepare("INSERT INTO kv(key,value,updated_at) VALUES(?,?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value,updated_at=excluded.updated_at").run(String(key),JSON.stringify(value),new Date().toISOString());return true}
+function kvWriteMany164(entries={}){let db=sqliteDb163(),put=db.prepare("INSERT INTO kv(key,value,updated_at) VALUES(?,?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value,updated_at=excluded.updated_at"),now=new Date().toISOString();db.exec("BEGIN IMMEDIATE");try{for(let [key,value] of Object.entries(entries||{}))put.run(key,JSON.stringify(value),now);db.exec("COMMIT");return true}catch(e){try{db.exec("ROLLBACK")}catch{}throw e}}
+ipcMain.handle("db:get",(_e,key)=>kvGet164(key));
+ipcMain.on("db:get-sync",(e,key)=>{e.returnValue=kvGet164(key)});
+ipcMain.on("db:all-sync",(e)=>{e.returnValue=kvAll164()});
+ipcMain.on("db:get-prefix-sync",(e,prefix)=>{e.returnValue=kvPrefix164(prefix)});
+ipcMain.on("db:set-sync",(e,key,value)=>{try{e.returnValue=kvSet164(key,value)}catch(err){console.error("DB sync save",err);e.returnValue=false}});
+ipcMain.handle("db:set",(_e,key,value)=>kvSet164(key,value));
+ipcMain.handle("db:remove",(_e,key)=>{sqliteDb163().prepare("DELETE FROM kv WHERE key=?").run(String(key));return true});
+ipcMain.handle("db:migrate",(_e,entries={})=>{let db=sqliteDb163(),added=0,put=db.prepare("INSERT INTO kv(key,value,updated_at) VALUES(?,?,?) ON CONFLICT(key) DO NOTHING"),now=new Date().toISOString();db.exec("BEGIN IMMEDIATE");try{for(let [key,value] of Object.entries(entries||{})){let r=put.run(key,JSON.stringify(value),now);added+=Number(r.changes||0)}db.exec("COMMIT");return {ok:true,added,path:sqlitePath163()}}catch(e){try{db.exec("ROLLBACK")}catch{}throw e}});
+ipcMain.handle("db:info",()=>{let db=sqliteDb163(),row=db.prepare("SELECT COUNT(*) AS n FROM kv").get(),mig=db.prepare("SELECT value FROM meta WHERE key=?").get("json_migrated_v1");let at="";try{at=mig?JSON.parse(mig.value).at:""}catch{}return {path:sqlitePath163(),engine:"sqlite",keys:Number(row?.n||0),updatedAt:at}});
 ipcMain.handle("db:backup",async()=>{let db=dbRead(),dir=path.join(app.getPath("userData"),"backups");fs.mkdirSync(dir,{recursive:true});let stamp=new Date().toISOString().replace(/[:.]/g,"-"),jsonDest=path.join(dir,"atemir-data-"+stamp+".json"),sqlDest=path.join(dir,"atemir-"+stamp+".db");fs.writeFileSync(jsonDest,JSON.stringify(db),"utf8");sqliteDb163().exec("PRAGMA wal_checkpoint(FULL)");fs.copyFileSync(sqlitePath163(),sqlDest);return {ok:true,path:sqlDest,jsonPath:jsonDest}});
-ipcMain.handle("db:write-many",(_e,entries={})=>{let db=dbRead();db.kv=db.kv||{};for(let [key,value] of Object.entries(entries||{}))db.kv[key]=value;db.updatedAt=new Date().toISOString();dbWrite(db);return true});
-ipcMain.handle("db:remove-prefix",(_e,prefix)=>{let db=dbRead(),n=0;db.kv=db.kv||{};for(let key of Object.keys(db.kv)){if(key.startsWith(prefix)){delete db.kv[key];n++}}if(n){db.updatedAt=new Date().toISOString();dbWrite(db)}return n});
-ipcMain.handle("db:remove-many",(_e,keys=[])=>{let db=dbRead(),n=0;db.kv=db.kv||{};for(let key of keys||[]){if(Object.prototype.hasOwnProperty.call(db.kv,key)){delete db.kv[key];n++}}if(n){db.updatedAt=new Date().toISOString();dbWrite(db)}return n});
+ipcMain.handle("db:write-many",(_e,entries={})=>kvWriteMany164(entries));
+ipcMain.handle("db:remove-prefix",(_e,prefix)=>{let keys=Object.keys(kvPrefix164(prefix));if(!keys.length)return 0;let db=sqliteDb163(),del=db.prepare("DELETE FROM kv WHERE key=?");db.exec("BEGIN IMMEDIATE");try{for(let key of keys)del.run(key);db.exec("COMMIT");return keys.length}catch(e){try{db.exec("ROLLBACK")}catch{}throw e}});
+ipcMain.handle("db:remove-many",(_e,keys=[])=>{let db=sqliteDb163(),del=db.prepare("DELETE FROM kv WHERE key=?"),n=0;db.exec("BEGIN IMMEDIATE");try{for(let key of keys||[]){let r=del.run(String(key));n+=Number(r.changes||0)}db.exec("COMMIT");return n}catch(e){try{db.exec("ROLLBACK")}catch{}throw e}});
 
 
 
