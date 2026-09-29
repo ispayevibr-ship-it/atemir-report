@@ -2642,3 +2642,28 @@ button[data-cancel-report720]:hover{background:#168dca!important;border-color:#1
  display:block!important;clear:both!important;width:100%!important;height:20px!important;
  min-height:20px!important;flex:0 0 20px!important;pointer-events:none!important
 }
+
+
+/* v8.0.136 — дополнительная информация и фотографии отдельными блоками под выполненными работами */
+.reportEditor994 .reportWorksEditor998,
+.reportEditor994 .reportNotes108,
+.reportEditor994 .reportPhoto108{
+ display:block!important;
+ width:100%!important;
+ max-width:none!important;
+ box-sizing:border-box!important;
+ clear:both!important;
+ float:none!important;
+ grid-column:1/-1!important;
+}
+.reportEditor994 .reportNotes108{
+ margin:14px 0 0!important;
+}
+.reportEditor994 .reportPhoto108{
+ margin:14px 0 0!important;
+}
+.reportEditor994 .reportNotesBody108,
+.reportEditor994 .photoGrid108{
+ width:100%!important;
+ box-sizing:border-box!important;
+}
