@@ -48,4 +48,17 @@ body{background:var(--at-canvas)!important;color:var(--at-text)!important;font-f
 })();
 </script>
 <script src="app.js"></script>
+<script>
+(function updaterIcon121(){
+ function fix(){
+  var box=document.getElementById("atemirUpdater"); if(!box)return false;
+  var row=box.firstElementChild, icon=row&&row.firstElementChild; if(!icon)return false;
+  icon.innerHTML='<svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m8 10 4 4 4-4"></path><path d="M5 18v2h14v-2"></path></svg>';
+  icon.style.cssText="width:38px;height:38px;flex:0 0 38px;border-radius:10px;background:#eef8fc;color:#168dca;display:flex;align-items:center;justify-content:center";
+  return true;
+ }
+ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>setTimeout(fix,0));else setTimeout(fix,0);
+ setTimeout(fix,500);
+})();
+</script>
 </body></html>
