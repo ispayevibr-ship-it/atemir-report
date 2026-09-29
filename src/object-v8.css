@@ -2481,3 +2481,10 @@ button[data-cancel-report720]:hover{background:#168dca!important;border-color:#1
 .reportEditor994 .reportEditorHead994 + .reportSectionHead994{
  margin-top:0!important;
 }
+
+
+/* v8.0.119 — вся строка ежедневного отчёта открывает отчёт */
+.dailyListCard981[data-report-row119]{cursor:pointer!important;transition:border-color .15s ease,box-shadow .15s ease,background .15s ease!important}
+.dailyListCard981[data-report-row119]:hover{border-color:#9fcfe2!important;background:#f7fcfe!important;box-shadow:0 3px 12px rgba(18,91,125,.08)!important}
+.dailyListCard981[data-report-row119]:focus-visible{outline:2px solid #168dca!important;outline-offset:2px!important}
+.dailyListCard981[data-report-row119] .dailyActions981{cursor:default!important}
