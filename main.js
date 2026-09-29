@@ -187,8 +187,11 @@ ipcMain.handle("db:remove-many",(_e,keys=[])=>{let db=sqliteDb163(),del=db.prepa
 let win,hotUpdate=null;
 const HOT_OWNER="ispayevibr-ship-it",HOT_REPO="atemir-report-updates";
 function hotRoot(){let p=path.join(app.getPath("userData"),"hot-update");try{fs.mkdirSync(p,{recursive:true})}catch{}return p}
-function effectiveVersion(){try{let x=JSON.parse(fs.readFileSync(path.join(hotRoot(),"version.json"),"utf8"));return x.version||app.getVersion()}catch{return app.getVersion()}}
-function runtimeFile(rel){let hot=path.join(hotRoot(),rel),base=path.join(__dirname,rel);return fs.existsSync(hot)?hot:base}
+function hotVersion(){try{return String(JSON.parse(fs.readFileSync(path.join(hotRoot(),"version.json"),"utf8")).version||"")}catch{return ""}}
+function hotIsNewer(){let v=hotVersion();return !!v&&verCmp(v,app.getVersion())>0}
+function clearStaleHot(){if(hotVersion()&&!hotIsNewer()){let root=hotRoot();try{fs.rmSync(path.join(root,"src"),{recursive:true,force:true})}catch{}try{fs.rmSync(path.join(root,"version.json"),{force:true})}catch{}}}
+function effectiveVersion(){let v=hotVersion();return v&&verCmp(v,app.getVersion())>0?v:app.getVersion()}
+function runtimeFile(rel){let hot=path.join(hotRoot(),rel),base=path.join(__dirname,rel);return hotIsNewer()&&fs.existsSync(hot)?hot:base}
 function ghGet(url,binary=false,redirects=0){return new Promise((resolve,reject)=>{let req=https.get(url,{headers:{"User-Agent":"A-Temir-Stroy-Report","Accept":"application/vnd.github+json","Cache-Control":"no-cache, no-store","Pragma":"no-cache"}},res=>{if(res.statusCode>=300&&res.statusCode<400&&res.headers.location&&redirects<5){res.resume();return ghGet(res.headers.location,binary,redirects+1).then(resolve,reject)}if(res.statusCode!==200){res.resume();return reject(Error("HTTP "+res.statusCode))}let a=[];res.on("data",x=>a.push(x));res.on("end",()=>{let b=Buffer.concat(a);resolve(binary?b:b.toString("utf8"))})});req.on("error",reject)})}
 function verCmp(a,b){let A=String(a).split(".").map(Number),B=String(b).split(".").map(Number);for(let i=0;i<3;i++){let d=(A[i]||0)-(B[i]||0);if(d)return d}return 0}
 async function fetchHotMeta(){let url="https://api.github.com/repos/"+HOT_OWNER+"/"+HOT_REPO+"/contents/hot/latest.json?ref=main&ts="+Date.now(),raw=await ghGet(url),api=JSON.parse(raw),txt=Buffer.from(String(api.content||"").replace(/\\n/g,""),"base64").toString("utf8"),meta=JSON.parse(txt);if(!meta.version)throw Error("Сервер обновлений не вернул номер версии");return meta}
@@ -217,4 +220,4 @@ function updates(){
  autoUpdater.on("error",e=>{console.error("Auto update:",e.message);sendUpdate("error",{message:e.message})});
  setTimeout(async()=>{let hot=await checkHotUpdate();if(!hot)autoUpdater.checkForUpdates().catch(e=>console.error("Update check:",e.message))},2500);
 }
-app.whenReady().then(()=>{create();updates()});app.on("window-all-closed",()=>{if(process.platform!=="darwin")app.quit()});app.on("activate",()=>{if(BrowserWindow.getAllWindows().length===0)create()});
+app.whenReady().then(()=>{clearStaleHot();create();updates()});app.on("window-all-closed",()=>{if(process.platform!=="darwin")app.quit()});app.on("activate",()=>{if(BrowserWindow.getAllWindows().length===0)create()});
