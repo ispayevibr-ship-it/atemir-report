@@ -37,7 +37,7 @@ async function saveEntities144(payload){try{
  // Do not overwrite BOM records that were intentionally left unloaded.
  (payload.tasks||[]).forEach(t=>{
   let k=entityPrefix144+"bom_"+t.id;
-  if(t.__bomLoaded152!==true)delete entries[k]
+  if(t.__bomLoaded152===false)delete entries[k]
  });
  // Never persist renderer-only lazy flags in task metadata.
  (payload.tasks||[]).forEach(t=>{
@@ -162,7 +162,7 @@ async function deleteEntity155(kind,item){
   if(kind==="tasks"&&item?.id){await window.atemirDesktop?.dbRemoveMany?.([entityPrefix144+"task_"+item.id,entityPrefix144+"bom_"+item.id]);await writeEntities153({[entityPrefix144+"taskIndex"]:(d.tasks||[]).map((z,sort)=>({id:z.id,type:z.type||"",code:z.code||"",sort}))});return}
   if(kind==="penalties")return saveEntity148("penalties");
   if(kind==="actedDays")return saveEntity148("actedDays");
-  save()
+  return saveByCollection148(kind,0)
  }catch(e){console.error("Entity delete",e);saveState148("Ошибка сохранения")}
 }
 function saveByCollection148(name,index){
@@ -595,7 +595,7 @@ function bind(){
  document.querySelectorAll("[data-mark-search715]").forEach(inp=>{let [di,ii]=inp.dataset.markSearch715.split(":").map(Number),sel=document.querySelector('[data-mark-select715="'+di+':'+ii+'"]');if(!sel)return;let all=[...sel.options].map(o=>({value:o.value,text:o.textContent,cls:o.className}));inp.oninput=()=>{let q=inp.value.trim().toLowerCase(),cur=sel.value;sel.innerHTML=all.filter((o,i)=>i===0||!q||o.text.toLowerCase().includes(q)).map(o=>'<option value="'+esc(o.value)+'"'+(o.value===cur?' selected':'')+(o.cls?' class="'+esc(o.cls)+'"':'')+'>'+esc(o.text)+'</option>').join("")};});
  document.querySelectorAll("[data-field]").forEach(e=>e.oninput=()=>{let p=e.dataset.field.split("."),o=d;for(let i=0;i<p.length-1;i++)o=o[p[i]];o[p.at(-1)]=e.value;saveEntity148("base")});
  document.querySelectorAll("[data-item]").forEach(e=>e.oninput=()=>{let [n,i,k]=e.dataset.item.split(":");d[n][+i][k]=e.value;saveByCollection148(n,+i)});
- document.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>{let n=b.dataset.add;if(n==="workDays"){d.workDays=d.workDays.filter(x=>!x.isNewDraft720);d.workDays.forEach(x=>x.editing=false);let nw=makers.workDays();nw.metaCollapsed=false;d.workDays.unshift(nw);saveEntity148("report",0)}else if(n==="penalties"){d.penalties.forEach(x=>x.collapsed=true);d.penalties.unshift(makers[n]());saveEntity148("penalties")}else{let nw=makers[n]();if(n==="invoices")nw.no=String((d.invoices||[]).length+1);d[n].unshift(nw);if(n==="invoices")saveEntity148("invoice",0);else if(n==="tasks")saveEntity148("task",0);else save()}render()});
+ document.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>{let n=b.dataset.add;if(n==="workDays"){let drafts=d.workDays.filter(x=>x.isNewDraft720);drafts.forEach(x=>deleteEntity155("workDays",x));d.workDays=d.workDays.filter(x=>!x.isNewDraft720);d.workDays.forEach(x=>x.editing=false);let nw=makers.workDays();nw.metaCollapsed=false;d.workDays.unshift(nw);saveEntity148("report",0)}else if(n==="penalties"){d.penalties.forEach(x=>x.collapsed=true);d.penalties.unshift(makers[n]());saveEntity148("penalties")}else{let nw=makers[n]();if(n==="invoices")nw.no=String((d.invoices||[]).length+1);d[n].unshift(nw);if(n==="invoices")saveEntity148("invoice",0);else if(n==="tasks")saveEntity148("task",0);else saveByCollection148(n,0)}render()});
  document.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{let [n,i]=b.dataset.del.split(":");if(n==="workDays"){let day=d.workDays[+i];if(!day||!confirm("Удалить ежедневный отчёт за "+(day.date||"выбранный день")+"?\n\nБудут удалены все выполненные работы и фотографии этого отчёта."))return;try{let db=await photoDb(),tx=db.transaction("photos","readwrite"),store=tx.objectStore("photos");(day.items||[]).forEach((x,ii)=>store.delete(x.id?"work_"+id+"_item_"+x.id:"work_"+id+"_"+i+"_"+ii));store.delete(day.id?"day_"+id+"_report_"+day.id:"day_"+id+"_"+i)}catch{}await window.atemirDesktop?.photoRemove?.(day.id?"day_"+id+"_report_"+day.id:"day_"+id+"_"+i);for(let x of (day.items||[]))if(x.id)await window.atemirDesktop?.photoRemove?.("work_"+id+"_item_"+x.id)}let removed=d[n]?.[+i];d[n].splice(+i,1);deleteEntity155(n,removed);render()});
  document.querySelectorAll("[data-task-save]").forEach(b=>b.onclick=()=>{let t=d.tasks[+b.dataset.taskSave];t.editing=false;saveEntity148("task",+b.dataset.taskSave);render()});
  document.querySelectorAll("[data-task-edit]").forEach(b=>b.onclick=()=>{d.tasks[+b.dataset.taskEdit].editing=true;render()});
