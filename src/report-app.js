@@ -6,11 +6,41 @@ function reportDateRu721(v){if(!v)return"без даты";let p=String(v).slice(
 function schemeNorm(v){return String(v||"").trim().toUpperCase().replace(/[–—−]/g,"-").replace(/\s+/g,"").replace(/^K(?=\d)/,"К").replace(/^B(?=\d)/,"В")}function schemeMounted(){let m={};savedWorkDays574().forEach(day=>(day.items||[]).forEach(x=>{let parts=String(x.mark||"").split(/[,;\/\s]+/).map(schemeNorm).filter(Boolean),q=Number(x.qty)||1;parts.forEach(z=>{m[z]=(m[z]||0)+(parts.length>1?1:q)})}));return m}function parseSchemeBom(text){let rows=[],seen={};String(text||"").split(/\r?\n/).forEach(line=>{let p=line.trim().split(/[;\t,]+/).map(x=>x.trim()).filter(Boolean),mark="",qty=1;p.forEach(v=>{let z=schemeNorm(v);if(/^[А-ЯA-Z]{0,4}\d+(?:[А-ЯA-Z]+)?(?:-\d+)?$/.test(z)&&!mark)mark=z});for(let i=p.length-1;i>=0;i--){let n=Number(String(p[i]).replace(",","."));if(Number.isFinite(n)&&n>0){qty=n;break}}if(mark){if(seen[mark])seen[mark].qty+=qty;else{seen[mark]={mark,qty};rows.push(seen[mark])}}});return rows}
 const key="atemir_v9__object_"+id,blank=()=>({version:72,base:{objectName:obj.name||"",address:obj.address||"",client:obj.client||""},reportDate:"",weather:{location:"",temp:"",wind:"",precip:""},reportPhotos:[],actedDays:[],penalties:[],workTypes:[],tasks:[],deadlines:[],workDays:[],invoices:[],workers:[],responsibles:[{role:"",fio:"",collapsed:false}],equipment:[]});
 let d;try{let dbd=window.atemirDesktop?.dbGetSync?.(key);d=Object.assign(blank(),dbd&&typeof dbd==="object"?dbd:JSON.parse(localStorage.getItem(key)||"{}"))}catch{d=blank()}function dbPut140(k,v){window.atemirDesktop?.dbSet?.(k,v).catch?.(e=>console.error("Local DB save",e))}
-async function dbHydrate140(){if(!window.atemirDesktop?.dbGet)return;try{let x=await window.atemirDesktop.dbGet(key);if(x&&typeof x==="object"){d=Object.assign(blank(),x);render()}}catch(e){console.error("Local DB load",e)}}
+async function dbHydrate140(){if(!window.atemirDesktop?.dbGet||window.atemirDesktop?.dbGetSync?.(entityPrefix144+"meta"))return;try{let x=await window.atemirDesktop.dbGet(key);if(x&&typeof x==="object"){d=Object.assign(blank(),x);await saveEntities144({...d,reportPhotos:[],workDays:stripAllPhotos142()});render()}}catch(e){console.error("Local DB load",e)}}
+const entityPrefix144="atemir_entity_"+id+"_";
+function entityEntries144(payload){
+ let base={...payload};delete base.workDays;delete base.invoices;delete base.tasks;delete base.penalties;delete base.actedDays;
+ let out={};
+ out[entityPrefix144+"base"]=base;
+ out[entityPrefix144+"reports"]=(payload.workDays||[]);
+ out[entityPrefix144+"invoices"]=(payload.invoices||[]);
+ out[entityPrefix144+"tasks"]=(payload.tasks||[]);
+ out[entityPrefix144+"penalties"]=(payload.penalties||[]);
+ out[entityPrefix144+"actedDays"]=(payload.actedDays||[]);
+ out[entityPrefix144+"meta"]={schema:1,updatedAt:new Date().toISOString()};
+ return out
+}
+async function saveEntities144(payload){try{await window.atemirDesktop?.dbWriteMany?.(entityEntries144(payload))}catch(e){console.error("Entity DB save",e)}}
+function hydrateEntities144(){
+ try{
+  let meta=window.atemirDesktop?.dbGetSync?.(entityPrefix144+"meta");
+  if(!meta)return false;
+  let base=window.atemirDesktop.dbGetSync(entityPrefix144+"base")||{};
+  d=Object.assign(blank(),base);
+  d.workDays=window.atemirDesktop.dbGetSync(entityPrefix144+"reports")||[];
+  d.invoices=window.atemirDesktop.dbGetSync(entityPrefix144+"invoices")||[];
+  d.tasks=window.atemirDesktop.dbGetSync(entityPrefix144+"tasks")||[];
+  d.penalties=window.atemirDesktop.dbGetSync(entityPrefix144+"penalties")||[];
+  d.actedDays=window.atemirDesktop.dbGetSync(entityPrefix144+"actedDays")||[];
+  return true
+ }catch(e){console.error("Entity DB load",e);return false}
+}
 
+
+if(!hydrateEntities144()){let initial144={...d,reportPhotos:[],workDays:stripAllPhotos142()};saveEntities144(initial144)}
 let active="home",timer;
 const sections=[["home","Обзор"],["works","Ежедневные отчёты"],["bom","Ведомости марок"],["schemeLab","Схема МК — тест"],["invoices","Поставки (накладные)"],["tasks","Виды работ / проекты"],["progress","Прогресс проекта"],["dynamics","Динамика"],["deadlines","Сроки"],["acted","Актированные дни"],["penalties","Замечания / штрафы"]];
-function save(){clearTimeout(timer);$("#saveState").textContent="Сохраняю…";timer=setTimeout(()=>{let payload={...d,reportPhotos:[],workDays:stripAllPhotos142()};dbPut140(key,payload);$("#saveState").textContent="Сохранено"},450)}
+function save(){clearTimeout(timer);$("#saveState").textContent="Сохраняю…";timer=setTimeout(()=>{let payload={...d,reportPhotos:[],workDays:stripAllPhotos142()};saveEntities144(payload);dbPut140(key,payload);$("#saveState").textContent="Сохранено"},450)}
 const photoDb=()=>new Promise((ok,no)=>{let r=indexedDB.open("ATemirReportPhotos",2);r.onupgradeneeded=()=>{let db=r.result;if(!db.objectStoreNames.contains("photos"))db.createObjectStore("photos")};r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)});
 async function loadPhotos(){try{let db=await photoDb(),tx=db.transaction("photos","readonly"),r=tx.objectStore("photos").get("object_"+id);r.onsuccess=()=>{d.reportPhotos=Array.isArray(r.result)?r.result:[];if(active==="photos")render()}}catch{}}
 async function savePhotos(){try{let db=await photoDb(),tx=db.transaction("photos","readwrite");tx.objectStore("photos").put(d.reportPhotos||[],"object_"+id)}catch{}}
@@ -22,7 +52,7 @@ async function loadDayPhotos142(){try{ensureStableIds538();let db=await photoDb(
 function stripAllPhotos142(){return (d.workDays||[]).map(day=>({...day,photos:[],items:(day.items||[]).map(x=>({...x,photos:[]}))}))}
 
 function ensureStableIds538(){let changed=false;(d.workDays||[]).forEach(day=>{if(!day.id){day.id=uid538();changed=true}(day.items||[]).forEach(x=>{if(!x.id){x.id=uid538();changed=true}})});return changed}
-async function loadWorkPhotos530(){try{let idsChanged=ensureStableIds538();idsChanged=ensureInvoiceIds575()||idsChanged;idsChanged=ensureTaskLinks580()||idsChanged;let db=await photoDb(),tx=db.transaction("photos","readwrite"),store=tx.objectStore("photos"),pending=[],migrated=false;(d.workDays||[]).forEach((day,di)=>(day.items||[]).forEach((x,ii)=>{pending.push(new Promise(done=>{let stable=workPhotoKey530(di,ii),legacy="work_"+id+"_"+di+"_"+ii,r=store.get(stable);r.onsuccess=()=>{if(Array.isArray(r.result)){x.photos=r.result;done();return}let lr=store.get(legacy);lr.onsuccess=()=>{if(Array.isArray(lr.result)&&lr.result.length){x.photos=lr.result;let w=store.put([...lr.result],stable);w.onsuccess=()=>{migrated=true;done()};w.onerror=()=>done();return}if(Array.isArray(x.photos)&&x.photos.length){let photos=[...x.photos],w=store.put(photos,stable);w.onsuccess=()=>{x.photos=photos;migrated=true;done()};w.onerror=()=>done()}else done()};lr.onerror=()=>done()};r.onerror=()=>done()}))}));await Promise.all(pending);if(migrated||idsChanged){let payload={...d,reportPhotos:[],workDays:stripAllPhotos142()};dbPut140(key,payload)}render()}catch{}}
+async function loadWorkPhotos530(){try{let idsChanged=ensureStableIds538();idsChanged=ensureInvoiceIds575()||idsChanged;idsChanged=ensureTaskLinks580()||idsChanged;let db=await photoDb(),tx=db.transaction("photos","readwrite"),store=tx.objectStore("photos"),pending=[],migrated=false;(d.workDays||[]).forEach((day,di)=>(day.items||[]).forEach((x,ii)=>{pending.push(new Promise(done=>{let stable=workPhotoKey530(di,ii),legacy="work_"+id+"_"+di+"_"+ii,r=store.get(stable);r.onsuccess=()=>{if(Array.isArray(r.result)){x.photos=r.result;done();return}let lr=store.get(legacy);lr.onsuccess=()=>{if(Array.isArray(lr.result)&&lr.result.length){x.photos=lr.result;let w=store.put([...lr.result],stable);w.onsuccess=()=>{migrated=true;done()};w.onerror=()=>done();return}if(Array.isArray(x.photos)&&x.photos.length){let photos=[...x.photos],w=store.put(photos,stable);w.onsuccess=()=>{x.photos=photos;migrated=true;done()};w.onerror=()=>done()}else done()};lr.onerror=()=>done()};r.onerror=()=>done()}))}));await Promise.all(pending);if(migrated||idsChanged){let payload={...d,reportPhotos:[],workDays:stripAllPhotos142()};saveEntities144(payload);dbPut140(key,payload)}render()}catch{}}
 async function saveWorkPhotos530(di,ii){try{let db=await photoDb(),tx=db.transaction("photos","readwrite"),x=d.workDays?.[di]?.items?.[ii];tx.objectStore("photos").put(Array.isArray(x?.photos)?x.photos:[],workPhotoKey530(di,ii))}catch{}}
 function stripWorkPhotos530(){return (d.workDays||[]).map(day=>({...day,items:(day.items||[]).map(x=>({...x,photos:[]}))}))}
 function savedWorkDays574(){return (d.workDays||[]).filter(day=>day&&day.editing===false&&(day.items||[]).every(x=>x.editing===false))}
