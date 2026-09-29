@@ -138,17 +138,17 @@ function kvParse164(row){if(!row)return null;try{return JSON.parse(row.value)}ca
 function relationalGet169(key){
  let db=sqliteDb163(),s=String(key),m=s.match(/^atemir_entity_(.+)_(task|bom|report|invoice)_([^_]+)$/);if(m){let kind=m[2],id=m[3];
   if(kind==="task"){let r=db.prepare("SELECT raw_json FROM tasks WHERE id=?").get(id);return r?kvParseSafe165(r.raw_json,null):undefined}
-  if(kind==="bom"){let rows=db.prepare("SELECT raw_json FROM bom_marks WHERE task_id=? ORDER BY sort_order").all(id);return rows.length?rows.map(r=>kvParseSafe165(r.raw_json,{})):undefined}
+  if(kind==="bom"){let rows=db.prepare("SELECT raw_json FROM bom_marks WHERE task_id=? ORDER BY sort_order").all(id);return rows.map(r=>kvParseSafe165(r.raw_json,{}))}
   if(kind==="report"){let r=db.prepare("SELECT raw_json FROM reports WHERE id=?").get(id);return r?kvParseSafe165(r.raw_json,null):undefined}
   if(kind==="invoice"){let r=db.prepare("SELECT raw_json FROM invoices WHERE id=?").get(id);return r?kvParseSafe165(r.raw_json,null):undefined}
  }
  let a=s.match(/^atemir_entity_(.+)_(base|taskIndex|reportIndex|invoiceIndex|actedDays|penalties)$/);if(a){let oid=a[1],kind=a[2];
   if(kind==="base"){let r=db.prepare("SELECT raw_json FROM objects WHERE id=?").get(oid);if(!r)return undefined;let x=kvParseSafe165(r.raw_json,{});return x.base||x}
-  if(kind==="taskIndex"){let rows=db.prepare("SELECT id,type,code,sort_order FROM tasks WHERE object_id=? ORDER BY sort_order").all(oid);return rows.length?rows.map(r=>({id:r.id,type:r.type||"",code:r.code||"",sort:r.sort_order||0})):undefined}
-  if(kind==="reportIndex"){let rows=db.prepare("SELECT id,report_date,sort_order FROM reports WHERE object_id=? ORDER BY sort_order").all(oid);return rows.length?rows.map(r=>({id:r.id,date:r.report_date||"",sort:r.sort_order||0})):undefined}
-  if(kind==="invoiceIndex"){let rows=db.prepare("SELECT id,invoice_date,number,sort_order FROM invoices WHERE object_id=? ORDER BY sort_order").all(oid);return rows.length?rows.map(r=>({id:r.id,date:r.invoice_date||"",no:r.number||"",sort:r.sort_order||0})):undefined}
-  if(kind==="actedDays"){let rows=db.prepare("SELECT raw_json FROM acted_days WHERE object_id=? ORDER BY day").all(oid);return rows.length?rows.map(r=>kvParseSafe165(r.raw_json,"")).filter(Boolean):undefined}
-  let rows=db.prepare("SELECT raw_json FROM penalties WHERE object_id=? ORDER BY sort_order").all(oid);return rows.length?rows.map(r=>kvParseSafe165(r.raw_json,{})):undefined
+  if(kind==="taskIndex"){let rows=db.prepare("SELECT id,type,code,sort_order FROM tasks WHERE object_id=? ORDER BY sort_order").all(oid);return rows.map(r=>({id:r.id,type:r.type||"",code:r.code||"",sort:r.sort_order||0}))}
+  if(kind==="reportIndex"){let rows=db.prepare("SELECT id,report_date,sort_order FROM reports WHERE object_id=? ORDER BY sort_order").all(oid);return rows.map(r=>({id:r.id,date:r.report_date||"",sort:r.sort_order||0}))}
+  if(kind==="invoiceIndex"){let rows=db.prepare("SELECT id,invoice_date,number,sort_order FROM invoices WHERE object_id=? ORDER BY sort_order").all(oid);return rows.map(r=>({id:r.id,date:r.invoice_date||"",no:r.number||"",sort:r.sort_order||0}))}
+  if(kind==="actedDays"){let rows=db.prepare("SELECT raw_json FROM acted_days WHERE object_id=? ORDER BY day").all(oid);return rows.map(r=>kvParseSafe165(r.raw_json,"")).filter(Boolean)}
+  let rows=db.prepare("SELECT raw_json FROM penalties WHERE object_id=? ORDER BY sort_order").all(oid);return rows.map(r=>kvParseSafe165(r.raw_json,{}))
  }
  if(s==="atemir-company-objects-v1"){let rows=db.prepare("SELECT id,raw_json FROM objects ORDER BY rowid").all();if(rows.length)return rows.map(r=>{let x=kvParseSafe165(r.raw_json,{});if(x.base)delete x.base;return Object.assign({id:r.id},x)})}
 }
@@ -188,8 +188,8 @@ ipcMain.handle("db:migrate",(_e,entries={})=>{let db=sqliteDb163(),added=0,put=d
 ipcMain.handle("db:info",()=>{let db=sqliteDb163(),row=db.prepare("SELECT COUNT(*) AS n FROM kv").get(),mig=db.prepare("SELECT value FROM meta WHERE key=?").get("json_migrated_v1");let at="";try{at=mig?JSON.parse(mig.value).at:""}catch{}return {path:sqlitePath163(),engine:"sqlite",keys:Number(row?.n||0),updatedAt:at}});
 ipcMain.handle("db:backup",async()=>{let db=dbRead(),dir=path.join(app.getPath("userData"),"backups");fs.mkdirSync(dir,{recursive:true});let stamp=new Date().toISOString().replace(/[:.]/g,"-"),jsonDest=path.join(dir,"atemir-data-"+stamp+".json"),sqlDest=path.join(dir,"atemir-"+stamp+".db");fs.writeFileSync(jsonDest,JSON.stringify(db),"utf8");sqliteDb163().exec("PRAGMA wal_checkpoint(FULL)");fs.copyFileSync(sqlitePath163(),sqlDest);return {ok:true,path:sqlDest,jsonPath:jsonDest}});
 ipcMain.handle("db:write-many",(_e,entries={})=>kvWriteMany164(entries));
-ipcMain.handle("db:remove-prefix",(_e,prefix)=>{let keys=Object.keys(kvPrefix164(prefix));if(!keys.length)return 0;let db=sqliteDb163(),del=db.prepare("DELETE FROM kv WHERE key=?");db.exec("BEGIN IMMEDIATE");try{for(let key of keys)del.run(key);db.exec("COMMIT");return keys.length}catch(e){try{db.exec("ROLLBACK")}catch{}throw e}});
-ipcMain.handle("db:remove-many",(_e,keys=[])=>{let db=sqliteDb163(),del=db.prepare("DELETE FROM kv WHERE key=?"),n=0;db.exec("BEGIN IMMEDIATE");try{for(let key of keys||[]){let r=del.run(String(key));n+=Number(r.changes||0)}db.exec("COMMIT");return n}catch(e){try{db.exec("ROLLBACK")}catch{}throw e}});
+ipcMain.handle("db:remove-prefix",(_e,prefix)=>{let keys=Object.keys(kvPrefix164(prefix)),db=sqliteDb163(),del=db.prepare("DELETE FROM kv WHERE key=?"),s=String(prefix);db.exec("BEGIN IMMEDIATE");try{for(let key of keys)del.run(key);let mo=s.match(/^atemir_entity_(.+)_$/);if(mo)db.prepare("DELETE FROM objects WHERE id=?").run(mo[1]);else for(let key of keys)relationalRemove169(key);db.exec("COMMIT");return keys.length}catch(e){try{db.exec("ROLLBACK")}catch{}throw e}});
+ipcMain.handle("db:remove-many",(_e,keys=[])=>{let db=sqliteDb163(),del=db.prepare("DELETE FROM kv WHERE key=?"),n=0;db.exec("BEGIN IMMEDIATE");try{for(let key of keys||[]){let r=del.run(String(key));n+=Number(r.changes||0);relationalRemove169(key)}db.exec("COMMIT");return n}catch(e){try{db.exec("ROLLBACK")}catch{}throw e}});
 
 
 
