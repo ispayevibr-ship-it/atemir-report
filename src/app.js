@@ -1,8 +1,7 @@
 /* Main company dashboard runtime. Moved from index.html in v5.33.0. */
 "use strict";
-const KEY="atemir-company-objects-v1";let objects=[];try{let dbv=window.atemirDesktop?.dbGetSync?.(KEY);if(Array.isArray(dbv))objects=dbv;else objects=JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){try{objects=JSON.parse(localStorage.getItem(KEY)||"[]")}catch{objects=[]}}
-const DB_KEYS140=()=>{let out={"atemir-company-objects-v1":objects};for(let o of objects){let k="atemir_v9__object_"+o.id,s=localStorage.getItem(k);if(s!=null)try{out[k]=JSON.parse(s)}catch{out[k]=s}let sk="atemir_scheme155__object_"+o.id,ss=localStorage.getItem(sk);if(ss!=null)try{out[sk]=JSON.parse(ss)}catch{out[sk]=ss}}return out};
-async function dbInit140(){if(!window.atemirDesktop?.dbMigrate)return;try{let result=await window.atemirDesktop.dbMigrate(DB_KEYS140());let remote=await window.atemirDesktop.dbGet(KEY);if(Array.isArray(remote)){objects=remote;render()}if(result?.added>0)await window.atemirDesktop.dbBackup?.()}catch(e){console.error("Local DB init",e)}}
+const KEY="atemir-company-objects-v1";let objects=[];const desktopDb140=!!window.atemirDesktop?.dbGetSync;try{if(desktopDb140){let dbv=window.atemirDesktop.dbGetSync(KEY);objects=Array.isArray(dbv)?dbv:[]}else objects=JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){objects=[]}
+async function dbInit140(){if(!window.atemirDesktop?.dbGet)return;try{let remote=await window.atemirDesktop.dbGet(KEY);objects=Array.isArray(remote)?remote:[];render()}catch(e){console.error("Local DB init",e)}}
 function dbPut140(k,v){window.atemirDesktop?.dbSet?.(k,v).catch?.(e=>console.error("Local DB save",e))}
 
 const esc=s=>String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));function save(){dbPut140(KEY,objects)}
