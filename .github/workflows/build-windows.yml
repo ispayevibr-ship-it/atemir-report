@@ -49,7 +49,7 @@ jobs:
           $changed = @(git diff-tree --no-commit-id --name-only -r $env:GITHUB_SHA)
           $core = $false
           foreach ($f in $changed) {
-            if ($f -eq "main.js" -or $f -eq "preload.js" -or $f -eq "package.json") { $core = $true }
+            if ($f -eq "main.js" -or $f -eq "preload.js") { $core = $true }
           }
           "core=$($core.ToString().ToLower())" >> $env:GITHUB_OUTPUT
           Write-Host "Core runtime changed: $core"
@@ -73,17 +73,8 @@ jobs:
         run: |
           $version = node -p "require('./package.json').version"
           "version=$version" >> $env:GITHUB_OUTPUT
-      - name: Detect full release
-        id: version_bump
-        if: github.event_name == 'push'
-        shell: pwsh
-        run: |
-          $changed = @(git diff-tree --no-commit-id --name-only -r $env:GITHUB_SHA)
-          $release = if (($changed -contains "package.json") -or ($changed -contains "main.js") -or ($changed -contains "preload.js")) { "true" } else { "false" }
-          "release=$release" >> $env:GITHUB_OUTPUT
-          Write-Host "Full release required: $release"
       - name: Publish public auto-update release
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && steps.core_change.outputs.core == 'true'
         shell: pwsh
         env:
           GH_TOKEN: ${{ secrets.UPDATE_REPO_TOKEN }}
