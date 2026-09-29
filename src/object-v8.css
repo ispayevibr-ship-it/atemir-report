@@ -2310,3 +2310,27 @@ button[data-add="workDays"]:hover{
 .reportEditor106 .reportSaveBar{justify-content:flex-end!important;padding:11px 12px!important}
 .reportEditor106 .reportSaveBar .primary{min-width:210px!important}
 @media(max-width:1250px){.reportPhoto108 .photoGrid108{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
+
+/* v8.0.109 — шаги, кнопки и список выполненных работ */
+.reportEditor106 .sectionNo106{width:24px!important;height:24px!important;flex:0 0 24px!important;border-radius:6px!important;background:#2796d2!important;font-size:10px!important}
+.reportEditor106 button,.reportEditor106 label.primary{transition:background .16s ease,border-color .16s ease,color .16s ease,transform .16s ease!important}
+.reportEditor106 button.primary,.reportEditor106 label.primary,.reportEditor106 .reportStructHead997 button,.reportEditor106 .reportWorksHead998 button{background:#168dca!important;border-color:#168dca!important;color:#fff!important}
+.reportEditor106 button.primary:hover,.reportEditor106 label.primary:hover,.reportEditor106 .reportStructHead997 button:hover,.reportEditor106 .reportWorksHead998 button:hover{background:#0d76aa!important;border-color:#0d76aa!important;color:#fff!important}
+.reportEditor106 button.white{background:#fff!important;border:1px solid #b9d4e1!important;color:#187da9!important;border-radius:5px!important}
+.reportEditor106 button.white:hover{background:#e8f5fb!important;border-color:#78bddd!important;color:#0d6f9b!important}
+.reportEditor106 button.danger{background:#fff!important;border:1px solid #e0b7b7!important;color:#bd4d4d!important;border-radius:5px!important}
+.reportEditor106 button.danger:hover{background:#fff0f0!important;border-color:#d98181!important;color:#a73535!important}
+.reportEditor106 .reportWorksHead998 .primary{height:32px!important;padding:0 13px!important;font:700 9.5px/30px Arial,sans-serif!important}
+.reportEditor106 .reportWorksList998{background:#fff!important}
+.reportEditor106 .reportWorksList998>.workSaved{padding:0!important;background:#fff!important;border-bottom:1px solid #e5ecef!important}
+.reportEditor106 .reportWorksList998>.workSaved:last-child{border-bottom:0!important}
+.reportEditor106 .reportWorksList998>.workSaved>.rowhead{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:14px!important;min-height:58px!important;padding:9px 13px!important;background:#fff!important}
+.reportEditor106 .reportWorksList998>.workSaved:hover>.rowhead{background:#f2f9fc!important}
+.reportEditor106 .reportWorksList998>.workSaved>.rowhead>div:first-child{display:block!important}
+.reportEditor106 .reportWorksList998>.workSaved>.rowhead>div:first-child>b{display:block!important;margin-bottom:3px!important;font:700 11px/1.35 Arial,sans-serif!important;color:#18384d!important}
+.reportEditor106 .reportWorksList998>.workSaved .muted{font:400 10px/1.35 Arial,sans-serif!important;color:#647a86!important}
+.reportEditor106 .reportWorksList998>.workSaved>.rowhead>div:last-child{display:flex!important;align-items:center!important;gap:5px!important}
+.reportEditor106 .reportWorksList998>.workSaved>.rowhead>div:last-child button{height:29px!important;min-height:29px!important;padding:0 9px!important;font:600 9px/27px Arial,sans-serif!important}
+.reportEditor106 .reportWorksList998>.workSaved>.rowhead>div:last-child .white:hover{background:#e8f5fb!important;border-color:#78bddd!important;color:#0d6f9b!important}
+.reportEditor106 .reportWorksList998>.workSaved>.rowhead>div:last-child .danger:hover{background:#fff0f0!important;border-color:#d98181!important;color:#a73535!important}
+.workEdit107 .workEditActions107 .primary:hover{background:#0d76aa!important;border-color:#0d76aa!important}
