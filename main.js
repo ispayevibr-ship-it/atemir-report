@@ -10,7 +10,16 @@ function sqliteDb163(){
  if(sqlite163)return sqlite163;
  let file=sqlitePath163();fs.mkdirSync(path.dirname(file),{recursive:true});
  sqlite163=new DatabaseSync(file);
- sqlite163.exec("PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL; PRAGMA foreign_keys=ON; CREATE TABLE IF NOT EXISTS kv (key TEXT PRIMARY KEY, value TEXT NOT NULL, updated_at TEXT NOT NULL); CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);");
+ sqlite163.exec(`PRAGMA journal_mode=WAL; PRAGMA synchronous=NORMAL; PRAGMA foreign_keys=ON;
+ CREATE TABLE IF NOT EXISTS kv (key TEXT PRIMARY KEY, value TEXT NOT NULL, updated_at TEXT NOT NULL);
+ CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+ CREATE TABLE IF NOT EXISTS objects (id TEXT PRIMARY KEY,name TEXT,client TEXT,status TEXT,address TEXT,participants TEXT,notes TEXT,hero_photo TEXT,raw_json TEXT NOT NULL,updated_at TEXT NOT NULL);
+ CREATE TABLE IF NOT EXISTS tasks (id TEXT PRIMARY KEY,object_id TEXT NOT NULL,type TEXT,code TEXT,unit TEXT,volume REAL,start_date TEXT,end_date TEXT,bom_name TEXT,sort_order INTEGER NOT NULL DEFAULT 0,raw_json TEXT NOT NULL,updated_at TEXT NOT NULL,FOREIGN KEY(object_id) REFERENCES objects(id) ON DELETE CASCADE);
+ CREATE INDEX IF NOT EXISTS idx_tasks_object ON tasks(object_id,sort_order);
+ CREATE TABLE IF NOT EXISTS bom_marks (object_id TEXT NOT NULL,task_id TEXT NOT NULL,mark_key TEXT NOT NULL,mark TEXT,name TEXT,qty REAL,unit TEXT,sort_order INTEGER NOT NULL DEFAULT 0,raw_json TEXT NOT NULL,updated_at TEXT NOT NULL,PRIMARY KEY(task_id,mark_key),FOREIGN KEY(task_id) REFERENCES tasks(id) ON DELETE CASCADE);
+ CREATE INDEX IF NOT EXISTS idx_bom_object_task ON bom_marks(object_id,task_id,sort_order);`);
+ migrateJsonToSqlite163();
+ migrateRelational165();
  migrateJsonToSqlite163();
  return sqlite163
 }
@@ -33,6 +42,35 @@ function migrateJsonToSqlite163(){
   }
  }catch(e){try{db.exec("ROLLBACK")}catch{}throw e}
 }
+function relNum165(v){let n=Number(String(v??"").replace(",","."));return Number.isFinite(n)?n:null}
+function migrateRelational165(){
+ let db=sqlite163;if(!db)return;
+ let done=db.prepare("SELECT value FROM meta WHERE key=?").get("relational_v1");
+ if(done)return;
+ let list=kvParseSafe165(db.prepare("SELECT value FROM kv WHERE key=?").get("atemir-company-objects-v1")?.value,[]);
+ let now=new Date().toISOString();
+ let putObj=db.prepare("INSERT INTO objects(id,name,client,status,address,participants,notes,hero_photo,raw_json,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET name=excluded.name,client=excluded.client,status=excluded.status,address=excluded.address,participants=excluded.participants,notes=excluded.notes,hero_photo=excluded.hero_photo,raw_json=excluded.raw_json,updated_at=excluded.updated_at");
+ let putTask=db.prepare("INSERT INTO tasks(id,object_id,type,code,unit,volume,start_date,end_date,bom_name,sort_order,raw_json,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET object_id=excluded.object_id,type=excluded.type,code=excluded.code,unit=excluded.unit,volume=excluded.volume,start_date=excluded.start_date,end_date=excluded.end_date,bom_name=excluded.bom_name,sort_order=excluded.sort_order,raw_json=excluded.raw_json,updated_at=excluded.updated_at");
+ let putBom=db.prepare("INSERT INTO bom_marks(object_id,task_id,mark_key,mark,name,qty,unit,sort_order,raw_json,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(task_id,mark_key) DO UPDATE SET object_id=excluded.object_id,mark=excluded.mark,name=excluded.name,qty=excluded.qty,unit=excluded.unit,sort_order=excluded.sort_order,raw_json=excluded.raw_json,updated_at=excluded.updated_at");
+ db.exec("BEGIN IMMEDIATE");
+ try{
+  for(let o of Array.isArray(list)?list:[]){
+   let oid=String(o?.id??"");if(!oid)continue,p="atemir_entity_"+oid+"_";
+   let base=kvParseSafe165(db.prepare("SELECT value FROM kv WHERE key=?").get(p+"base")?.value,{});
+   putObj.run(oid,o.name||base.objectName||"",o.client||base.client||"",o.status||"В работе",o.address||base.address||"",base.participants||o.participants||"",base.notes||o.notes||"",base.heroPhoto||"",JSON.stringify({...o,base}),now);
+   let ti=kvParseSafe165(db.prepare("SELECT value FROM kv WHERE key=?").get(p+"taskIndex")?.value,[]);
+   for(let z of Array.isArray(ti)?ti:[]){
+    let t=kvParseSafe165(db.prepare("SELECT value FROM kv WHERE key=?").get(p+"task_"+z.id)?.value,null);if(!t)continue;
+    let tid=String(t.id||z.id);putTask.run(tid,oid,t.type||"",t.code||"",t.unit||"",relNum165(t.volume),t.start||"",t.date||"",t.bomName||"",Number(z.sort||0),JSON.stringify(t),now);
+    let bom=kvParseSafe165(db.prepare("SELECT value FROM kv WHERE key=?").get(p+"bom_"+tid)?.value,[]);
+    (Array.isArray(bom)?bom:[]).forEach((r,i)=>{let mk=String(r.id||r.mark||r.name||i);putBom.run(oid,tid,mk,r.mark||"",r.name||r.title||"",relNum165(r.qty??r.count??r.volume),r.unit||t.unit||"",i,JSON.stringify(r),now)})
+   }
+  }
+  db.prepare("INSERT INTO meta(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value").run("relational_v1",JSON.stringify({at:now,objects:db.prepare("SELECT COUNT(*) n FROM objects").get().n,tasks:db.prepare("SELECT COUNT(*) n FROM tasks").get().n,bom:db.prepare("SELECT COUNT(*) n FROM bom_marks").get().n}));
+  db.exec("COMMIT")
+ }catch(e){try{db.exec("ROLLBACK")}catch{}throw e}
+}
+function kvParseSafe165(v,fallback){if(v==null)return fallback;try{return JSON.parse(v)}catch{return fallback}}
 function dbRead(){
  let db=sqliteDb163(),kv={};
  for(let row of db.prepare("SELECT key,value FROM kv").all()){try{kv[row.key]=JSON.parse(row.value)}catch{kv[row.key]=row.value}}
