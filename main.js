@@ -9,6 +9,8 @@ function dbWrite(x){let file=dbPath(),tmp=file+".tmp";fs.mkdirSync(path.dirname(
 ipcMain.handle("db:get",(_e,key)=>{let db=dbRead();return Object.prototype.hasOwnProperty.call(db.kv||{},key)?db.kv[key]:null});
 ipcMain.on("db:get-sync",(e,key)=>{let db=dbRead();e.returnValue=Object.prototype.hasOwnProperty.call(db.kv||{},key)?db.kv[key]:null});
 ipcMain.on("db:all-sync",(e)=>{e.returnValue=dbRead().kv||{}});
+ipcMain.on("db:get-prefix-sync",(e,prefix)=>{let db=dbRead(),out={};for(let [key,value] of Object.entries(db.kv||{}))if(key.startsWith(prefix))out[key]=value;e.returnValue=out});
+
 ipcMain.on("db:set-sync",(e,key,value)=>{try{let db=dbRead();db.kv=db.kv||{};db.kv[key]=value;db.updatedAt=new Date().toISOString();dbWrite(db);e.returnValue=true}catch(err){console.error("DB sync save",err);e.returnValue=false}});
 ipcMain.handle("db:set",(_e,key,value)=>{let db=dbRead();db.kv=db.kv||{};db.kv[key]=value;db.updatedAt=new Date().toISOString();dbWrite(db);return true});
 ipcMain.handle("db:remove",(_e,key)=>{let db=dbRead();if(db.kv)delete db.kv[key];db.updatedAt=new Date().toISOString();dbWrite(db);return true});
