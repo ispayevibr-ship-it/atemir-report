@@ -1,0 +1,32 @@
+name: Fix object edit persistence
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch object editor persistence
+        shell: python
+        run: |
+          from pathlib import Path
+          p=Path('src/app.js')
+          s=p.read_text(encoding='utf-8')
+          old='try{dbPut140(key,detail);save();modal.remove();render()}'
+          new='try{let entityBaseKey="atemir_entity_"+target.id+"_base",entityBase=window.atemirDesktop?.dbGetSync?.(entityBaseKey);if(entityBase&&typeof entityBase==="object")dbPut140(entityBaseKey,Object.assign({},entityBase,{objectName:draft.name,client:draft.client,address:draft.address,participants:draft.participants,notes:draft.notes,heroPhoto:tempHeroPhoto}));dbPut140(key,detail);save();modal.remove();render()}'
+          if old not in s:
+              raise SystemExit('Expected save block not found; refusing unsafe patch')
+          if s.count(old)!=1:
+              raise SystemExit(f'Expected exactly one save block, found {s.count(old)}')
+          p.write_text(s.replace(old,new),encoding='utf-8')
+      - name: Syntax check
+        run: node --check src/app.js
+      - name: Commit fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/app.js
+          git commit -m "Fix edited object fields persistence"
+          git push
