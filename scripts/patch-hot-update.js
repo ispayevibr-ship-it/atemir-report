@@ -1,1 +1,1 @@
-// unused helper; not executed
+// not used by application runtime
