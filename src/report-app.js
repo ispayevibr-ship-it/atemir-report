@@ -112,7 +112,7 @@ function saveEntity148(kind,index){
  else if(kind==="task"||kind==="bom"){let x=d.tasks?.[+index];if(x){if(!x.id)x.id=uid538();entityId=x.id}}
  let token=kind+":"+(entityId||String(index??"")),old=entityTimers148[token];if(old)clearTimeout(old);
  saveState148("Сохраняю…");
- entityTimers148[token]=setTimeout(async()=>{
+ const runSave148=async()=>{
   try{
    let entries={};
    if(kind==="report"){
@@ -147,10 +147,13 @@ function saveEntity148(kind,index){
     let indexSaved=await window.atemirDesktop?.dbGet?.(entityPrefix144+"reportIndex");
     if(!saved||String(saved.id)!==String(entityId)||!Array.isArray(indexSaved)||!indexSaved.some(z=>String(z.id)===String(entityId)))throw new Error("Daily report persistence verification failed")
    }
-   saveState148("Сохранено")
-  }catch(e){console.error("Targeted save",e);saveState148("Ошибка сохранения")}
+   saveState148("Сохранено");return true
+  }catch(e){console.error("Targeted save",e);saveState148("Ошибка сохранения");return false}
   finally{delete entityTimers148[token]}
- },300)
+ };
+ if(kind==="report")return runSave148();
+ entityTimers148[token]=setTimeout(runSave148,300);
+ return true
 }
 function cancelEntitySave159(kind,id){
  if(!id)return;
