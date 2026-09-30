@@ -52,27 +52,30 @@ jobs:
         run: npm install
       - name: Build Windows installer
         run: npx electron-builder --win nsis --x64 --publish never
-      - name: Detect core runtime changes
+      - name: Detect release type
         id: core_change
         if: github.event_name == 'push'
         shell: pwsh
         run: |
-          $version = node -p "require('./package.json').version"
           $changed = @(git diff-tree --no-commit-id --name-only -r $env:GITHUB_SHA)
-          $core = ($version -eq '8.0.205' -or $version -eq '8.0.206' -or $version -eq '8.0.207' -or $version -eq '8.0.208' -or $version -eq '8.0.209')
-          foreach ($f in $changed) {
-            if ($f -eq "bootstrap.js" -or $f -eq "main.js" -or $f -eq "preload.js" -or $f -eq "package-lock.json" -or $f -like "build/*" -or $f -eq ".github/workflows/build-windows.yml") { $core = $true }
-          }
-          if (-not $core -and ($changed -contains "package.json")) {
+          $core = $false
+
+          # A package version bump is always a public FULL release.
+          # This avoids the old bug where a release commit containing only package.json
+          # was incorrectly classified as a lightweight update.
+          if ($changed -contains "package.json") {
             $parent = git rev-parse "$env:GITHUB_SHA^"
             $oldPkg = git show "${parent}:package.json" | ConvertFrom-Json
             $newPkg = Get-Content package.json -Raw | ConvertFrom-Json
-            $oldComparable = [ordered]@{ main=$oldPkg.main; dependencies=$oldPkg.dependencies; devDependencies=$oldPkg.devDependencies; build=$oldPkg.build; scripts=$oldPkg.scripts } | ConvertTo-Json -Depth 20 -Compress
-            $newComparable = [ordered]@{ main=$newPkg.main; dependencies=$newPkg.dependencies; devDependencies=$newPkg.devDependencies; build=$newPkg.build; scripts=$newPkg.scripts } | ConvertTo-Json -Depth 20 -Compress
-            if ($oldComparable -ne $newComparable) { $core = $true }
+            if ($oldPkg.version -ne $newPkg.version) { $core = $true }
           }
+
+          foreach ($f in $changed) {
+            if ($f -eq "bootstrap.js" -or $f -eq "main.js" -or $f -eq "preload.js" -or $f -eq "package-lock.json" -or $f -like "build/*" -or $f -eq ".github/workflows/build-windows.yml") { $core = $true }
+          }
+
           "core=$($core.ToString().ToLower())" >> $env:GITHUB_OUTPUT
-          Write-Host "Core runtime changed: $core"
+          Write-Host "Full release required: $core"
       - name: Build lightweight update package
         if: github.event_name == 'push' && steps.core_change.outputs.core != 'true'
         shell: pwsh
