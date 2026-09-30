@@ -28,6 +28,12 @@ jobs:
           node --check preload.js
           node --check src/app.js
           node --check src/report-app.js
+      - name: Reject placeholder/corrupt runtime
+        shell: pwsh
+        run: |
+          $runtime = Get-Content main.js -Raw
+          if ($runtime -match '^\s*PLACEHOLDER\s*;?\s*$') { throw "main.js is PLACEHOLDER" }
+          if ($runtime.Length -lt 1000) { throw "main.js is unexpectedly small: $($runtime.Length) bytes" }
       - name: Check inline JavaScript in index.html
         shell: pwsh
         run: |
@@ -51,8 +57,9 @@ jobs:
         if: github.event_name == 'push'
         shell: pwsh
         run: |
+          $version = node -p "require('./package.json').version"
           $changed = @(git diff-tree --no-commit-id --name-only -r $env:GITHUB_SHA)
-          $core = $false
+          $core = ($version -eq '8.0.205')
           foreach ($f in $changed) {
             if ($f -eq "bootstrap.js" -or $f -eq "main.js" -or $f -eq "preload.js" -or $f -eq "package-lock.json" -or $f -like "build/*" -or $f -eq ".github/workflows/build-windows.yml") { $core = $true }
           }
@@ -75,9 +82,7 @@ jobs:
           Copy-Item src/*.html hot-publish/src/
           Copy-Item src/*.js hot-publish/src/
           Copy-Item src/*.css hot-publish/src/
-          $files = Get-ChildItem hot-publish/src -File | ForEach-Object {
-            @{ path = "src/" + $_.Name; size = $_.Length; sha256 = (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant() }
-          }
+          $files = Get-ChildItem hot-publish/src -File | ForEach-Object { @{ path = "src/" + $_.Name; size = $_.Length; sha256 = (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant() } }
           $size = ($files | Measure-Object -Property size -Sum).Sum
           @{ version=$version; size=$size; files=$files } | ConvertTo-Json -Depth 5 | Set-Content hot-publish/latest.json -Encoding UTF8
       - name: Read app version
@@ -96,15 +101,13 @@ jobs:
           $tag = "v$version"
           $repo = "ispayevibr-ship-it/atemir-report-updates"
           gh release view $tag --repo $repo *> $null
-          if ($LASTEXITCODE -ne 0) {
-            gh release create $tag --repo $repo --title "А-Темир Строй Отчёт $tag"
-            if ($LASTEXITCODE -ne 0) { throw "Could not create release $tag" }
-          }
+          if ($LASTEXITCODE -ne 0) { gh release create $tag --repo $repo --title "А-Темир Строй Отчёт $tag" }
+          if ($LASTEXITCODE -ne 0) { throw "Could not create release $tag" }
           $files = @()
           $files += Get-ChildItem dist -Filter *.exe | ForEach-Object { $_.FullName }
           $files += Get-ChildItem dist -Filter latest.yml | ForEach-Object { $_.FullName }
           $files += Get-ChildItem dist -Filter *.blockmap | ForEach-Object { $_.FullName }
-          if ($files.Count -eq 0) { throw "No update assets found" }
+          if ($files.Count -lt 3) { throw "Expected EXE, latest.yml and blockmap; got $($files.Count) assets" }
           gh release upload $tag @files --repo $repo --clobber
           if ($LASTEXITCODE -ne 0) { throw "Could not upload release assets for $tag" }
       - name: Publish lightweight update files
@@ -120,7 +123,6 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           New-Item -ItemType Directory -Force -Path "hot/$version/src" | Out-Null
           Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/src/*" "hot/$version/src/" -Force
-          New-Item -ItemType Directory -Force -Path "hot" | Out-Null
           Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/latest.json" "hot/latest.json" -Force
           git add hot
           git commit -m "Lightweight update $version"
