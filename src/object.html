@@ -28,44 +28,10 @@
   </main>
 </div>
 <script>
-(async()=>{
-  const objectId=new URLSearchParams(location.search).get("object")||"default";
-  try{
-    const listKey="atemir-company-objects-v1";
-    const detailKey="atemir_v9__object_"+objectId;
-    const baseKey="atemir_entity_"+objectId+"_base";
-    let list=window.atemirDesktop?.dbGet?await window.atemirDesktop.dbGet(listKey):JSON.parse(localStorage.getItem(listKey)||"[]");
-    if(!Array.isArray(list))list=[];
-    const canonical=list.find(x=>String(x?.id)===String(objectId));
-    let detail=window.atemirDesktop?.dbGet?await window.atemirDesktop.dbGet(detailKey):JSON.parse(localStorage.getItem(detailKey)||"{}");
-    if(!detail||typeof detail!=="object")detail={};
-    let entityBase=window.atemirDesktop?.dbGet?await window.atemirDesktop.dbGet(baseKey):null;
-    if(!entityBase||typeof entityBase!=="object")entityBase={};
-
-    // The object card is the authoritative source for editable object metadata.
-    // Mirror it into BOTH stores used by report-app before report-app starts.
-    if(canonical){
-      const meta={
-        objectName:canonical.name||"",
-        client:canonical.client||"",
-        address:canonical.address||"",
-        participants:canonical.participants??detail.base?.participants??entityBase.participants??"",
-        notes:canonical.notes??detail.base?.notes??entityBase.notes??""
-      };
-      detail.base={...(detail.base||{}),...meta,heroPhoto:detail.base?.heroPhoto??entityBase.heroPhoto??""};
-      entityBase={...entityBase,...meta,heroPhoto:detail.base.heroPhoto};
-      if(window.atemirDesktop?.dbSet){
-        await window.atemirDesktop.dbSet(detailKey,detail);
-        await window.atemirDesktop.dbSet(baseKey,entityBase);
-        // Verify the writes before report-app is allowed to hydrate/save anything.
-        const verifyDetail=await window.atemirDesktop.dbGet(detailKey);
-        const verifyBase=await window.atemirDesktop.dbGet(baseKey);
-        if(verifyDetail?.base?.objectName!==meta.objectName||verifyBase?.objectName!==meta.objectName)throw new Error("Object metadata verification failed");
-      }else{
-        localStorage.setItem(detailKey,JSON.stringify(detail));
-      }
-    }
-  }catch(e){console.error("Object metadata sync",e)}
+// v8.0.208: object.html is read-only with respect to object metadata.
+// The editor owns name/photo/client/address persistence. Opening an object must never
+// copy an older dashboard snapshot back into detail/base stores.
+(()=>{
   const script=document.createElement("script");
   script.src="report-app.js";
   document.body.appendChild(script);
