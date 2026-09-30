@@ -117,9 +117,9 @@ function saveEntity148(kind,index){
    let entries={};
    if(kind==="report"){
     let x=(d.workDays||[]).find(z=>String(z?.id)===String(entityId));if(x){
-     entries[entityPrefix144+"report_"+x.id]={...x,photos:[],items:(x.items||[]).map(i=>({...i,photos:[]}))};
-     let idx=window.atemirDesktop?.dbGetSync?.(entityPrefix144+"reportIndex")||[],cur=idx.find(z=>z.id===x.id);
-     if(!cur||cur.date!==(x.date||"")||idx.length!==(d.workDays||[]).length)entries[entityPrefix144+"reportIndex"]=(d.workDays||[]).map((z,sort)=>({id:z.id,date:z.date||"",sort}))
+     entries[entityPrefix144+"report_"+x.id]={...x};
+     // Always persist the report index together with the report. This makes a new/edited daily report atomic.
+     entries[entityPrefix144+"reportIndex"]=(d.workDays||[]).map((z,sort)=>({id:z.id,date:z.date||"",sort}))
     }
    }else if(kind==="invoice"){
     let x=(d.invoices||[]).find(z=>String(z?.id)===String(entityId));if(x){
@@ -141,7 +141,13 @@ function saveEntity148(kind,index){
    }else if(kind==="penalties")entries[entityPrefix144+"penalties"]=d.penalties||[];
    else if(kind==="actedDays")entries[entityPrefix144+"actedDays"]=d.actedDays||[];
    else {let base={...d};delete base.workDays;delete base.invoices;delete base.tasks;delete base.penalties;delete base.actedDays;delete base.reportPhotos;entries[entityPrefix144+"base"]=base}
-   await writeEntities153(entries);saveState148("Сохранено")
+   await writeEntities153(entries);
+   if(kind==="report"&&entityId){
+    let saved=await window.atemirDesktop?.dbGet?.(entityPrefix144+"report_"+entityId);
+    let indexSaved=await window.atemirDesktop?.dbGet?.(entityPrefix144+"reportIndex");
+    if(!saved||String(saved.id)!==String(entityId)||!Array.isArray(indexSaved)||!indexSaved.some(z=>String(z.id)===String(entityId)))throw new Error("Daily report persistence verification failed")
+   }
+   saveState148("Сохранено")
   }catch(e){console.error("Targeted save",e);saveState148("Ошибка сохранения")}
   finally{delete entityTimers148[token]}
  },300)
