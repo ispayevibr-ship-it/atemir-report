@@ -1,0 +1,34 @@
+name: Apply report persistence fix 8.0.214
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: repair/report-reload-8.0.214
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Apply repair
+        run: node scripts/apply-report-persistence-fix-8.0.214.js
+      - name: Verify expected changes
+        run: |
+          grep -F 'let works=r.items||r.works||r.workItems||r.completedWorks||[];' main.js
+          grep -F 'if(kind==="report")return runSave148();' src/report-app.js
+          git diff --check
+          git diff -- main.js src/report-app.js
+      - name: Commit repair
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add main.js src/report-app.js
+          git diff --cached --quiet && exit 0
+          git commit -m "Fix daily report persistence for 8.0.214"
+          git push origin HEAD:repair/report-reload-8.0.214
