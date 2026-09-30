@@ -1,1 +1,0 @@
-Updater repair 8.0.212: bootstrap should prefer fresh raw.githubusercontent.com bytes and use jsDelivr only as fallback. This avoids stale main-branch CDN manifests while retaining a network fallback.
