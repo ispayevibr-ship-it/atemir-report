@@ -1,1 +1,1 @@
-// not used by application runtime
+// archival only
