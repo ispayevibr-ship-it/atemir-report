@@ -1,0 +1,1 @@
+const fs=require('fs');const p='main.js';let s=fs.readFileSync(p,'utf8');const a='let works=r.works||r.workItems||r.completedWorks||[];',b='let works=r.items||r.works||r.workItems||r.completedWorks||[];';if(!s.includes(a))throw Error('target not found');s=s.replaceAll(a,b);fs.writeFileSync(p,s);console.log('daily report items persistence fixed');
