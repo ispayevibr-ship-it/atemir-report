@@ -23,6 +23,7 @@ jobs:
           node-version: 22
       - name: Syntax check
         run: |
+          node --check bootstrap.js
           node --check main.js
           node --check preload.js
           node --check src/app.js
@@ -53,7 +54,7 @@ jobs:
           $changed = @(git diff-tree --no-commit-id --name-only -r $env:GITHUB_SHA)
           $core = $false
           foreach ($f in $changed) {
-            if ($f -eq "main.js" -or $f -eq "preload.js" -or $f -eq "package-lock.json" -or $f -like "build/*" -or $f -eq ".github/workflows/build-windows.yml") { $core = $true }
+            if ($f -eq "bootstrap.js" -or $f -eq "main.js" -or $f -eq "preload.js" -or $f -eq "package-lock.json" -or $f -like "build/*" -or $f -eq ".github/workflows/build-windows.yml") { $core = $true }
           }
           if (-not $core -and ($changed -contains "package.json")) {
             $parent = git rev-parse "$env:GITHUB_SHA^"
@@ -121,74 +122,7 @@ jobs:
           Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/src/*" "hot/$version/src/" -Force
           New-Item -ItemType Directory -Force -Path "hot" | Out-Null
           Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/latest.json" "hot/latest.json" -Force
-          # Never allow an older concurrently running build to move latest.json backwards.
-          try {
-            $remoteLatest = Invoke-RestMethod -Uri ("https://raw.githubusercontent.com/ispayevibr-ship-it/atemir-report-updates/main/hot/latest.json?ts=" + [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds())
-            if ($remoteLatest.version) {
-              $remoteParts = @($remoteLatest.version.Split('.') | ForEach-Object { [int]$_ })
-              $newParts = @($version.Split('.') | ForEach-Object { [int]$_ })
-              while ($remoteParts.Count -lt 3) { $remoteParts += 0 }
-              while ($newParts.Count -lt 3) { $newParts += 0 }
-              $remoteNewer = $false
-              for ($i=0; $i -lt 3; $i++) {
-                if ($remoteParts[$i] -gt $newParts[$i]) { $remoteNewer = $true; break }
-                if ($remoteParts[$i] -lt $newParts[$i]) { break }
-              }
-              if ($remoteNewer) {
-                Write-Host "Keeping newer hot/latest.json version $($remoteLatest.version); this build is $version"
-                Invoke-WebRequest -Uri ("https://raw.githubusercontent.com/ispayevibr-ship-it/atemir-report-updates/main/hot/latest.json?ts=" + [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()) -OutFile "hot/latest.json"
-              }
-            }
-          } catch {
-            Write-Host "Could not compare remote lightweight manifest; publishing current build manifest."
-          }
-          # Re-check latest.json after clone/rebase. Concurrent older builds must never overwrite a newer manifest.
-          try {
-            $manifestPath = Join-Path (Get-Location) "hot/latest.json"
-            $currentManifest = Get-Content $manifestPath -Raw | ConvertFrom-Json
-            $currentParts = @($currentManifest.version.Split('.') | ForEach-Object { [int]$_ })
-            $newParts = @($version.Split('.') | ForEach-Object { [int]$_ })
-            while ($currentParts.Count -lt 3) { $currentParts += 0 }
-            while ($newParts.Count -lt 3) { $newParts += 0 }
-            $currentNewer = $false
-            for ($i=0; $i -lt 3; $i++) {
-              if ($currentParts[$i] -gt $newParts[$i]) { $currentNewer = $true; break }
-              if ($currentParts[$i] -lt $newParts[$i]) { break }
-            }
-            if (-not $currentNewer) {
-              Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/latest.json" "hot/latest.json" -Force
-            }
-          } catch {
-            Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/latest.json" "hot/latest.json" -Force
-          }
           git add hot
           git commit -m "Lightweight update $version"
-          $pushed = $false
-          for ($attempt = 1; $attempt -le 5 -and -not $pushed; $attempt++) {
-            git fetch origin main
-            git rebase origin/main
-            if ($LASTEXITCODE -ne 0) {
-              git rebase --abort 2>$null
-              git reset --hard origin/main
-              New-Item -ItemType Directory -Force -Path "hot/$version/src" | Out-Null
-              Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/src/*" "hot/$version/src/" -Force
-              $remoteVersion = ""
-              try { $remoteVersion = (Get-Content "hot/latest.json" -Raw | ConvertFrom-Json).version } catch {}
-              $useNew = $true
-              if ($remoteVersion) {
-                $rp = @($remoteVersion.Split('.') | ForEach-Object { [int]$_ })
-                $np = @($version.Split('.') | ForEach-Object { [int]$_ })
-                while ($rp.Count -lt 3) { $rp += 0 }; while ($np.Count -lt 3) { $np += 0 }
-                for ($i=0; $i -lt 3; $i++) {
-                  if ($rp[$i] -gt $np[$i]) { $useNew = $false; break }
-                  if ($rp[$i] -lt $np[$i]) { break }
-                }
-              }
-              if ($useNew) { Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/latest.json" "hot/latest.json" -Force }
-              git add hot
-              git commit -m "Lightweight update $version"
-            }
-            git push origin HEAD:main
-            if ($LASTEXITCODE -eq 0) { $pushed = $true } else { Start-Sleep -Seconds 2 }
-          }
-          if (-not $pushed) { throw "Failed to publish lightweight update after retries" }
+          git pull --rebase origin main
+          git push origin HEAD:main
