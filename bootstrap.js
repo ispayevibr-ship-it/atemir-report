@@ -6,41 +6,6 @@ const https = require("https");
 const {EventEmitter} = require("events");
 const originalGet = https.get.bind(https);
 
-/*
- * Persistence compatibility guard (8.0.210).
- *
- * The relational SQLite layer stores both indexed columns and the complete entity
- * snapshot in raw_json. Older write statements could update the indexed columns on
- * conflict but leave raw_json untouched. Reads hydrate from raw_json, so a successful
- * edit appeared on screen and then reverted after navigation/restart. The same class
- * of bug can affect objects, tasks and BOM rows.
- *
- * main.js is intentionally left structurally untouched here. Before it is loaded we
- * harden DatabaseSync.prepare(): every INSERT ... ON CONFLICT statement that contains
- * a raw_json column is guaranteed to update raw_json as part of the conflict clause.
- * This keeps the canonical snapshot and indexed columns in the same SQLite statement.
- */
-try {
-  const {DatabaseSync} = require("node:sqlite");
-  const proto = DatabaseSync && DatabaseSync.prototype;
-  if (proto && typeof proto.prepare === "function" && !proto.__atemirPersistence210) {
-    const originalPrepare = proto.prepare;
-    Object.defineProperty(proto,"__atemirPersistence210",{value:true,configurable:false});
-    proto.prepare = function(sql) {
-      let text = String(sql ?? "");
-      if (/^\s*INSERT\s+INTO\s+/i.test(text) && /\braw_json\b/i.test(text) && /\bON\s+CONFLICT\b/i.test(text) && /\bDO\s+UPDATE\s+SET\b/i.test(text)) {
-        const updatePart = text.split(/\bDO\s+UPDATE\s+SET\b/i)[1] || "";
-        if (!/\braw_json\s*=\s*excluded\.raw_json\b/i.test(updatePart)) {
-          text = text.replace(/\bDO\s+UPDATE\s+SET\b/i, "DO UPDATE SET raw_json=excluded.raw_json,");
-        }
-      }
-      return originalPrepare.call(this,text);
-    };
-  }
-} catch (e) {
-  console.error("Persistence guard 8.0.210 failed to initialize",e);
-}
-
 function proxyBuffer(url, cb, headers = {}) {
   return originalGet(url, {headers:{"User-Agent":"A-Temir-Stroy-Report","Cache-Control":"no-cache","Pragma":"no-cache",...headers}}, res => {
     if (res.statusCode !== 200) { cb(res); return; }
@@ -65,6 +30,7 @@ https.get = function patchedGet(input, options, callback) {
   try { url=input instanceof URL?input:new URL(String(input)); }
   catch { return originalGet(input,options,callback); }
 
+  // raw.githubusercontent.com/<owner>/<repo>/<ref>/<path>
   if (url.hostname === "raw.githubusercontent.com") {
     const p=url.pathname.split("/").filter(Boolean);
     if (p.length>=4) {
@@ -74,6 +40,8 @@ https.get = function patchedGet(input, options, callback) {
     }
   }
 
+  // api.github.com/repos/<owner>/<repo>/contents/<path>?ref=<ref>
+  // Return the same JSON shape expected by main.js, but obtain bytes from CDN.
   if (url.hostname === "api.github.com") {
     const m=url.pathname.match(/^\/repos\/([^/]+)\/([^/]+)\/contents\/(.+)$/);
     if (m) {
