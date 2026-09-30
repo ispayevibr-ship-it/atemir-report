@@ -1,8 +1,8 @@
 {
   "name": "atemir-report",
-  "version": "8.0.199",
+  "version": "8.0.200",
   "description": "Отчётность по объектам ТОО А-Темир Строй",
-  "main": "main.js",
+  "main": "bootstrap.js",
   "scripts": {
     "start": "electron .",
     "dist:win": "electron-builder --win nsis --x64"
@@ -19,6 +19,7 @@
     "productName": "А-Темир Строй Отчёт",
     "asar": true,
     "files": [
+      "bootstrap.js",
       "main.js",
       "preload.js",
       "src/**/*",
