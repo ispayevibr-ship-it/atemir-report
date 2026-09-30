@@ -61,11 +61,10 @@ jobs:
         if: github.event_name == 'push'
         shell: pwsh
         run: |
-          # Compare the new main state against its first parent. This also works for merge commits.
           $changed = @(git diff --name-only HEAD^1 HEAD)
           $core = $false
           foreach ($f in $changed) {
-            if ($f -eq "bootstrap.js" -or $f -eq "main.js" -or $f -eq "preload.js" -or $f -eq "package-lock.json" -or $f -like "build/*" -or $f -eq ".github/workflows/build-windows.yml") { $core = $true }
+            if ($f -eq "bootstrap.js" -or $f -eq "main.js" -or $f -eq "preload.js" -or $f -eq "package.json" -or $f -eq "package-lock.json" -or $f -like "build/*" -or $f -eq ".github/workflows/build-windows.yml") { $core = $true }
           }
           "core=$($core.ToString().ToLower())" >> $env:GITHUB_OUTPUT
           Write-Host "Changed files: $($changed -join ', ')"
