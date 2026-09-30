@@ -1,0 +1,10 @@
+const fs=require('fs');
+const p='main.js';
+let s=fs.readFileSync(p,'utf8');
+const old='let works=r.works||r.workItems||r.completedWorks||[];';
+const neu='let works=r.items||r.works||r.workItems||r.completedWorks||[];';
+const count=s.split(old).length-1;
+if(count<1)throw new Error('report works target not found');
+s=s.split(old).join(neu);
+fs.writeFileSync(p,s);
+console.log('patched report items compatibility in '+count+' place(s)');
