@@ -1,0 +1,10 @@
+const fs=require('fs');
+let p='main.js',s=fs.readFileSync(p,'utf8');
+const old='function githubJson(url){return new Promise((resolve,reject)=>{https.get(url,{headers:{\"User-Agent\":\"atemir-report\",Accept:\"application/vnd.github+json\"}},r=>{let b=\"\";r.on(\"data\",d=>b+=d);r.on(\"end\",()=>{if(r.statusCode>=200&&r.statusCode<300){try{resolve(JSON.parse(b))}catch(e){reject(e)}}else reject(Error(\"HTTP \"+r.statusCode))})}).on(\"error\",reject)})}';
+const neu='function githubJson(url){return new Promise((resolve,reject)=>{https.get(url,{headers:{\"User-Agent\":\"atemir-report\",Accept:\"application/vnd.github+json\",\"Cache-Control\":\"no-cache\"}},r=>{let b=\"\";r.on(\"data\",d=>b+=d);r.on(\"end\",()=>{if(r.statusCode>=200&&r.statusCode<300){try{resolve(JSON.parse(b))}catch(e){reject(e)}}else reject(Error(\"HTTP \"+r.statusCode+\" \\"+url))})}).on(\"error\",reject)})}';
+if(!s.includes(old))throw Error('githubJson target not found');
+s=s.replace(old,neu);
+const marker='async function checkHotUpdate(){';
+if(!s.includes(marker))throw Error('checkHotUpdate target not found');
+s=s.replace(marker,'async function checkHotUpdate(){\n try{let raw=await new Promise((resolve,reject)=>{let u=\"https://raw.githubusercontent.com/ispayevibr-ship-it/atemir-report-updates/main/hot/latest.json?t=\"+Date.now();https.get(u,{headers:{\"User-Agent\":\"atemir-report\",\"Cache-Control\":\"no-cache\"}},r=>{let b=\"\";r.on(\"data\",d=>b+=d);r.on(\"end\",()=>r.statusCode===200?resolve(b):reject(Error(\"HTTP \"+r.statusCode)))}).on(\"error\",reject)});let manifest=JSON.parse(raw);if(manifest&&newer(manifest.version,app.getVersion())){sendUpdate(\"available\",{version:manifest.version,hot:true});return manifest}}catch(e){console.error(\"Direct hot update check failed:\",e.message)}');
+fs.writeFileSync(p,s);console.log('patched main.js');
