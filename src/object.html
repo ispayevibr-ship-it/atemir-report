@@ -33,9 +33,15 @@
   try{
     const key="atemir-company-objects-v1";
     let list=[];
-    if(window.atemirDesktop?.dbGetSync){
-      const value=window.atemirDesktop.dbGetSync(key);
+    if(window.atemirDesktop?.dbGet){
+      // The editor persists through async IPC. Read asynchronously here so an immediate
+      // click into the object cannot resurrect the previous synchronous snapshot.
+      let value=await window.atemirDesktop.dbGet(key);
       list=Array.isArray(value)?value:[];
+      // One short retry also covers a save that was already queued by the previous page.
+      await new Promise(r=>setTimeout(r,120));
+      value=await window.atemirDesktop.dbGet(key);
+      if(Array.isArray(value))list=value;
     }else{
       list=JSON.parse(localStorage.getItem(key)||"[]");
     }
@@ -43,10 +49,15 @@
     if(canonical&&window.atemirDesktop?.dbSet){
       const baseKey="atemir_entity_"+objectId+"_base";
       const oldBase=window.atemirDesktop.dbGetSync?.(baseKey);
-      if(oldBase&&typeof oldBase==="object"){
-        const nextBase={...oldBase,objectName:canonical.name||"",client:canonical.client||"",address:canonical.address||"",participants:canonical.participants??oldBase.participants,notes:canonical.notes??oldBase.notes};
-        await window.atemirDesktop.dbSet(baseKey,nextBase);
-      }
+      const nextBase={
+        ...(oldBase&&typeof oldBase==="object"?oldBase:{}),
+        objectName:canonical.name||"",
+        client:canonical.client||"",
+        address:canonical.address||"",
+        participants:canonical.participants??oldBase?.participants??"",
+        notes:canonical.notes??oldBase?.notes??""
+      };
+      await window.atemirDesktop.dbSet(baseKey,nextBase);
     }
   }catch(e){console.error("Object metadata sync",e)}
   const script=document.createElement("script");
