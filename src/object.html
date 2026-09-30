@@ -27,6 +27,32 @@
     <section id="view"></section>
   </main>
 </div>
-<script src="report-app.js"></script>
+<script>
+(async()=>{
+  const objectId=new URLSearchParams(location.search).get("object")||"default";
+  try{
+    const key="atemir-company-objects-v1";
+    let list=[];
+    if(window.atemirDesktop?.dbGetSync){
+      const value=window.atemirDesktop.dbGetSync(key);
+      list=Array.isArray(value)?value:[];
+    }else{
+      list=JSON.parse(localStorage.getItem(key)||"[]");
+    }
+    const canonical=list.find(x=>String(x?.id)===String(objectId));
+    if(canonical&&window.atemirDesktop?.dbSet){
+      const baseKey="atemir_entity_"+objectId+"_base";
+      const oldBase=window.atemirDesktop.dbGetSync?.(baseKey);
+      if(oldBase&&typeof oldBase==="object"){
+        const nextBase={...oldBase,objectName:canonical.name||"",client:canonical.client||"",address:canonical.address||"",participants:canonical.participants??oldBase.participants,notes:canonical.notes??oldBase.notes};
+        await window.atemirDesktop.dbSet(baseKey,nextBase);
+      }
+    }
+  }catch(e){console.error("Object metadata sync",e)}
+  const script=document.createElement("script");
+  script.src="report-app.js";
+  document.body.appendChild(script);
+})();
+</script>
 </body>
 </html>
