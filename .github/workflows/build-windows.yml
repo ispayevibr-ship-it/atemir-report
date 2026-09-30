@@ -59,21 +59,9 @@ jobs:
         run: |
           $changed = @(git diff-tree --no-commit-id --name-only -r $env:GITHUB_SHA)
           $core = $false
-
-          # A package version bump is always a public FULL release.
-          # This avoids the old bug where a release commit containing only package.json
-          # was incorrectly classified as a lightweight update.
-          if ($changed -contains "package.json") {
-            $parent = git rev-parse "$env:GITHUB_SHA^"
-            $oldPkg = git show "${parent}:package.json" | ConvertFrom-Json
-            $newPkg = Get-Content package.json -Raw | ConvertFrom-Json
-            if ($oldPkg.version -ne $newPkg.version) { $core = $true }
-          }
-
           foreach ($f in $changed) {
-            if ($f -eq "bootstrap.js" -or $f -eq "main.js" -or $f -eq "preload.js" -or $f -eq "package-lock.json" -or $f -like "build/*" -or $f -eq ".github/workflows/build-windows.yml") { $core = $true }
+            if ($f -eq "bootstrap.js" -or $f -eq "main.js" -or $f -eq "preload.js" -or $f -eq "package-lock.json" -or $f -like "build/*") { $core = $true }
           }
-
           "core=$($core.ToString().ToLower())" >> $env:GITHUB_OUTPUT
           Write-Host "Full release required: $core"
       - name: Build lightweight update package
