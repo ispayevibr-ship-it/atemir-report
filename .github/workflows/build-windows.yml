@@ -59,7 +59,7 @@ jobs:
         run: |
           $version = node -p "require('./package.json').version"
           $changed = @(git diff-tree --no-commit-id --name-only -r $env:GITHUB_SHA)
-          $core = ($version -eq '8.0.205' -or $version -eq '8.0.206' -or $version -eq '8.0.207')
+          $core = ($version -eq '8.0.205' -or $version -eq '8.0.206' -or $version -eq '8.0.207' -or $version -eq '8.0.208' -or $version -eq '8.0.209')
           foreach ($f in $changed) {
             if ($f -eq "bootstrap.js" -or $f -eq "main.js" -or $f -eq "preload.js" -or $f -eq "package-lock.json" -or $f -like "build/*" -or $f -eq ".github/workflows/build-windows.yml") { $core = $true }
           }
