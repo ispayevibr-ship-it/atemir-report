@@ -84,7 +84,7 @@ function migrateReports166(){
   for(let o of (Array.isArray(objects)?objects:[])){let oid=String(o?.id??"");if(!oid)continue;let p="atemir_entity_"+oid+"_",ri=kvParseSafe165(db.prepare("SELECT value FROM kv WHERE key=?").get(p+"reportIndex")?.value,[]);
    for(let z of (Array.isArray(ri)?ri:[])){let r=kvParseSafe165(db.prepare("SELECT value FROM kv WHERE key=?").get(p+"report_"+z.id)?.value,null);if(!r)continue;let rid=String(r.id||z.id),weather=typeof r.weather==="string"?r.weather:JSON.stringify(r.weather||{});
     pr.run(rid,oid,r.date||r.reportDate||"",weather,r.notes||r.info||r.additionalInfo||"",Number(z.sort||0),JSON.stringify(r),now);
-    let works=r.works||r.workItems||r.completedWorks||[];(Array.isArray(works)?works:[]).forEach((w,i)=>pw.run(rid,String(w.id||i),String(w.taskId||""),w.mark||"",w.name||w.title||"",relNum165(w.qty??w.count??w.volume),w.unit||"",i,JSON.stringify(w)));
+    let works=r.items||r.works||r.workItems||r.completedWorks||[];(Array.isArray(works)?works:[]).forEach((w,i)=>pw.run(rid,String(w.id||i),String(w.taskId||""),w.mark||"",w.name||w.title||"",relNum165(w.qty??w.count??w.volume),w.unit||"",i,JSON.stringify(w)));
     for(let pair of [["worker",r.people||r.workers||[]],["responsible",r.responsibles||r.responsiblePersons||[]]]){let kind=pair[0],list=Array.isArray(pair[1])?pair[1]:[];list.forEach((x,i)=>pp.run(rid,kind+"_"+String(x.id||i),kind,x.role||x.position||"",x.name||"",relNum165(x.qty??x.count??1),i,JSON.stringify(x)))}
     let eq=r.equipment||r.machinery||r.vehicles||[];(Array.isArray(eq)?eq:[]).forEach((x,i)=>pe.run(rid,String(x.id||i),x.type||x.name||"",x.name||"",relNum165(x.qty??x.count??1),i,JSON.stringify(x)))
    }
