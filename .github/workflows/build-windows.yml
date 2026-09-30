@@ -6,6 +6,10 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: atemir-main-publish
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -112,10 +116,27 @@ jobs:
           Set-Location "$env:RUNNER_TEMP/hot-repo"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          $latestPath = "hot/latest.json"
+          if (Test-Path $latestPath) {
+            $current = Get-Content $latestPath -Raw | ConvertFrom-Json
+            $incoming = [version]$version
+            $published = [version]$current.version
+            if ($incoming -lt $published) {
+              Write-Host "Skip stale lightweight publish $version; latest is $($current.version)"
+              exit 0
+            }
+          }
           New-Item -ItemType Directory -Force -Path "hot/$version/src" | Out-Null
           Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/src/*" "hot/$version/src/" -Force
           Copy-Item "$env:GITHUB_WORKSPACE/hot-publish/latest.json" "hot/latest.json" -Force
           git add hot
           git commit -m "Lightweight update $version"
           git pull --rebase origin main
+          if (Test-Path $latestPath) {
+            $afterPull = Get-Content $latestPath -Raw | ConvertFrom-Json
+            if ([version]$version -lt [version]$afterPull.version) {
+              Write-Host "A newer lightweight update $($afterPull.version) appeared; do not overwrite it with $version"
+              exit 0
+            }
+          }
           git push origin HEAD:main
