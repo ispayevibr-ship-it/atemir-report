@@ -1,6 +1,9 @@
 name: Fix object edit persistence
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/fix-object-edit.yml
 permissions:
   contents: write
 jobs:
