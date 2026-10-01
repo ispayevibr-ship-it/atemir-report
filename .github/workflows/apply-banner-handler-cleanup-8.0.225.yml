@@ -1,0 +1,48 @@
+name: Apply banner handler cleanup 8.0.225
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/banner-upload-handler-8.0.225
+          fetch-depth: 0
+      - name: Remove legacy duplicate photo handlers
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('src/app.js')
+          s=p.read_text()
+          start=s.find(' if(step===1){document.getElementById("photo510").onchange=async e=>')
+          end=s.find('\n if(step===3){document.getElementById("addWork510")', start)
+          if start < 0 or end < 0:
+              raise SystemExit('legacy duplicate handler block not found')
+          removed=s[start:end]
+          if 'heroPhoto510' not in removed or "tempPhoto=await compress(f)" not in removed:
+              raise SystemExit('unexpected legacy block; refusing patch')
+          s=s[:start]+s[end:]
+          p.write_text(s)
+          print('Removed legacy duplicate banner onchange handlers')
+          PY
+      - name: Verify one handler path remains
+        run: |
+          node --check src/app.js
+          test "$(grep -o 'bindBannerFile("photo510"' src/app.js | wc -l)" -eq 1
+          test "$(grep -o 'bindBannerFile("heroPhoto510"' src/app.js | wc -l)" -eq 1
+          ! grep -F 'document.getElementById("photo510").onchange=async e=>' src/app.js
+          ! grep -F 'document.getElementById("heroPhoto510").onchange=async e=>' src/app.js
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/app.js
+          git diff --cached --quiet && exit 0
+          git commit -m "fix: remove duplicate legacy banner upload handlers"
+          git push origin HEAD:fix/banner-upload-handler-8.0.225
