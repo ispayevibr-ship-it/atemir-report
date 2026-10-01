@@ -1,0 +1,10 @@
+const fs=require('fs');
+const p='main.js';
+let s=fs.readFileSync(p,'utf8');
+const bad='INSERT INTO report_equipment(report_id,equipment_key,type,name,qty,sort_order,raw_json) VALUES(?,?,?,?,?,?,?,?)';
+const good='INSERT INTO report_equipment(report_id,equipment_key,type,name,qty,sort_order,raw_json) VALUES(?,?,?,?,?,?,?)';
+let n=s.split(bad).length-1;
+if(!n)throw new Error('broken report_equipment SQL not found');
+s=s.split(bad).join(good);
+fs.writeFileSync(p,s);
+console.log('fixed report_equipment placeholders:',n);
