@@ -147,7 +147,7 @@ main>header{display:none!important}
 
 
 .objectHero770.objectHeroCover812{
-  background-position:center top!important;
+
   background-repeat:no-repeat!important;
 }
 
@@ -1261,7 +1261,7 @@ main>header{display:none!important}
 .objectHero770.objectHeroCover812{
   height:180px!important;
   min-height:180px!important;
-  background-size:100% 180px!important;
+
 }
 .objectHeroCover812 .heroContent812{
   left:26px!important;
@@ -2301,4 +2301,20 @@ button[data-cancel-report720]:hover{background:#168dca!important;border-color:#1
 }
 @media(max-width:1050px){
  .reportView995 .reportGrid124{grid-template-columns:1fr!important}
+}
+
+/* The displayed frame has the same proportions as the editor. */
+.objectHero770.objectHeroCover812{
+ height:auto!important;min-height:0!important;aspect-ratio:1920/180;
+
+}
+@media(max-width:1600px){
+ .objectHeroCover812 .heroContent812{top:8px!important;bottom:8px!important;left:20px!important;width:65%!important}
+ .objectHeroCover812 .heroCrumb812{margin-bottom:3px!important;font-size:8px!important}
+ .objectHeroCover812 h1{font-size:20px!important;line-height:1.1!important}
+ .objectHeroCover812 .heroParty812{margin-top:3px!important;font-size:10px!important}
+ .objectHeroCover812 .heroFacts812{gap:18px!important}
+ .objectHeroCover812 .heroFacts812 .heroStatus812{min-height:23px!important;font-size:10px!important}
+ .objectHeroCover812 .heroFacts812 b{font-size:10px!important}
+ .objectHeroCover812 .heroFacts812 small{font-size:8px!important}
 }
