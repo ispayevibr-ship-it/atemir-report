@@ -20,33 +20,30 @@ jobs:
           from pathlib import Path
           p=Path('src/app.js'); s=p.read_text()
 
-          # 1. Filter tombstoned IDs whenever the company object list is loaded.
-          old='let objects=window.atemirDesktop.dbGetSync(KEY)||[];'
-          new='let deletedObjectIds=new Set(window.atemirDesktop.dbGetSync("atemir-deleted-object-ids-v1")||[]);let objects=(window.atemirDesktop.dbGetSync(KEY)||[]).filter(o=>!deletedObjectIds.has(String(o?.id)));'
-          if old not in s: raise SystemExit('initial object load anchor not found')
+          old='const KEY="atemir-company-objects-v1";let objects=[];const desktopDb140=!!window.atemirDesktop?.dbGetSync;try{if(desktopDb140){let dbv=window.atemirDesktop.dbGetSync(KEY);objects=Array.isArray(dbv)?dbv:[]}else objects=JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){objects=[]}'
+          new='const KEY="atemir-company-objects-v1",DELETED_KEY="atemir-deleted-object-ids-v1";let objects=[],deletedObjectIds=new Set();const desktopDb140=!!window.atemirDesktop?.dbGetSync;try{if(desktopDb140){let dv=window.atemirDesktop.dbGetSync(DELETED_KEY);deletedObjectIds=new Set(Array.isArray(dv)?dv.map(String):[]);let dbv=window.atemirDesktop.dbGetSync(KEY);objects=(Array.isArray(dbv)?dbv:[]).filter(o=>!deletedObjectIds.has(String(o?.id)))}else objects=JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){objects=[]}'
+          if old not in s: raise SystemExit('current initial load anchor not found')
           s=s.replace(old,new,1)
 
-          # 2. Persist a tombstone before deleting the object itself.
+          old='async function dbInit140(){if(!window.atemirDesktop?.dbGet)return;try{let remote=await window.atemirDesktop.dbGet(KEY);objects=Array.isArray(remote)?remote:[];render()}catch(e){console.error("Local DB init",e)}}'
+          new='async function dbInit140(){if(!window.atemirDesktop?.dbGet)return;try{let dv=await window.atemirDesktop.dbGet(DELETED_KEY);deletedObjectIds=new Set(Array.isArray(dv)?dv.map(String):[]);let remote=await window.atemirDesktop.dbGet(KEY),raw=Array.isArray(remote)?remote:[],clean=raw.filter(o=>!deletedObjectIds.has(String(o?.id)));objects=clean;if(clean.length!==raw.length)await window.atemirDesktop.dbSet(KEY,clean);render()}catch(e){console.error("Local DB init",e)}}'
+          if old not in s: raise SystemExit('current async init anchor not found')
+          s=s.replace(old,new,1)
+
           old='let oid=String(o.id);await window.atemirDesktop?.dbDeleteObject?.(oid);'
-          new='let oid=String(o.id);deletedObjectIds.add(oid);await window.atemirDesktop.dbSet("atemir-deleted-object-ids-v1",[...deletedObjectIds]);await window.atemirDesktop?.dbDeleteObject?.(oid);'
-          if old not in s: raise SystemExit('delete anchor not found')
-          s=s.replace(old,new,1)
-
-          # 3. Async refresh must also reject tombstoned objects and rewrite a clean list.
-          old='window.atemirDesktop.dbGet(KEY).then(v=>{if(Array.isArray(v)){objects=v;render()}})'
-          new='window.atemirDesktop.dbGet(KEY).then(async v=>{if(Array.isArray(v)){let clean=v.filter(o=>!deletedObjectIds.has(String(o?.id)));objects=clean;if(clean.length!==v.length)await window.atemirDesktop.dbSet(KEY,clean);render()}})'
-          if old not in s: raise SystemExit('async refresh anchor not found')
+          new='let oid=String(o.id);deletedObjectIds.add(oid);await window.atemirDesktop?.dbSet?.(DELETED_KEY,[...deletedObjectIds]);await window.atemirDesktop?.dbWaitForWrites?.();await window.atemirDesktop?.dbDeleteObject?.(oid);'
+          if old not in s: raise SystemExit('current delete anchor not found')
           s=s.replace(old,new,1)
 
           p.write_text(s)
-          print('patched persistent deleted-object tombstones')
+          print('patched current app runtime with persistent tombstones')
           PY
       - name: Verify patch
         run: |
           node --check src/app.js
-          grep -F 'atemir-deleted-object-ids-v1' src/app.js
+          grep -F 'DELETED_KEY="atemir-deleted-object-ids-v1"' src/app.js
           grep -F 'deletedObjectIds.add(oid)' src/app.js
-          grep -F 'filter(o=>!deletedObjectIds.has(String(o?.id)))' src/app.js
+          grep -F 'clean=raw.filter' src/app.js
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
