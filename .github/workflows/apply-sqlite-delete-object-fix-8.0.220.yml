@@ -1,0 +1,63 @@
+name: Apply SQLite object deletion fix 8.0.220
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: repair/sqlite-delete-object-8.0.220
+          fetch-depth: 0
+      - name: Patch main/preload/app
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          # main.js: add a dedicated transactional relational delete IPC handler.
+          p=Path('main.js'); s=p.read_text()
+          anchor='ipcMain.handle("report:html"'
+          if 'ipcMain.handle("db:delete-object"' not in s:
+              pos=s.find(anchor)
+              if pos < 0: raise SystemExit('main.js anchor not found')
+              code='ipcMain.handle("db:delete-object",async(_e,objectId)=>{let id=String(objectId||"");if(!id)throw Error("Object id is required");let db=sqliteDb163();db.exec("BEGIN IMMEDIATE");try{db.prepare("DELETE FROM objects WHERE id=?").run(id);let left=Number(db.prepare("SELECT COUNT(*) n FROM objects WHERE id=?").get(id)?.n||0);if(left)throw Error("Object relational deletion verification failed");db.exec("COMMIT");return {ok:true,id}}catch(e){try{db.exec("ROLLBACK")}catch{}throw e}});\n'
+              s=s[:pos]+code+s[pos:]
+              p.write_text(s)
+
+          # preload.js: expose the new operation to renderer.
+          p=Path('preload.js'); s=p.read_text()
+          old='dbRemoveMany:(keys)=>ipcRenderer.invoke("db:remove-many",keys),photoGet:'
+          new='dbRemoveMany:(keys)=>ipcRenderer.invoke("db:remove-many",keys),dbDeleteObject:(id)=>ipcRenderer.invoke("db:delete-object",id),photoGet:'
+          if new not in s:
+              if old not in s: raise SystemExit('preload.js anchor not found')
+              s=s.replace(old,new,1); p.write_text(s)
+
+          # app.js: relational deletion must happen before KV/photo cleanup.
+          p=Path('src/app.js'); s=p.read_text()
+          old='let oid=String(o.id);localStorage.removeItem("atemir_v9__object_"+oid);'
+          new='let oid=String(o.id);await window.atemirDesktop?.dbDeleteObject?.(oid);localStorage.removeItem("atemir_v9__object_"+oid);'
+          if new not in s:
+              if old not in s: raise SystemExit('app.js delete anchor not found')
+              s=s.replace(old,new,1); p.write_text(s)
+          PY
+      - name: Verify patch
+        run: |
+          node --check main.js
+          node --check preload.js
+          node --check src/app.js
+          grep -F 'ipcMain.handle("db:delete-object"' main.js
+          grep -F 'dbDeleteObject:(id)=>ipcRenderer.invoke("db:delete-object",id)' preload.js
+          grep -F 'await window.atemirDesktop?.dbDeleteObject?.(oid)' src/app.js
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add main.js preload.js src/app.js
+          git diff --cached --quiet && exit 0
+          git commit -m "fix: delete objects from relational SQLite storage"
+          git push origin HEAD:repair/sqlite-delete-object-8.0.220
