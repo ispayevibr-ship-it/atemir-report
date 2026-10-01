@@ -29,9 +29,6 @@
 </div>
 <script src="banner-frame.js"></script>
 <script>
-// v8.0.229: object.html is read-only with respect to object metadata.
-// UI-only daily report edit flags must not survive leaving and reopening an object.
-// A saved report always opens from the reports list; editing starts only after an explicit click.
 (async()=>{
   try{
     const objectId=new URLSearchParams(location.search).get("object")||"default";
@@ -42,12 +39,7 @@
       if(!value||typeof value!=="object"||value.isNewDraft720)continue;
       let changed=value.editing===true;
       const clean={...value,editing:false};
-      if(Array.isArray(value.items)){
-        clean.items=value.items.map(item=>{
-          if(item&&item.editing===true){changed=true;return {...item,editing:false}}
-          return item
-        });
-      }
+      if(Array.isArray(value.items))clean.items=value.items.map(item=>{if(item&&item.editing===true){changed=true;return {...item,editing:false}}return item});
       if(changed&&window.atemirDesktop?.dbSet)writes.push(window.atemirDesktop.dbSet(key,clean));
     }
     if(writes.length)await Promise.all(writes);
@@ -55,8 +47,7 @@
   const script=document.createElement("script");
   script.src="report-app.js";
   script.onload=()=>{
-    const pager=document.createElement("script");pager.src="daily-pagination.js";document.body.appendChild(pager);
-    const marks=document.createElement("script");marks.src="marks-design.js";document.body.appendChild(marks);
+    for(const src of ["daily-pagination.js","marks-design.js","marks-table-ui.js"]){const s=document.createElement("script");s.src=src;document.body.appendChild(s)}
   };
   document.body.appendChild(script);
 })();
