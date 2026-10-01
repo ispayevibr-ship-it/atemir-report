@@ -1,0 +1,36 @@
+name: Apply SQLite report backup fix 8.0.215
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: repair/sqlite-report-backup-8.0.215
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Apply repair
+        run: node scripts/apply-sqlite-report-backup-fix-8.0.215.js
+      - name: Verify repair
+        run: |
+          grep -F 'reportsVerified:reportChecks.length' main.js
+          grep -F 'PRAGMA quick_check' main.js
+          grep -F 'Резервная копия:' main.js
+          if grep -F 'db:backup",async()=>{let db=dbRead()' main.js; then exit 1; fi
+          git diff --check
+          git diff -- main.js
+      - name: Commit repair
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add main.js
+          git diff --cached --quiet && exit 0
+          git commit -m "Verify report persistence and repair SQLite backup"
+          git push origin HEAD:repair/sqlite-report-backup-8.0.215
