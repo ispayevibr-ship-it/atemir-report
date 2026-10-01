@@ -2303,9 +2303,9 @@ button[data-cancel-report720]:hover{background:#168dca!important;border-color:#1
  .reportView995 .reportGrid124{grid-template-columns:1fr!important}
 }
 
-/* The displayed frame has the same proportions as the editor. */
+/* Keep the established banner height independent of the window width. */
 .objectHero770.objectHeroCover812{
- height:auto!important;min-height:0!important;aspect-ratio:1920/180;
+ height:180px!important;min-height:180px!important;aspect-ratio:auto;
 
 }
 @media(max-width:1600px){
