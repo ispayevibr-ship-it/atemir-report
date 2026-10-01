@@ -1,0 +1,57 @@
+name: Apply deleted object tombstone fix 8.0.222
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: repair/deleted-object-tombstone-8.0.222
+          fetch-depth: 0
+      - name: Patch deleted-object tombstones
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('src/app.js'); s=p.read_text()
+
+          # 1. Filter tombstoned IDs whenever the company object list is loaded.
+          old='let objects=window.atemirDesktop.dbGetSync(KEY)||[];'
+          new='let deletedObjectIds=new Set(window.atemirDesktop.dbGetSync("atemir-deleted-object-ids-v1")||[]);let objects=(window.atemirDesktop.dbGetSync(KEY)||[]).filter(o=>!deletedObjectIds.has(String(o?.id)));'
+          if old not in s: raise SystemExit('initial object load anchor not found')
+          s=s.replace(old,new,1)
+
+          # 2. Persist a tombstone before deleting the object itself.
+          old='let oid=String(o.id);await window.atemirDesktop?.dbDeleteObject?.(oid);'
+          new='let oid=String(o.id);deletedObjectIds.add(oid);await window.atemirDesktop.dbSet("atemir-deleted-object-ids-v1",[...deletedObjectIds]);await window.atemirDesktop?.dbDeleteObject?.(oid);'
+          if old not in s: raise SystemExit('delete anchor not found')
+          s=s.replace(old,new,1)
+
+          # 3. Async refresh must also reject tombstoned objects and rewrite a clean list.
+          old='window.atemirDesktop.dbGet(KEY).then(v=>{if(Array.isArray(v)){objects=v;render()}})'
+          new='window.atemirDesktop.dbGet(KEY).then(async v=>{if(Array.isArray(v)){let clean=v.filter(o=>!deletedObjectIds.has(String(o?.id)));objects=clean;if(clean.length!==v.length)await window.atemirDesktop.dbSet(KEY,clean);render()}})'
+          if old not in s: raise SystemExit('async refresh anchor not found')
+          s=s.replace(old,new,1)
+
+          p.write_text(s)
+          print('patched persistent deleted-object tombstones')
+          PY
+      - name: Verify patch
+        run: |
+          node --check src/app.js
+          grep -F 'atemir-deleted-object-ids-v1' src/app.js
+          grep -F 'deletedObjectIds.add(oid)' src/app.js
+          grep -F 'filter(o=>!deletedObjectIds.has(String(o?.id)))' src/app.js
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/app.js
+          git diff --cached --quiet && exit 0
+          git commit -m "fix: prevent deleted objects from being resurrected"
+          git push origin HEAD:repair/deleted-object-tombstone-8.0.222
