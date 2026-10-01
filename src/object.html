@@ -55,9 +55,8 @@
   const script=document.createElement("script");
   script.src="report-app.js";
   script.onload=()=>{
-    const pager=document.createElement("script");
-    pager.src="daily-pagination.js";
-    document.body.appendChild(pager);
+    const pager=document.createElement("script");pager.src="daily-pagination.js";document.body.appendChild(pager);
+    const marks=document.createElement("script");marks.src="marks-design.js";document.body.appendChild(marks);
   };
   document.body.appendChild(script);
 })();
