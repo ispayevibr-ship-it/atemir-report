@@ -54,6 +54,11 @@
   }catch(e){console.error("Daily report navigation reset",e)}
   const script=document.createElement("script");
   script.src="report-app.js";
+  script.onload=()=>{
+    const pager=document.createElement("script");
+    pager.src="daily-pagination.js";
+    document.body.appendChild(pager);
+  };
   document.body.appendChild(script);
 })();
 </script>
