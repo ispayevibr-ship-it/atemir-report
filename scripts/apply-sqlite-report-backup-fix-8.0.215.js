@@ -1,0 +1,18 @@
+const fs=require('fs');
+const path='main.js';
+let s=fs.readFileSync(path,'utf8');
+function rep(from,to,label){if(!s.includes(from))throw new Error('Not found: '+label);s=s.replace(from,to)}
+
+rep(
+'function kvWriteMany164(entries={}){let db=sqliteDb163(),put=db.prepare("INSERT INTO kv(key,value,updated_at) VALUES(?,?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value,updated_at=excluded.updated_at"),del=db.prepare("DELETE FROM kv WHERE key=?"),now=new Date().toISOString();db.exec("BEGIN IMMEDIATE");try{for(let [key,value] of Object.entries(entries||{})){let rel=isRelationalEntity172(key);if(!rel)put.run(key,JSON.stringify(value),now);syncRelational168(key,value);if(rel)del.run(String(key))}db.exec("COMMIT");return true}catch(e){try{db.exec("ROLLBACK")}catch{}throw e}}',
+'function kvWriteMany164(entries={}){let db=sqliteDb163(),put=db.prepare("INSERT INTO kv(key,value,updated_at) VALUES(?,?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value,updated_at=excluded.updated_at"),del=db.prepare("DELETE FROM kv WHERE key=?"),now=new Date().toISOString(),reportChecks=[];db.exec("BEGIN IMMEDIATE");try{for(let [key,value] of Object.entries(entries||{})){let rel=isRelationalEntity172(key);if(!rel)put.run(key,JSON.stringify(value),now);syncRelational168(key,value);let rm=String(key).match(/^atemir_entity_(.+)_report_([^_]+)$/);if(rm)reportChecks.push({oid:rm[1],id:rm[2]});if(rel)del.run(String(key))}db.exec("COMMIT");for(let r of reportChecks){let row=db.prepare("SELECT id,object_id,raw_json FROM reports WHERE id=? AND object_id=?").get(r.id,r.oid);if(!row)throw Error("SQLite verification failed: report "+r.id+" was not persisted");let parsed=kvParseSafe165(row.raw_json,null);if(!parsed||String(parsed.id||r.id)!==String(r.id))throw Error("SQLite verification failed: report "+r.id+" payload is unreadable")}return {ok:true,reportsVerified:reportChecks.length}}catch(e){try{if(db.isTransaction)db.exec("ROLLBACK")}catch{}throw e}}',
+'write-many verification');
+
+const backupStart='ipcMain.handle("db:backup",async()=>{let db=dbRead(),dir=path.join(app.getPath("userData"),"backups");';
+const backupEnd='return {ok:true,path:archive,photosIncluded:fs.existsSync(photos)} });';
+let a=s.indexOf(backupStart);if(a<0)throw new Error('Not found: backup start');
+let b=s.indexOf(backupEnd,a);if(b<0)throw new Error('Not found: backup end');b+=backupEnd.length;
+let fixed=`ipcMain.handle("db:backup",async()=>{let dir=path.join(app.getPath("userData"),"backups"),work="";try{fs.mkdirSync(dir,{recursive:true});let db=sqliteDb163(),check=db.prepare("PRAGMA quick_check").get(),integrity=Object.values(check||{})[0]||"unknown";if(integrity!=="ok")throw Error("Проверка SQLite: "+integrity);db.exec("PRAGMA wal_checkpoint(FULL)");let stamp=new Date().toISOString().replace(/[:.]/g,"-"),sqlDest,photos=photoRoot(),archive=path.join(dir,"A-Temir_Backup_"+stamp+".tar.gz");work=path.join(dir,".backup-"+stamp);fs.mkdirSync(work,{recursive:true});sqlDest=path.join(work,"atemir.db");fs.copyFileSync(sqlitePath163(),sqlDest);if(fs.existsSync(photos))fs.cpSync(photos,path.join(work,"photos"),{recursive:true});let z=spawnSync("tar",["-czf",archive,"-C",work,"."],{windowsHide:true,encoding:"utf8"});if(z.error)throw z.error;if(z.status!==0)throw Error("tar: "+String(z.stderr||z.stdout||"код "+z.status).trim());return {ok:true,path:archive,photosIncluded:fs.existsSync(photos),integrity}}catch(e){console.error("Database backup failed:",e);throw Error("Резервная копия: "+(e?.message||String(e)))}finally{if(work)try{fs.rmSync(work,{recursive:true,force:true})}catch{}}});`;
+s=s.slice(0,a)+fixed+s.slice(b);
+fs.writeFileSync(path,s,'utf8');
+console.log('Applied SQLite report verification and backup fix');
