@@ -1,0 +1,13 @@
+const fs=require('fs');
+const p='src/report-app.js';
+let s=fs.readFileSync(p,'utf8');
+const old='document.querySelectorAll("[data-report-save]").forEach(b=>b.onclick=()=>{let di=+b.dataset.reportSave,day=normalizeDay(d.workDays[di]);';
+const neu='document.querySelectorAll("[data-report-save]").forEach(b=>b.onclick=async()=>{let di=+b.dataset.reportSave,day=normalizeDay(d.workDays[di]);';
+if(!s.includes(old))throw new Error('report save handler not found');
+s=s.replace(old,neu);
+const old2='normalizeDay(day);day.editing=false;delete day.isNewDraft720;day.items.forEach(x=>x.editing=false);window.reportView718=di;saveEntity148("report",di);render();requestAnimationFrame(()=>document.getElementById("report-"+di)?.scrollIntoView({block:"center"}))});';
+const neu2='normalizeDay(day);let wasDraft=day.isNewDraft720;day.items.forEach(x=>x.editing=false);saveState148("Сохраняю отчёт…");let ok=await saveEntity148("report",di);let verify=day.id?await window.atemirDesktop?.dbGet?.(entityPrefix144+"report_"+day.id):null;if(!ok||!verify||String(verify.id)!==String(day.id)){day.editing=true;if(wasDraft)day.isNewDraft720=true;saveState148("Ошибка сохранения");alert("Не удалось подтвердить сохранение ежедневного отчёта. Отчёт оставлен открытым — данные не потеряны.");return}day.editing=false;delete day.isNewDraft720;window.reportView718=di;saveState148("Сохранено");render();requestAnimationFrame(()=>document.getElementById("report-"+di)?.scrollIntoView({block:"center"}))});';
+if(!s.includes(old2))throw new Error('report save tail not found');
+s=s.replace(old2,neu2);
+fs.writeFileSync(p,s);
+console.log('patched report save await/verify');
