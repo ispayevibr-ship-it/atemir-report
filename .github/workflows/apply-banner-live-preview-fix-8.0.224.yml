@@ -1,0 +1,41 @@
+name: Apply banner live preview fix 8.0.224
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ui/banner-live-preview-8.0.224
+          fetch-depth: 0
+      - name: Fix selected-file banner previews
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('src/app.js'); s=p.read_text()
+          anchor='if(step===2)body.innerHTML='
+          i=s.find(anchor)
+          if i<0: raise SystemExit('wizard step anchor not found')
+          insert='''\n if(step===1){\n  let bindBannerFile=(inputId,previewId,setter)=>{let input=document.getElementById(inputId),preview=document.getElementById(previewId);if(!input||!preview)return;input.onchange=async()=>{let f=input.files&&input.files[0];if(!f)return;try{let data=await compress(f);setter(data);preview.innerHTML='<img src="'+data+'" alt="">'}catch(err){console.error("Banner preview",err);alert("Не удалось обработать изображение.")}}};\n  bindBannerFile("photo510","preview510",v=>tempPhoto=v);\n  bindBannerFile("heroPhoto510","heroPreview510",v=>tempHeroPhoto=v);\n }\n'''
+          s=s[:i]+insert+s[i:]
+          p.write_text(s)
+          PY
+      - name: Verify
+        run: |
+          node --check src/app.js
+          grep -F 'bindBannerFile("photo510","preview510"' src/app.js
+          grep -F 'bindBannerFile("heroPhoto510","heroPreview510"' src/app.js
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/app.js
+          git diff --cached --quiet && exit 0
+          git commit -m "fix: show selected banner images immediately"
+          git push origin HEAD:ui/banner-live-preview-8.0.224
