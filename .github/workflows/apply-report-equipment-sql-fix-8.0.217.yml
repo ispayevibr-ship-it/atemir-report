@@ -1,0 +1,29 @@
+name: Apply report equipment SQL fix 8.0.217
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: repair/report-equipment-sql-8.0.217
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Fix report equipment SQL
+        run: node scripts/fix-report-equipment-sql-217.js
+      - name: Verify syntax
+        run: node --check main.js
+      - name: Verify broken SQL is gone
+        run: |
+          if grep -F 'INSERT INTO report_equipment(report_id,equipment_key,type,name,qty,sort_order,raw_json) VALUES(?,?,?,?,?,?,?,?)' main.js; then exit 1; fi
+      - name: Commit fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add main.js
+          git commit -m "fix: persist report equipment with correct SQL placeholders"
+          git push origin HEAD:repair/report-equipment-sql-8.0.217
