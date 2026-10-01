@@ -29,10 +29,29 @@
 </div>
 <script src="banner-frame.js"></script>
 <script>
-// v8.0.208: object.html is read-only with respect to object metadata.
-// The editor owns name/photo/client/address persistence. Opening an object must never
-// copy an older dashboard snapshot back into detail/base stores.
-(()=>{
+// v8.0.229: object.html is read-only with respect to object metadata.
+// UI-only daily report edit flags must not survive leaving and reopening an object.
+// A saved report always opens from the reports list; editing starts only after an explicit click.
+(async()=>{
+  try{
+    const objectId=new URLSearchParams(location.search).get("object")||"default";
+    const prefix="atemir_entity_"+objectId+"_report_";
+    const rows=window.atemirDesktop?.dbGetPrefixSync?.(prefix)||{};
+    const writes=[];
+    for(const [key,value] of Object.entries(rows)){
+      if(!value||typeof value!=="object"||value.isNewDraft720)continue;
+      let changed=value.editing===true;
+      const clean={...value,editing:false};
+      if(Array.isArray(value.items)){
+        clean.items=value.items.map(item=>{
+          if(item&&item.editing===true){changed=true;return {...item,editing:false}}
+          return item
+        });
+      }
+      if(changed&&window.atemirDesktop?.dbSet)writes.push(window.atemirDesktop.dbSet(key,clean));
+    }
+    if(writes.length)await Promise.all(writes);
+  }catch(e){console.error("Daily report navigation reset",e)}
   const script=document.createElement("script");
   script.src="report-app.js";
   document.body.appendChild(script);
