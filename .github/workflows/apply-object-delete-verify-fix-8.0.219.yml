@@ -1,0 +1,46 @@
+name: Apply object deletion persistence fix 8.0.219
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: repair/object-delete-verify-8.0.219
+          fetch-depth: 0
+      - name: Patch object deletion
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('src/app.js')
+          s=p.read_text()
+          old='objects=objects.filter(x=>String(x.id)!==oid);save();render()'
+          new='objects=objects.filter(x=>String(x.id)!==oid);try{await window.atemirDesktop.dbSet(KEY,objects);await window.atemirDesktop.dbWaitForWrites?.();let persisted=await window.atemirDesktop.dbGet(KEY);if(!Array.isArray(persisted)||persisted.some(x=>String(x.id)===oid))throw Error("Object deletion persistence verification failed");objects=persisted;render()}catch(err){console.error("Object delete persistence",err);alert("Не удалось окончательно удалить объект из базы данных. Попробуйте ещё раз.");try{let persisted=await window.atemirDesktop.dbGet(KEY);if(Array.isArray(persisted))objects=persisted}catch(_){}render()}'
+          if old not in s:
+              raise SystemExit('Expected deletion code not found; no changes made')
+          s=s.replace(old,new,1)
+          p.write_text(s)
+          print('patched object deletion await/verify')
+          PY
+      - name: Verify patch
+        run: |
+          node --check src/app.js
+          grep -F 'Object deletion persistence verification failed' src/app.js
+          if grep -F 'objects=objects.filter(x=>String(x.id)!==oid);save();render()' src/app.js; then
+            echo 'Old unsafe deletion code still present' >&2
+            exit 1
+          fi
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/app.js
+          git diff --cached --quiet && exit 0
+          git commit -m "fix: await and verify object deletion persistence"
+          git push origin HEAD:repair/object-delete-verify-8.0.219
