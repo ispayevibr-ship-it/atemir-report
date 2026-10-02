@@ -1,0 +1,13 @@
+(()=>{"use strict";
+const q=new URLSearchParams(location.search),storageId=q.get('object')||'default',prefix=`atemir_entity_${storageId}_`;
+const sync=k=>{try{return window.atemirDesktop?.dbGetSync?.(k)}catch(e){console.error('DB read',k,e);return null}};
+const asyncGet=async k=>{try{return await window.atemirDesktop?.dbGet?.(k)}catch(e){console.error('DB read',k,e);return null}};
+const set=async(k,v)=>{try{return await window.atemirDesktop?.dbSet?.(k,v)}catch(e){console.error('DB write',k,e);throw e}};
+const index=(kind)=>{const x=sync(prefix+kind+'Index');return Array.isArray(x)?[...x].sort((a,b)=>(a.sort??0)-(b.sort??0)):[]};
+const list=(kind)=>index(kind).map(x=>sync(prefix+kind+'_'+x.id)).filter(Boolean);
+const entity=(kind,id)=>sync(prefix+kind+'_'+id);
+const bom=taskId=>{const x=sync(prefix+'bom_'+taskId);return Array.isArray(x)?x:[]};
+const object=()=>{let a=sync('atemir-company-objects-v1');return Array.isArray(a)?a.find(x=>String(x.id)===String(storageId)||String(x.routeId)===String(storageId))||null:null};
+window.atemirObjectCore={storageId,prefix,object,db:{sync,get:asyncGet,set},reports:{index:()=>index('report'),list:()=>list('report'),get:id=>entity('report',id)},deliveries:{index:()=>index('invoice'),list:()=>list('invoice'),get:id=>entity('invoice',id)},tasks:{index:()=>index('task'),list:()=>list('task'),get:id=>entity('task',id),bom}};
+window.dispatchEvent(new CustomEvent('atemir:core-ready',{detail:{storageId}}));
+})();
