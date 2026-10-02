@@ -10,15 +10,15 @@ function labelInput(root,label){const l=[...root.querySelectorAll("label")].find
 function repairVolume(root){
  const labels=[...root.querySelectorAll("label")];if(!labels.some(x=>txt(x)==="Объём 1 ед."))return;
  const selects=[...root.querySelectorAll("select")];
- const type=labelInput(root,"Вид работ")||labelInput(root,"Вид работ")||selects[0];
+ const type=labelInput(root,"Вид работ")||selects[0];
  const code=labelInput(root,"Шифр")||selects[1];
  const markSel=labels.find(x=>txt(x)==="Марка")?.parentElement?.querySelector("select")||selects.find(s=>[...s.options].some(o=>/по проекту|смонт/i.test(o.textContent||"")));
  const vol=labelInput(root,"Объём 1 ед.");if(!type||!code||!markSel||!vol)return;
  const mark=String(markSel.value||markSel.options?.[markSel.selectedIndex]?.text||"").split(/[·•]/)[0].trim();if(!mark||/без марки/i.test(mark))return;
  const t=taskFor(type.value,code.value),r=bomRow(t,mark);if(!t||!r)return;
- let raw=num(r.weight1??r.weight??r.unitWeight??r.weightUnit??0),unit=String(t.unit||"").trim().toLowerCase();
- // BOM for metal structures is imported in kg. Daily reports/invoices work in tonnes.
- let value=(unit==="тн"||unit==="т"||unit==="тонн"||unit==="тонна")?raw/1000:raw;
+ // Units are authoritative. Never convert kg <-> тн automatically.
+ // The value stored in the BOM is copied exactly as the volume/weight of one unit.
+ const value=num(r.weight1??r.weight??r.unitWeight??r.weightUnit??r.volume1??0);
  if(!Number.isFinite(value))return;
  if(Math.abs(num(vol.value)-value)>1e-12){vol.value=String(value).replace(".",",");vol.dispatchEvent(new Event("input",{bubbles:true}));vol.dispatchEvent(new Event("change",{bubbles:true}))}
 }
