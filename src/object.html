@@ -47,8 +47,7 @@
   const loadScript=(src)=>new Promise((resolve,reject)=>{const s=document.createElement("script");s.src=src;s.onload=resolve;s.onerror=reject;document.body.appendChild(s)});
   await loadScript("report-app.js");
   await loadScript("daily-pagination.js");
-  await loadScript("marks-design.js");
-  await loadScript("marks-table-ui.js");
+  await loadScript("bom-native.js");
 })();
 </script>
 </body>
