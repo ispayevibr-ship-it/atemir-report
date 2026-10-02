@@ -1,0 +1,10 @@
+(()=>{"use strict";
+const oid=new URLSearchParams(location.search).get('object')||'default',P=`atemir_entity_${oid}_`;
+const db=k=>{try{return window.atemirDesktop?.dbGetSync?.(k)}catch{return null}},norm=v=>String(v||'').trim().toUpperCase().replace(/\s+/g,'');
+function selectedKey(){return document.getElementById('bomProjectFilter714')?.value||''}
+function usedMarks(){const K=selectedKey(),used=new Set(),ri=db(P+'reportIndex')||[];for(const x of ri){const r=db(P+'report_'+x.id);for(const item of (r?.items||[])){if(`${item.type||''}|||${item.code||''}`===K&&norm(item.mark))used.add(norm(item.mark))}}return used}
+function protect(){const root=document.getElementById('bomNative');if(!root)return;const used=usedMarks();root.querySelectorAll('.bnRow').forEach(row=>{const mark=norm(row.querySelector('.bnMark')?.textContent);const del=row.querySelector('[data-del]');if(!del)return;if(used.has(mark)){del.disabled=true;del.style.display='none';del.title='Нельзя удалить: марка используется в ежедневном отчёте';row.dataset.usedInReport='true'}else{del.disabled=false;del.style.display='';row.dataset.usedInReport='false'}})}
+function intercept(e){const b=e.target.closest?.('[data-del]');if(!b)return;const row=b.closest('.bnRow'),mark=norm(row?.querySelector('.bnMark')?.textContent);if(mark&&usedMarks().has(mark)){e.preventDefault();e.stopImmediatePropagation();alert('Эту марку нельзя удалить: она уже используется в ежедневном отчёте. Марку можно только редактировать.');protect()}}
+function boot(){document.addEventListener('click',intercept,true);document.addEventListener('change',e=>{if(e.target?.id==='bomProjectFilter714')requestAnimationFrame(protect)},true);const v=document.getElementById('view')||document.body;new MutationObserver(()=>requestAnimationFrame(protect)).observe(v,{childList:true,subtree:true});protect()}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+})();
