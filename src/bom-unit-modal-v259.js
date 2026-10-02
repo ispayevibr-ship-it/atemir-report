@@ -1,0 +1,8 @@
+(()=>{"use strict";
+const oid=new URLSearchParams(location.search).get('object')||'default',P=`atemir_entity_${oid}_`;
+const db=k=>{try{return window.atemirDesktop?.dbGetSync?.(k)}catch{return null}};
+function unit(){const key=document.getElementById('bomProjectFilter714')?.value||'';if(!key)return '—';for(const x of (db(P+'taskIndex')||[])){const t=db(P+'task_'+x.id);if(t&&`${t.type||''}|||${t.code||''}`===key)return String(t.unit||'—').trim()||'—'}return '—'}
+function apply(){const m=document.querySelector('.bnModal252');if(!m)return;let w=m.querySelector('.bnUnitWrap259');if(!w){const labels=[...m.querySelectorAll('label')],q=labels.find(x=>x.textContent.trim()==='Количество');const input=q?.nextElementSibling;if(!input)return;w=document.createElement('div');w.className='bnUnitWrap259';w.innerHTML='<label>Ед. измерения</label><input class="bnUnitField259" readonly>';input.insertAdjacentElement('afterend',w)}w.querySelector('input').value=unit();}
+function boot(){const s=document.createElement('style');s.textContent='.bnModal252 .bnUnitField259{width:100%;height:40px;border:1px solid #d5e0e7;border-radius:8px;padding:0 11px;box-sizing:border-box;background:#f4f7f9;color:#29485b;font-size:12px;font-weight:700}.bnModal252 .bnUnitWrap255{display:none!important}';document.head.appendChild(s);new MutationObserver(()=>requestAnimationFrame(apply)).observe(document.body,{childList:true,subtree:true});apply()}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
+})();
