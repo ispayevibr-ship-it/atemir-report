@@ -1,0 +1,42 @@
+/* BOM upload button — final visual override */
+body.bomNativeActive #bomUpload517,
+body.bomNativeActive button#bomUpload517 {
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-width:230px !important;
+  height:40px !important;
+  padding:0 20px !important;
+  border:1px solid #1695cf !important;
+  border-radius:8px !important;
+  background:#1695cf !important;
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+  font-size:11px !important;
+  font-weight:700 !important;
+  line-height:1 !important;
+  opacity:1 !important;
+  box-shadow:none !important;
+  cursor:pointer !important;
+  transition:background .15s ease,border-color .15s ease,box-shadow .15s ease !important;
+}
+body.bomNativeActive #bomUpload517:not(:disabled):hover {
+  background:#117fb2 !important;
+  border-color:#117fb2 !important;
+  box-shadow:0 3px 10px rgba(17,127,178,.18) !important;
+}
+body.bomNativeActive #bomUpload517:disabled {
+  background:#e8f3f8 !important;
+  border-color:#cfe3ed !important;
+  color:#668391 !important;
+  -webkit-text-fill-color:#668391 !important;
+  opacity:1 !important;
+  cursor:not-allowed !important;
+  box-shadow:none !important;
+}
+body.bomNativeActive #bomUpload517:disabled:hover {
+  background:#e8f3f8 !important;
+  border-color:#cfe3ed !important;
+  color:#668391 !important;
+  -webkit-text-fill-color:#668391 !important;
+}
