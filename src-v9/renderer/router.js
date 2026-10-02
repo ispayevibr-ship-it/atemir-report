@@ -1,0 +1,2 @@
+"use strict";
+window.Router={path(){return location.hash.slice(1)||"/objects"},go(path){location.hash=path},parse(){const p=this.path().split("/").filter(Boolean);if(p[0]!=="objects")return{name:"notFound"};if(p.length===1)return{name:"objects"};if(p.length===2)return{name:"object",objectId:p[1]};if(p.length===3&&p[2]==="reports")return{name:"reports",objectId:p[1]};if(p.length===4&&p[2]==="reports")return{name:"report",objectId:p[1],reportId:p[3]};return{name:"notFound"}}};
