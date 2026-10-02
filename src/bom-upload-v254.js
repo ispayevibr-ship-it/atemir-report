@@ -1,27 +1,26 @@
 (()=>{"use strict";
-const STYLE_ID="bomUploadV254Css";
+const STYLE_ID="bomUploadV255Css";
 function addCss(){if(document.getElementById(STYLE_ID))return;const s=document.createElement("style");s.id=STYLE_ID;s.textContent=`
+body.bn252 #view>.card:first-child .grid{grid-template-columns:minmax(260px,1fr) minmax(260px,1fr) 264px!important;align-items:end!important}
 body.bn252 #bomUpload517,
 body.bn252 #bomUpload517[style],
-body.bn252 #bomUpload517:disabled{
-  display:inline-flex!important;align-items:center!important;justify-content:center!important;
-  min-width:264px!important;width:264px!important;height:52px!important;padding:0 20px!important;
-  border:1px solid #1695cf!important;border-radius:9px!important;
-  background:#1695cf!important;color:#fff!important;-webkit-text-fill-color:#fff!important;
-  font-size:12px!important;font-weight:800!important;line-height:1!important;text-align:center!important;
-  opacity:1!important;filter:none!important;text-shadow:none!important;box-shadow:none!important;
-  box-sizing:border-box!important;text-decoration:none!important;white-space:nowrap!important;
-}
-body.bn252 #bomUpload517 *,body.bn252 #bomUpload517[style] *{color:#fff!important;-webkit-text-fill-color:#fff!important;opacity:1!important}
-body.bn252 #bomUpload517:not(:disabled):hover{background:#117fb2!important;border-color:#117fb2!important}
-body.bn252 #bomUpload517:disabled,
 body.bn252 #bomUpload517[data-disabled="true"]{
-  background:#d9edf6!important;border-color:#c7e3ef!important;color:#4e7b91!important;
-  -webkit-text-fill-color:#4e7b91!important;cursor:not-allowed!important;opacity:1!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  width:264px!important;min-width:264px!important;max-width:264px!important;height:42px!important;min-height:42px!important;
+  margin:0!important;padding:0 18px!important;box-sizing:border-box!important;
+  border:1px solid #1695cf!important;border-radius:8px!important;
+  background:#1695cf!important;background-image:none!important;
+  color:#fff!important;-webkit-text-fill-color:#fff!important;
+  font-family:inherit!important;font-size:11px!important;font-weight:800!important;line-height:40px!important;
+  text-align:center!important;text-decoration:none!important;white-space:nowrap!important;
+  opacity:1!important;filter:none!important;text-shadow:none!important;box-shadow:none!important;
+  cursor:pointer!important;overflow:hidden!important;
 }
-body.bn252 #bomUpload517:disabled *,body.bn252 #bomUpload517[data-disabled="true"] *{color:#4e7b91!important;-webkit-text-fill-color:#4e7b91!important}
+body.bn252 #bomUpload517:hover{background:#117fb2!important;border-color:#117fb2!important}
+body.bn252 #bomUpload517 input{display:none!important}
+@media(max-width:1200px){body.bn252 #view>.card:first-child .grid{grid-template-columns:1fr 1fr!important}body.bn252 #view>.card:first-child .grid>div:last-child{grid-column:1/-1!important}body.bn252 #bomUpload517{width:264px!important}}
 `;document.head.appendChild(s)}
-function sync(){addCss();const b=document.getElementById("bomUpload517");if(!b)return;const type=document.querySelector('#view>.card:first-child select');const selects=document.querySelectorAll('#view>.card:first-child select');const project=selects[1];const inactive=!(type?.value&&project?.value);if(inactive){b.setAttribute('data-disabled','true')}else{b.removeAttribute('data-disabled')}b.style.opacity='1';b.style.filter='none'}
-const obs=new MutationObserver(()=>sync());function boot(){sync();const v=document.getElementById('view');if(v)obs.observe(v,{childList:true,subtree:true,attributes:true,attributeFilter:['style','disabled']});document.addEventListener('change',e=>{if(e.target?.closest?.('#view>.card:first-child'))setTimeout(sync,0)},true)}
+function sync(){addCss();const b=document.getElementById("bomUpload517");if(!b)return;b.style.setProperty('opacity','1','important');b.style.setProperty('background','#1695cf','important');b.style.setProperty('color','#fff','important');b.style.setProperty('-webkit-text-fill-color','#fff','important')}
+function boot(){sync();const v=document.getElementById('view');if(v)new MutationObserver(()=>requestAnimationFrame(sync)).observe(v,{childList:true,subtree:true});document.addEventListener('change',()=>requestAnimationFrame(sync),true)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
